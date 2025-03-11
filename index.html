@@ -1,111 +1,130 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Quiz Coding</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --game-primary: #6C5CE7;
-            --game-secondary: #A8A5E6;
-            --game-success: #00B894;
-            --game-danger: #D63031;
-        }
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: white;
-            min-height: 100vh;
-            font-family: 'Press Start 2P', cursive;
-        }
-        .game-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: rgba(0,0,0,0.7);
-            border-radius: 20px;
-            border: 3px solid var(--game-primary);
-            position: relative;
-            overflow: hidden;
-        }
-        .game-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-        .game-title {
-            font-size: 2.5rem;
-            text-shadow: 3px 3px 0 var(--game-primary);
-            margin-bottom: 1rem;
-        }
-        .character {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%236C5CE7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5" fill="%23ffffff"/></svg>');
-            background-size: contain;
-            animation: float 3s ease-in-out infinite;
-        }
-        .question-box {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            position: relative;
-            border: 2px solid var(--game-primary);
-        }
-        .option-btn {
-            width: 100%;
-            margin: 0.5rem 0;
-            padding: 1rem;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--game-primary);
-            color: white;
-            text-align: left;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .option-btn:hover {
-            background: var(--game-primary);
-            transform: translateX(10px);
-        }
-        .progress-bar {
-            height: 15px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            margin-bottom: 2rem;
-        }
-        .progress {
-            height: 100%;
-            background: var(--game-primary);
-            transition: width 0.5s ease;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes pixelate {
-            0% { filter: blur(0px); }
-            50% { filter: blur(2px); }
-            100% { filter: blur(0px); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Quest - Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts: Press Start 2P untuk desktop, Poppins untuk mobile -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --game-primary: #6C5CE7;
+      --game-secondary: #A8A5E6;
+      --game-success: #00B894;
+      --game-danger: #D63031;
+    }
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      min-height: 100vh;
+      font-family: 'Press Start 2P', cursive;
+    }
+    /* Untuk perangkat mobile gunakan font Poppins */
+    @media (max-width: 768px) {
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+    }
+    .game-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      border: 3px solid var(--game-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .game-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .game-title {
+      font-size: 2.5rem;
+      text-shadow: 3px 3px 0 var(--game-primary);
+      margin-bottom: 1rem;
+    }
+    .character {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%236C5CE7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5" fill="%23ffffff"/></svg>');
+      background-size: contain;
+      animation: float 3s ease-in-out infinite;
+    }
+    .question-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      position: relative;
+      border: 2px solid var(--game-primary);
+    }
+    .option-btn {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--game-primary);
+      color: white;
+      text-align: left;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .option-btn:hover {
+      background: var(--game-primary);
+      transform: translateX(10px);
+    }
+    .progress-bar {
+      height: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+    }
+    .progress {
+      height: 100%;
+      background: var(--game-primary);
+      transition: width 0.5s ease;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pixelate {
+      0% { filter: blur(0px); }
+      50% { filter: blur(2px); }
+      100% { filter: blur(0px); }
+    }
+    .share-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <div class="container game-container">
-        <div class="game-header">
-            <div class="character"></div>
-            <h1 class="game-title">CODE QUEST</h1>
-            <div class="progress-bar">
-                <div class="progress" style="width: 0%"></div>
-            </div>
-        </div>
-        <div class="question-box">
-            <!-- Konten pertanyaan akan disuntikkan secara dinamis -->
-        </div>
+  <div class="container game-container">
+    <div class="game-header">
+      <div class="character"></div>
+      <h1 class="game-title">CODE QUEST</h1>
+      <div class="progress-bar">
+        <div class="progress" style="width: 0%"></div>
+      </div>
     </div>
+    <div class="question-box">
+      <!-- Konten pertanyaan akan disuntikkan secara dinamis -->
+    </div>
+    <!-- Ikon share -->
+    <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
+  </div>
+
 
     <script>
         // Data soal (bab1 dan bab2) dari kode sebelumnya
@@ -512,186 +531,92 @@
               jawaban: 'C'
             }
           ],
-          bab2: [
-            { soal: '1. Apa kepanjangan dari ERD dalam konteks database?',
-              pilihan: {
-                A: 'Entity Relationship Design',
-                B: 'Entity Relationship Diagram',
-                C: 'Entity Relational Data',
-                D: 'Element Relationship Diagram',
-                E: 'Entity Resource Diagram'
-              },
-              jawaban: 'B'
-            },
-            { soal: '2. Manakah yang BUKAN termasuk komponen utama ERD?',
-              pilihan: {
-                A: 'Entitas',
-                B: 'Atribut',
-                C: 'SQL Query',
-                D: 'Relasi',
-                E: 'Primary Key'
-              },
-              jawaban: 'C'
-            },
-            { soal: '3. Contoh entitas dalam database akademik adalah:',
-              pilihan: {
-                A: 'NIM',
-                B: 'Nilai',
-                C: 'Mahasiswa',
-                D: 'Tanggal Lahir',
-                E: 'IPK'
-              },
-              jawaban: 'C'
-            },
-            { soal: '4. Manakah yang merupakan contoh atribut?',
-              pilihan: {
-                A: 'Mengajar',
-                B: 'NIM',
-                C: 'Meminjam',
-                D: 'Buku',
-                E: 'Perpustakaan'
-              },
-              jawaban: 'B'
-            },
-            { soal: '5. Relasi dalam ERD berfungsi untuk:',
-              pilihan: {
-                A: 'Menampilkan data statistik',
-                B: 'Mengenkripsi data',
-                C: 'Menghubungkan entitas',
-                D: 'Mengoptimasi query',
-                E: 'Menyimpan backup data'
-              },
-              jawaban: 'C'
-            },
-            { soal: '6. Primary Key adalah:',
-              pilihan: {
-                A: 'Kunci untuk mengakses database',
-                B: 'Identitas unik suatu entitas',
-                C: 'Password administrator',
-                D: 'Index tabel',
-                E: 'Kunci relasi antar server'
-              },
-              jawaban: 'B'
-            },
-            { soal: '7. Foreign Key berfungsi untuk:',
-              pilihan: {
-                A: 'Mengamankan data sensitif',
-                B: 'Menghubungkan ke primary key tabel lain',
-                C: 'Mengurutkan data',
-                D: 'Mengkompresi database',
-                E: 'Membuat index pencarian'
-              },
-              jawaban: 'B'
-            },
-            { soal: '8. ERD terutama digunakan dalam fase:',
-              pilihan: {
-                A: 'Implementasi sistem',
-                B: 'Desain database',
-                C: 'Testing software',
-                D: 'Maintenance sistem',
-                E: 'Dokumentasi user'
-              },
-              jawaban: 'B'
-            },
-            { soal: '9. Normalisasi data dalam ERD bertujuan untuk:',
-              pilihan: {
-                A: 'Meningkatkan kecepatan query',
-                B: 'Mengurangi redundansi data',
-                C: 'Memperbesar ukuran database',
-                D: 'Menambah jumlah tabel',
-                E: 'Mengenkripsi informasi'
-              },
-              jawaban: 'B'
-            },
-            { soal: '10. Software yang biasa digunakan untuk membuat ERD adalah:',
-              pilihan: {
-                A: 'MySQL Workbench',
-                B: 'Microsoft Word',
-                C: 'Adobe Photoshop',
-                D: 'Visual Studio Code',
-                E: 'Google Chrome'
-              },
-              jawaban: 'A'
-            }
-          ]
         };
 
-        // Konversi data soal menjadi array pertanyaan untuk game
         const questions = [];
-        Object.values(soalData).forEach(bab => {
-          bab.forEach(item => {
-            const options = [
-              item.pilihan.A,
-              item.pilihan.B,
-              item.pilihan.C,
-              item.pilihan.D,
-              item.pilihan.E
-            ];
-            const correctIndex = item.jawaban.charCodeAt(0) - 'A'.charCodeAt(0);
-            questions.push({
-              question: item.soal,
-              options: options,
-              correct: correctIndex
-            });
-          });
+    Object.values(soalData).forEach(bab => {
+      bab.forEach(item => {
+        const options = [
+          item.pilihan.A,
+          item.pilihan.B,
+          item.pilihan.C,
+          item.pilihan.D,
+          item.pilihan.E
+        ];
+        const correctIndex = item.jawaban.charCodeAt(0) - 'A'.charCodeAt(0);
+        questions.push({
+          question: item.soal,
+          options: options,
+          correct: correctIndex
         });
+      });
+    });
 
-        let currentQuestion = 0;
-        let score = 0;
+    let currentQuestion = 0;
+    let score = 0;
+    const results = []; // Menyimpan detail tiap pertanyaan
 
-        function updateProgress() {
-          const progressPercent = (currentQuestion / questions.length) * 100;
-          document.querySelector('.progress').style.width = `${progressPercent}%`;
-        }
+    function updateProgress() {
+      const progressPercent = (currentQuestion / questions.length) * 100;
+      document.querySelector('.progress').style.width = `${progressPercent}%`;
+    }
 
-        function showQuestion() {
-          const questionBox = document.querySelector('.question-box');
-          // Kosongkan konten sebelumnya
-          questionBox.innerHTML = '';
-          if (currentQuestion < questions.length) {
-            const q = questions[currentQuestion];
-            const questionEl = document.createElement('h3');
-            questionEl.className = 'mb-4';
-            questionEl.innerHTML = q.question;
-            questionBox.appendChild(questionEl);
+    function showQuestion() {
+      const questionBox = document.querySelector('.question-box');
+      questionBox.innerHTML = '';
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        const questionEl = document.createElement('h3');
+        questionEl.className = 'mb-4';
+        questionEl.innerHTML = q.question;
+        questionBox.appendChild(questionEl);
 
-            // Buat tombol opsi untuk setiap pilihan
-            q.options.forEach((option, index) => {
-              const btn = document.createElement('button');
-              btn.className = 'option-btn';
-              btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
-              btn.addEventListener('click', function() {
-                this.style.animation = 'pixelate 0.3s';
-                // Periksa jawaban
-                if (index === q.correct) {
-                  score++;
-                  btn.style.backgroundColor = 'var(--game-success)';
-                } else {
-                  btn.style.backgroundColor = 'var(--game-danger)';
-                  // Tandai tombol jawaban yang benar
-                  document.querySelectorAll('.option-btn').forEach(b => {
-                    if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
-                      b.style.backgroundColor = 'var(--game-success)';
-                    }
-                  });
+        // Buat tombol opsi
+        q.options.forEach((option, index) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
+          btn.addEventListener('click', function() {
+            this.style.animation = 'pixelate 0.3s';
+            let isCorrect = false;
+            if (index === q.correct) {
+              score++;
+              btn.style.backgroundColor = 'var(--game-success)';
+              isCorrect = true;
+            } else {
+              btn.style.backgroundColor = 'var(--game-danger)';
+              // Tandai opsi yang benar
+              document.querySelectorAll('.option-btn').forEach(b => {
+                if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
+                  b.style.backgroundColor = 'var(--game-success)';
                 }
-                setTimeout(() => {
-                  currentQuestion++;
-                  updateProgress();
-                  showQuestion();
-                }, 500);
               });
-              questionBox.appendChild(btn);
+            }
+            // Simpan detail hasil
+            results.push({
+              question: q.question,
+              selected: index,
+              correct: q.correct,
+              isCorrect: isCorrect,
+              options: q.options
             });
-          } else {
-            // Tampilkan hasil akhir
-            questionBox.innerHTML = `<h3>Quiz Selesai!</h3><p>Skor Anda: ${score} / ${questions.length}</p>`;
-            document.querySelector('.progress').style.width = `100%`;
-          }
-        }
+            setTimeout(() => {
+              currentQuestion++;
+              updateProgress();
+              showQuestion();
+            }, 500);
+          });
+          questionBox.appendChild(btn);
+        });
+      } else {
+        // Quiz selesai: simpan hasil dan arahkan ke halaman hasil.html
+        localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
+        window.location.href = 'hasil.html';
+      }
+    }
 
-        // Inisialisasi quiz
-        showQuestion();
-    </script>
+    // Inisialisasi quiz
+    showQuestion();
+  </script>
 </body>
 </html>
