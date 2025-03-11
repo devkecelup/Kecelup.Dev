@@ -1,1 +1,55 @@
+<!-- share.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Same styles as index.html -->
+    <style>
+        .share-box {
+            text-align: center;
+            padding: 3rem;
+        }
 
+        .share-message {
+            font-size: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-icon {
+            font-size: 3rem;
+            color: var(--game-primary);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container game-container">
+        <div class="share-box">
+            <h2>🔥 Aku Sudah Menaklukkan Code Quest! 🔥</h2>
+            <div class="share-message">
+                Dapatkan skor 85/100 dalam tantangan coding game!<br>
+                Berani mencoba? 😎
+            </div>
+            <div class="social-icons">
+                <i class="fab fa-whatsapp social-icon"></i>
+                <i class="fab fa-instagram social-icon"></i>
+                <i class="fab fa-facebook social-icon"></i>
+                <i class="fab fa-twitter social-icon"></i>
+            </div>
+            <button class="option-btn" onclick="location.href='index.html'">
+                <i class="fas fa-gamepad"></i> Mulai Petualangan
+            </button>
+        </div>
+    </div>
+</body>
+</html>
