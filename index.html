@@ -1,685 +1,697 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ulangan Pemrograman Gim & Database</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Tampilan mirip Google Form */
-    body {
-      background-color: #f8f9fa;
-    }
-    .quiz-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .question-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    .question-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .option-label {
-      display: block;
-      padding: 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
-    .option-label:hover {
-      background-color: #f1f1f1;
-    }
-    .correct {
-      background-color: #d4edda !important;
-      border-color: #c3e6cb !important;
-    }
-    .incorrect {
-      background-color: #f8d7da !important;
-      border-color: #f5c6cb !important;
-    }
-    .answer-feedback {
-      margin-top: 8px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Quiz Coding</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --game-primary: #6C5CE7;
+            --game-secondary: #A8A5E6;
+            --game-success: #00B894;
+            --game-danger: #D63031;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            border: 3px solid var(--game-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .game-title {
+            font-size: 2.5rem;
+            text-shadow: 3px 3px 0 var(--game-primary);
+            margin-bottom: 1rem;
+        }
+        .character {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%236C5CE7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5" fill="%23ffffff"/></svg>');
+            background-size: contain;
+            animation: float 3s ease-in-out infinite;
+        }
+        .question-box {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            position: relative;
+            border: 2px solid var(--game-primary);
+        }
+        .option-btn {
+            width: 100%;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--game-primary);
+            color: white;
+            text-align: left;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .option-btn:hover {
+            background: var(--game-primary);
+            transform: translateX(10px);
+        }
+        .progress-bar {
+            height: 15px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 2rem;
+        }
+        .progress {
+            height: 100%;
+            background: var(--game-primary);
+            transition: width 0.5s ease;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pixelate {
+            0% { filter: blur(0px); }
+            50% { filter: blur(2px); }
+            100% { filter: blur(0px); }
+        }
+    </style>
 </head>
 <body>
-  <div class="container quiz-container">
-    <h2 class="text-center mb-4">Ulangan Pemrograman Gim & Database</h2>
-    <form id="quizForm"></form>
-    <button id="submitBtn" class="btn btn-primary btn-lg w-100">Kumpulkan Jawaban</button>
-    <div id="result" class="mt-4"></div>
-  </div>
-  
-  <script>
-    // Data soal untuk bab1 dan bab2
-    const soalData = {
-      bab1: [
-        { soal: '1. Apa yang dimaksud dengan pemrograman gim?',
-          pilihan: {
-            A: 'Proses pembuatan website',
-            B: 'Proses pembuatan perangkat lunak interaktif untuk hiburan atau edukasi',
-            C: 'Proses pembuatan aplikasi mobile',
-            D: 'Proses desain grafis',
-            E: 'Proses pembuatan sistem operasi'
-          },
-          jawaban: 'B'
-        },
-        { soal: '2. Elemen dasar gim mencakup semua berikut kecuali:',
-          pilihan: {
-            A: 'Grafik dan Animasi',
-            B: 'Gameplay',
-            C: 'Fisika',
-            D: 'Audio',
-            E: 'Database'
-          },
-          jawaban: 'E'
-        },
-        { soal: '3. Mana dari berikut yang termasuk elemen dasar gim?',
-          pilihan: {
-            A: 'AI (Artificial Intelligence)',
-            B: 'Database Management',
-            C: 'Sistem Operasi',
-            D: 'Pengolahan Data',
-            E: 'Penyimpanan Cloud'
-          },
-          jawaban: 'A'
-        },
-        { soal: '4. Apa yang dimaksud dengan game engine?',
-          pilihan: {
-            A: 'Perangkat keras untuk menjalankan gim',
-            B: 'Perangkat lunak untuk membuat dan mengembangkan gim',
-            C: 'Sistem operasi khusus untuk gim',
-            D: 'Aplikasi pengedit foto',
-            E: 'Bahasa pemrograman'
-          },
-          jawaban: 'B'
-        },
-        { soal: '5. Game engine yang populer dan menggunakan bahasa pemrograman C# adalah:',
-          pilihan: {
-            A: 'Unreal Engine',
-            B: 'Godot',
-            C: 'Unity',
-            D: 'CryEngine',
-            E: 'Frostbite'
-          },
-          jawaban: 'C'
-        },
-        { soal: '6. Game engine yang menggunakan bahasa pemrograman C++ dan Blueprints adalah:',
-          pilihan: {
-            A: 'Unity',
-            B: 'Unreal Engine',
-            C: 'Godot',
-            D: 'Source Engine',
-            E: 'Lumberyard'
-          },
-          jawaban: 'B'
-        },
-        { soal: '7. Game engine yang menggunakan bahasa pemrograman GDScript adalah:',
-          pilihan: {
-            A: 'Unity',
-            B: 'Unreal Engine',
-            C: 'Godot',
-            D: 'CryEngine',
-            E: 'Frostbite'
-          },
-          jawaban: 'C'
-        },
-        { soal: '8. Dalam Unity, apa yang dimaksud dengan "Scene"?',
-          pilihan: {
-            A: 'Tempat menyimpan aset gim',
-            B: 'Tempat objek-objek gim ditempatkan dan diatur',
-            C: 'Editor kode pemrograman',
-            D: 'Format audio',
-            E: 'Komponen animasi'
-          },
-          jawaban: 'B'
-        },
-        { soal: '9. Apa itu GameObject dalam Unity?',
-          pilihan: {
-            A: 'Objek dalam gim seperti karakter, musuh, atau item',
-            B: 'Aset untuk audio',
-            C: 'Editor untuk membuat level',
-            D: 'Format file gambar',
-            E: 'Tipe data untuk skrip'
-          },
-          jawaban: 'A'
-        },
-        { soal: '10. Komponen apa yang digunakan untuk mengatur posisi, rotasi, dan skala objek dalam Unity?',
-          pilihan: {
-            A: 'AudioSource',
-            B: 'Collider',
-            C: 'Transform',
-            D: 'Rigidbody',
-            E: 'Animator'
-          },
-          jawaban: 'C'
-        },
-        { soal: '11. Komponen mana yang digunakan untuk menambahkan efek fisika pada objek dalam Unity?',
-          pilihan: {
-            A: 'Transform',
-            B: 'Rigidbody',
-            C: 'Collider',
-            D: 'Animator',
-            E: 'UI'
-          },
-          jawaban: 'B'
-        },
-        { soal: '12. Fungsi Collider dalam Unity adalah untuk:',
-          pilihan: {
-            A: 'Menambahkan audio',
-            B: 'Mengatur animasi',
-            C: 'Mendeteksi tabrakan antara objek',
-            D: 'Mengatur fisika',
-            E: 'Menyimpan data pemain'
-          },
-          jawaban: 'C'
-        },
-        { soal: '13. Bagaimana cara mendeteksi input keyboard di Unity?',
-          pilihan: {
-            A: 'Input.GetAxis("Horizontal")',
-            B: 'Input.GetKey(KeyCode.Space)',
-            C: 'Input.GetMouseButton(0)',
-            D: 'Input.GetButton("Fire1")',
-            E: 'Input.GetTouch(0)'
-          },
-          jawaban: 'B'
-        },
-        { soal: '14. Bagaimana cara mendeteksi pergerakan mouse di Unity?',
-          pilihan: {
-            A: 'Input.GetKey(KeyCode.Mouse0)',
-            B: 'Input.GetAxis("Mouse X")',
-            C: 'Input.GetButton("Jump")',
-            D: 'Input.GetTouch(1)',
-            E: 'Input.GetAxis("Horizontal")'
-          },
-          jawaban: 'B'
-        },
-        { soal: '15. Untuk mendeteksi pergerakan joystick/controller, perintah apa yang digunakan dalam Unity?',
-          pilihan: {
-            A: 'Input.GetKey(KeyCode.Joystick1)',
-            B: 'Input.GetAxis("Vertical")',
-            C: 'Input.GetAxis("Horizontal")',
-            D: 'Input.GetMouseButton(1)',
-            E: 'Input.GetTouch(0)'
-          },
-          jawaban: 'C'
-        },
-        { soal: '16. Format audio mana yang terkompresi dengan ukuran file kecil?',
-          pilihan: {
-            A: 'WAV',
-            B: 'FLAC',
-            C: 'MP3',
-            D: 'AIFF',
-            E: 'OGG'
-          },
-          jawaban: 'C'
-        },
-        { soal: '17. Format audio mana yang dikenal dengan kualitas tinggi namun ukuran file lebih besar?',
-          pilihan: {
-            A: 'MP3',
-            B: 'WAV',
-            C: 'AAC',
-            D: 'WMA',
-            E: 'OGG'
-          },
-          jawaban: 'B'
-        },
-        { soal: '18. Komponen apa yang digunakan untuk memutar suara di Unity?',
-          pilihan: {
-            A: 'AudioListener',
-            B: 'AudioClip',
-            C: 'AudioSource',
-            D: 'AudioMixer',
-            E: 'SoundManager'
-          },
-          jawaban: 'C'
-        },
-        { soal: '19. Apa fungsi dari AudioMixer dalam Unity?',
-          pilihan: {
-            A: 'Menyimpan aset audio',
-            B: 'Mengontrol volume dan efek suara',
-            C: 'Mengatur file audio',
-            D: 'Mengubah format audio',
-            E: 'Menghapus suara'
-          },
-          jawaban: 'B'
-        },
-        { soal: '20. Apa yang dimaksud dengan Spatial Audio dalam konteks gim?',
-          pilihan: {
-            A: 'Audio 2D statis',
-            B: 'Audio yang berubah sesuai dengan posisi dan orientasi pemain',
-            C: 'Format file audio khusus',
-            D: 'Pengaturan volume tetap',
-            E: 'Efek audio pada menu gim'
-          },
-          jawaban: 'B'
-        },
-        { soal: '21. Teknik optimisasi gim apa yang digunakan untuk menyembunyikan objek yang tidak terlihat oleh kamera?',
-          pilihan: {
-            A: 'LOD (Level of Detail)',
-            B: 'Garbage Collection',
-            C: 'Occlusion Culling',
-            D: 'Backface Culling',
-            E: 'Frustum Culling'
-          },
-          jawaban: 'C'
-        },
-        { soal: '22. Teknik optimisasi gim yang menurunkan kualitas detail objek saat berada jauh dari kamera adalah:',
-          pilihan: {
-            A: 'Occlusion Culling',
-            B: 'Level Streaming',
-            C: 'LOD (Level of Detail)',
-            D: 'Batching',
-            E: 'Texture Compression'
-          },
-          jawaban: 'C'
-        },
-        { soal: '23. Fungsi Garbage Collection dalam konteks pemrograman gim adalah untuk:',
-          pilihan: {
-            A: 'Menambah data baru',
-            B: 'Menghapus data yang tidak digunakan',
-            C: 'Menyimpan data pemain',
-            D: 'Meningkatkan grafis',
-            E: 'Mengontrol kecepatan animasi'
-          },
-          jawaban: 'B'
-        },
-        { soal: '24. Perintah apa yang digunakan di Unity untuk mencetak log ke console untuk debugging?',
-          pilihan: {
-            A: 'Console.WriteLine()',
-            B: 'Debug.Log()',
-            C: 'Print()',
-            D: 'LogMessage()',
-            E: 'System.out.println()'
-          },
-          jawaban: 'B'
-        },
-        { soal: '25. Apa fungsi dari Profiler dalam Unity?',
-          pilihan: {
-            A: 'Mengatur input pengguna',
-            B: 'Menganalisis performa gim',
-            C: 'Membuat aset grafis',
-            D: 'Menyimpan data',
-            E: 'Mengatur suara'
-          },
-          jawaban: 'B'
-        },
-        { soal: '26. Platform distribusi gim terbesar untuk PC adalah:',
-          pilihan: {
-            A: 'Google Play Store',
-            B: 'App Store',
-            C: 'Steam',
-            D: 'Epic Games Store',
-            E: 'Itch.io'
-          },
-          jawaban: 'C'
-        },
-        { soal: '27. Platform distribusi gim untuk perangkat Android yang populer adalah:',
-          pilihan: {
-            A: 'Steam',
-            B: 'Google Play Store',
-            C: 'App Store',
-            D: 'Xbox Live',
-            E: 'Nintendo eShop'
-          },
-          jawaban: 'B'
-        },
-        { soal: '28. Platform distribusi gim untuk perangkat iOS adalah:',
-          pilihan: {
-            A: 'Google Play Store',
-            B: 'Steam',
-            C: 'App Store',
-            D: 'Epic Games Store',
-            E: 'Microsoft Store'
-          },
-          jawaban: 'C'
-        },
-        { soal: '29. Model monetisasi gim di mana pemain harus membeli gim sebelum dapat memainkannya disebut:',
-          pilihan: {
-            A: 'Freemium',
-            B: 'In-App Purchase',
-            C: 'Premium',
-            D: 'Iklan',
-            E: 'Subscription'
-          },
-          jawaban: 'C'
-        },
-        { soal: '30. Model monetisasi gim yang menawarkan gim gratis dengan fitur tambahan berbayar disebut:',
-          pilihan: {
-            A: 'Premium',
-            B: 'Freemium',
-            C: 'In-App Purchase',
-            D: 'Iklan',
-            E: 'Langganan'
-          },
-          jawaban: 'B'
-        },
-        { soal: '31. Model monetisasi gim yang melibatkan pembelian item dalam gim dengan uang sungguhan adalah:',
-          pilihan: {
-            A: 'Premium',
-            B: 'Freemium',
-            C: 'In-App Purchase',
-            D: 'Iklan',
-            E: 'Sponsorship'
-          },
-          jawaban: 'C'
-        },
-        { soal: '32. Model monetisasi gim yang mengandalkan pendapatan dari penayangan iklan disebut:',
-          pilihan: {
-            A: 'Premium',
-            B: 'Freemium',
-            C: 'In-App Purchase',
-            D: 'Iklan dalam Gim',
-            E: 'Langganan'
-          },
-          jawaban: 'D'
-        },
-        { soal: '33. Apa itu Unity Hub?',
-          pilihan: {
-            A: 'Platform distribusi gim',
-            B: 'Alat untuk menginstal dan mengelola berbagai versi Unity',
-            C: 'Editor grafis untuk gim',
-            D: 'Bahasa pemrograman',
-            E: 'Komponen audio di Unity'
-          },
-          jawaban: 'B'
-        },
-        { soal: '34. Saat memulai proyek baru di Unity, template proyek yang tersedia biasanya berupa:',
-          pilihan: {
-            A: '3D saja',
-            B: '2D saja',
-            C: '2D dan 3D',
-            D: 'VR saja',
-            E: 'AR saja'
-          },
-          jawaban: 'C'
-        },
-        { soal: '35. Komponen mana yang menampilkan daftar semua objek dalam sebuah scene di Unity?',
-          pilihan: {
-            A: 'Scene View',
-            B: 'Game View',
-            C: 'Hierarchy',
-            D: 'Inspector',
-            E: 'Project'
-          },
-          jawaban: 'C'
-        },
-        { soal: '36. Komponen mana yang menampilkan properti dari objek yang dipilih di Unity?',
-          pilihan: {
-            A: 'Scene View',
-            B: 'Game View',
-            C: 'Hierarchy',
-            D: 'Inspector',
-            E: 'Project'
-          },
-          jawaban: 'D'
-        },
-        { soal: '37. Apa fungsi utama dari Scene View dalam Unity?',
-          pilihan: {
-            A: 'Menyimpan aset',
-            B: 'Menampilkan pratinjau gim saat dijalankan',
-            C: 'Menampilkan dan mengatur tata letak objek dalam scene',
-            D: 'Mengedit kode skrip',
-            E: 'Mengontrol audio'
-          },
-          jawaban: 'C'
-        },
-        { soal: '38. Dalam skrip Unity, fungsi <code>Start()</code> dan <code>Update()</code> digunakan untuk:',
-          pilihan: {
-            A: 'Mengatur audio',
-            B: 'Menginisialisasi dan memperbarui perilaku objek',
-            C: 'Mengelola file',
-            D: 'Mengubah aset grafis',
-            E: 'Menyimpan data'
-          },
-          jawaban: 'B'
-        },
-        { soal: '39. Fungsi <code>OnCollisionEnter</code> dalam Unity digunakan untuk:',
-          pilihan: {
-            A: 'Menampilkan animasi',
-            B: 'Mendeteksi tabrakan antara objek',
-            C: 'Mengatur input',
-            D: 'Memutar audio',
-            E: 'Mengubah scene'
-          },
-          jawaban: 'B'
-        },
-        { soal: '40. Bagaimana cara berpindah antar level atau scene dalam Unity?',
-          pilihan: {
-            A: 'Menggunakan AudioSource',
-            B: 'Menggunakan Animator',
-            C: 'Menggunakan SceneManager',
-            D: 'Menggunakan GameObject',
-            E: 'Menggunakan Collider'
-          },
-          jawaban: 'C'
-        }
-      ],
-      bab2: [
-        { soal: '1. Apa kepanjangan dari ERD dalam konteks database?',
-          pilihan: {
-            A: 'Entity Relationship Design',
-            B: 'Entity Relationship Diagram',
-            C: 'Entity Relational Data',
-            D: 'Element Relationship Diagram',
-            E: 'Entity Resource Diagram'
-          },
-          jawaban: 'B'
-        },
-        { soal: '2. Manakah yang BUKAN termasuk komponen utama ERD?',
-          pilihan: {
-            A: 'Entitas',
-            B: 'Atribut',
-            C: 'SQL Query',
-            D: 'Relasi',
-            E: 'Primary Key'
-          },
-          jawaban: 'C'
-        },
-        { soal: '3. Contoh entitas dalam database akademik adalah:',
-          pilihan: {
-            A: 'NIM',
-            B: 'Nilai',
-            C: 'Mahasiswa',
-            D: 'Tanggal Lahir',
-            E: 'IPK'
-          },
-          jawaban: 'C'
-        },
-        { soal: '4. Manakah yang merupakan contoh atribut?',
-          pilihan: {
-            A: 'Mengajar',
-            B: 'NIM',
-            C: 'Meminjam',
-            D: 'Buku',
-            E: 'Perpustakaan'
-          },
-          jawaban: 'B'
-        },
-        { soal: '5. Relasi dalam ERD berfungsi untuk:',
-          pilihan: {
-            A: 'Menampilkan data statistik',
-            B: 'Mengenkripsi data',
-            C: 'Menghubungkan entitas',
-            D: 'Mengoptimasi query',
-            E: 'Menyimpan backup data'
-          },
-          jawaban: 'C'
-        },
-        { soal: '6. Primary Key adalah:',
-          pilihan: {
-            A: 'Kunci untuk mengakses database',
-            B: 'Identitas unik suatu entitas',
-            C: 'Password administrator',
-            D: 'Index tabel',
-            E: 'Kunci relasi antar server'
-          },
-          jawaban: 'B'
-        },
-        { soal: '7. Foreign Key berfungsi untuk:',
-          pilihan: {
-            A: 'Mengamankan data sensitif',
-            B: 'Menghubungkan ke primary key tabel lain',
-            C: 'Mengurutkan data',
-            D: 'Mengkompresi database',
-            E: 'Membuat index pencarian'
-          },
-          jawaban: 'B'
-        },
-        { soal: '8. ERD terutama digunakan dalam fase:',
-          pilihan: {
-            A: 'Implementasi sistem',
-            B: 'Desain database',
-            C: 'Testing software',
-            D: 'Maintenance sistem',
-            E: 'Dokumentasi user'
-          },
-          jawaban: 'B'
-        },
-        { soal: '9. Normalisasi data dalam ERD bertujuan untuk:',
-          pilihan: {
-            A: 'Meningkatkan kecepatan query',
-            B: 'Mengurangi redundansi data',
-            C: 'Memperbesar ukuran database',
-            D: 'Menambah jumlah tabel',
-            E: 'Mengenkripsi informasi'
-          },
-          jawaban: 'B'
-        },
-        { soal: '10. Software yang biasa digunakan untuk membuat ERD adalah:',
-          pilihan: {
-            A: 'MySQL Workbench',
-            B: 'Microsoft Word',
-            C: 'Adobe Photoshop',
-            D: 'Visual Studio Code',
-            E: 'Google Chrome'
-          },
-          jawaban: 'A'
-        }
-      ]
-    };
+    <div class="container game-container">
+        <div class="game-header">
+            <div class="character"></div>
+            <h1 class="game-title">CODE QUEST</h1>
+            <div class="progress-bar">
+                <div class="progress" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="question-box">
+            <!-- Konten pertanyaan akan disuntikkan secara dinamis -->
+        </div>
+    </div>
 
-    // Fungsi untuk merender soal ke dalam form
-    const quizForm = document.getElementById('quizForm');
-    function renderQuiz() {
-      for (const bab in soalData) {
-        // Buat section untuk tiap bab
-        const babSection = document.createElement('div');
-        babSection.classList.add('mb-4');
-  
-        const babTitle = document.createElement('h4');
-        babTitle.textContent = bab.toUpperCase();
-        babTitle.classList.add('mb-3', 'text-primary');
-        babSection.appendChild(babTitle);
-  
-        // Render tiap pertanyaan dalam bab
-        soalData[bab].forEach((item, idx) => {
-          const questionCard = document.createElement('div');
-          questionCard.classList.add('question-card', 'mb-3', 'p-3', 'border', 'rounded');
-          questionCard.dataset.bab = bab;
-          questionCard.dataset.index = idx;
-  
-          const questionTitle = document.createElement('p');
-          questionTitle.classList.add('question-title');
-          questionTitle.innerHTML = item.soal;
-          questionCard.appendChild(questionTitle);
-  
-          // Render pilihan jawaban
-          for (const opt in item.pilihan) {
-            const optionDiv = document.createElement('div');
-            optionDiv.classList.add('form-check', 'mb-1');
-  
-            const optionInput = document.createElement('input');
-            optionInput.classList.add('form-check-input');
-            optionInput.type = 'radio';
-            optionInput.name = `${bab}_${idx}`;
-            optionInput.id = `${bab}_${idx}_${opt}`;
-            optionInput.value = opt;
-            optionInput.required = true;
-  
-            const optionLabel = document.createElement('label');
-            optionLabel.classList.add('form-check-label', 'option-label');
-            optionLabel.setAttribute('for', `${bab}_${idx}_${opt}`);
-            optionLabel.innerHTML = `${opt}. ${item.pilihan[opt]}`;
-  
-            optionDiv.appendChild(optionInput);
-            optionDiv.appendChild(optionLabel);
-            questionCard.appendChild(optionDiv);
-          }
-  
-          // Tempat untuk feedback jawaban
-          const feedbackDiv = document.createElement('div');
-          feedbackDiv.classList.add('answer-feedback');
-          questionCard.appendChild(feedbackDiv);
-  
-          babSection.appendChild(questionCard);
-        });
-  
-        quizForm.appendChild(babSection);
-      }
-    }
-    renderQuiz();
-  
-    // Fungsi untuk memeriksa jawaban dan menampilkan feedback
-    function checkAnswers() {
-      let score = 0;
-      let total = 0;
-  
-      for (const bab in soalData) {
-        soalData[bab].forEach((item, idx) => {
-          total++;
-          const questionCard = document.querySelector(`div.question-card[data-bab="${bab}"][data-index="${idx}"]`);
-          const selected = document.querySelector(`input[name="${bab}_${idx}"]:checked`);
-          const feedbackDiv = questionCard.querySelector('.answer-feedback');
-  
-          // Nonaktifkan opsi untuk pertanyaan ini
-          const options = questionCard.querySelectorAll('input[type="radio"]');
-          options.forEach(option => {
-            option.disabled = true;
-          });
-  
-          if (selected) {
-            if (selected.value === item.jawaban) {
-              score++;
-              feedbackDiv.innerHTML = `<span class="text-success">Jawaban Anda benar.</span>`;
-              // Tandai opsi yang benar
-              const correctLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${item.jawaban}"]`);
-              if (correctLabel) correctLabel.classList.add('correct');
-            } else {
-              feedbackDiv.innerHTML = `<span class="text-danger">Jawaban Anda salah. Jawaban yang benar adalah ${item.jawaban}.</span>`;
-              // Tandai opsi yang dipilih salah
-              const userLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${selected.value}"]`);
-              if (userLabel) userLabel.classList.add('incorrect');
-              // Tandai opsi yang benar
-              const correctLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${item.jawaban}"]`);
-              if (correctLabel) correctLabel.classList.add('correct');
+    <script>
+        // Data soal (bab1 dan bab2) dari kode sebelumnya
+        const soalData = {
+          bab1: [
+            { soal: '1. Apa yang dimaksud dengan pemrograman gim?',
+              pilihan: {
+                A: 'Proses pembuatan website',
+                B: 'Proses pembuatan perangkat lunak interaktif untuk hiburan atau edukasi',
+                C: 'Proses pembuatan aplikasi mobile',
+                D: 'Proses desain grafis',
+                E: 'Proses pembuatan sistem operasi'
+              },
+              jawaban: 'B'
+            },
+            { soal: '2. Elemen dasar gim mencakup semua berikut kecuali:',
+              pilihan: {
+                A: 'Grafik dan Animasi',
+                B: 'Gameplay',
+                C: 'Fisika',
+                D: 'Audio',
+                E: 'Database'
+              },
+              jawaban: 'E'
+            },
+            { soal: '3. Mana dari berikut yang termasuk elemen dasar gim?',
+              pilihan: {
+                A: 'AI (Artificial Intelligence)',
+                B: 'Database Management',
+                C: 'Sistem Operasi',
+                D: 'Pengolahan Data',
+                E: 'Penyimpanan Cloud'
+              },
+              jawaban: 'A'
+            },
+            { soal: '4. Apa yang dimaksud dengan game engine?',
+              pilihan: {
+                A: 'Perangkat keras untuk menjalankan gim',
+                B: 'Perangkat lunak untuk membuat dan mengembangkan gim',
+                C: 'Sistem operasi khusus untuk gim',
+                D: 'Aplikasi pengedit foto',
+                E: 'Bahasa pemrograman'
+              },
+              jawaban: 'B'
+            },
+            { soal: '5. Game engine yang populer dan menggunakan bahasa pemrograman C# adalah:',
+              pilihan: {
+                A: 'Unreal Engine',
+                B: 'Godot',
+                C: 'Unity',
+                D: 'CryEngine',
+                E: 'Frostbite'
+              },
+              jawaban: 'C'
+            },
+            { soal: '6. Game engine yang menggunakan bahasa pemrograman C++ dan Blueprints adalah:',
+              pilihan: {
+                A: 'Unity',
+                B: 'Unreal Engine',
+                C: 'Godot',
+                D: 'Source Engine',
+                E: 'Lumberyard'
+              },
+              jawaban: 'B'
+            },
+            { soal: '7. Game engine yang menggunakan bahasa pemrograman GDScript adalah:',
+              pilihan: {
+                A: 'Unity',
+                B: 'Unreal Engine',
+                C: 'Godot',
+                D: 'CryEngine',
+                E: 'Frostbite'
+              },
+              jawaban: 'C'
+            },
+            { soal: '8. Dalam Unity, apa yang dimaksud dengan "Scene"?',
+              pilihan: {
+                A: 'Tempat menyimpan aset gim',
+                B: 'Tempat objek-objek gim ditempatkan dan diatur',
+                C: 'Editor kode pemrograman',
+                D: 'Format audio',
+                E: 'Komponen animasi'
+              },
+              jawaban: 'B'
+            },
+            { soal: '9. Apa itu GameObject dalam Unity?',
+              pilihan: {
+                A: 'Objek dalam gim seperti karakter, musuh, atau item',
+                B: 'Aset untuk audio',
+                C: 'Editor untuk membuat level',
+                D: 'Format file gambar',
+                E: 'Tipe data untuk skrip'
+              },
+              jawaban: 'A'
+            },
+            { soal: '10. Komponen apa yang digunakan untuk mengatur posisi, rotasi, dan skala objek dalam Unity?',
+              pilihan: {
+                A: 'AudioSource',
+                B: 'Collider',
+                C: 'Transform',
+                D: 'Rigidbody',
+                E: 'Animator'
+              },
+              jawaban: 'C'
+            },
+            { soal: '11. Komponen mana yang digunakan untuk menambahkan efek fisika pada objek dalam Unity?',
+              pilihan: {
+                A: 'Transform',
+                B: 'Rigidbody',
+                C: 'Collider',
+                D: 'Animator',
+                E: 'UI'
+              },
+              jawaban: 'B'
+            },
+            { soal: '12. Fungsi Collider dalam Unity adalah untuk:',
+              pilihan: {
+                A: 'Menambahkan audio',
+                B: 'Mengatur animasi',
+                C: 'Mendeteksi tabrakan antara objek',
+                D: 'Mengatur fisika',
+                E: 'Menyimpan data pemain'
+              },
+              jawaban: 'C'
+            },
+            { soal: '13. Bagaimana cara mendeteksi input keyboard di Unity?',
+              pilihan: {
+                A: 'Input.GetAxis("Horizontal")',
+                B: 'Input.GetKey(KeyCode.Space)',
+                C: 'Input.GetMouseButton(0)',
+                D: 'Input.GetButton("Fire1")',
+                E: 'Input.GetTouch(0)'
+              },
+              jawaban: 'B'
+            },
+            { soal: '14. Bagaimana cara mendeteksi pergerakan mouse di Unity?',
+              pilihan: {
+                A: 'Input.GetKey(KeyCode.Mouse0)',
+                B: 'Input.GetAxis("Mouse X")',
+                C: 'Input.GetButton("Jump")',
+                D: 'Input.GetTouch(1)',
+                E: 'Input.GetAxis("Horizontal")'
+              },
+              jawaban: 'B'
+            },
+            { soal: '15. Untuk mendeteksi pergerakan joystick/controller, perintah apa yang digunakan dalam Unity?',
+              pilihan: {
+                A: 'Input.GetKey(KeyCode.Joystick1)',
+                B: 'Input.GetAxis("Vertical")',
+                C: 'Input.GetAxis("Horizontal")',
+                D: 'Input.GetMouseButton(1)',
+                E: 'Input.GetTouch(0)'
+              },
+              jawaban: 'C'
+            },
+            { soal: '16. Format audio mana yang terkompresi dengan ukuran file kecil?',
+              pilihan: {
+                A: 'WAV',
+                B: 'FLAC',
+                C: 'MP3',
+                D: 'AIFF',
+                E: 'OGG'
+              },
+              jawaban: 'C'
+            },
+            { soal: '17. Format audio mana yang dikenal dengan kualitas tinggi namun ukuran file lebih besar?',
+              pilihan: {
+                A: 'MP3',
+                B: 'WAV',
+                C: 'AAC',
+                D: 'WMA',
+                E: 'OGG'
+              },
+              jawaban: 'B'
+            },
+            { soal: '18. Komponen apa yang digunakan untuk memutar suara di Unity?',
+              pilihan: {
+                A: 'AudioListener',
+                B: 'AudioClip',
+                C: 'AudioSource',
+                D: 'AudioMixer',
+                E: 'SoundManager'
+              },
+              jawaban: 'C'
+            },
+            { soal: '19. Apa fungsi dari AudioMixer dalam Unity?',
+              pilihan: {
+                A: 'Menyimpan aset audio',
+                B: 'Mengontrol volume dan efek suara',
+                C: 'Mengatur file audio',
+                D: 'Mengubah format audio',
+                E: 'Menghapus suara'
+              },
+              jawaban: 'B'
+            },
+            { soal: '20. Apa yang dimaksud dengan Spatial Audio dalam konteks gim?',
+              pilihan: {
+                A: 'Audio 2D statis',
+                B: 'Audio yang berubah sesuai dengan posisi dan orientasi pemain',
+                C: 'Format file audio khusus',
+                D: 'Pengaturan volume tetap',
+                E: 'Efek audio pada menu gim'
+              },
+              jawaban: 'B'
+            },
+            { soal: '21. Teknik optimisasi gim apa yang digunakan untuk menyembunyikan objek yang tidak terlihat oleh kamera?',
+              pilihan: {
+                A: 'LOD (Level of Detail)',
+                B: 'Garbage Collection',
+                C: 'Occlusion Culling',
+                D: 'Backface Culling',
+                E: 'Frustum Culling'
+              },
+              jawaban: 'C'
+            },
+            { soal: '22. Teknik optimisasi gim yang menurunkan kualitas detail objek saat berada jauh dari kamera adalah:',
+              pilihan: {
+                A: 'Occlusion Culling',
+                B: 'Level Streaming',
+                C: 'LOD (Level of Detail)',
+                D: 'Batching',
+                E: 'Texture Compression'
+              },
+              jawaban: 'C'
+            },
+            { soal: '23. Fungsi Garbage Collection dalam konteks pemrograman gim adalah untuk:',
+              pilihan: {
+                A: 'Menambah data baru',
+                B: 'Menghapus data yang tidak digunakan',
+                C: 'Menyimpan data pemain',
+                D: 'Meningkatkan grafis',
+                E: 'Mengontrol kecepatan animasi'
+              },
+              jawaban: 'B'
+            },
+            { soal: '24. Perintah apa yang digunakan di Unity untuk mencetak log ke console untuk debugging?',
+              pilihan: {
+                A: 'Console.WriteLine()',
+                B: 'Debug.Log()',
+                C: 'Print()',
+                D: 'LogMessage()',
+                E: 'System.out.println()'
+              },
+              jawaban: 'B'
+            },
+            { soal: '25. Apa fungsi dari Profiler dalam Unity?',
+              pilihan: {
+                A: 'Mengatur input pengguna',
+                B: 'Menganalisis performa gim',
+                C: 'Membuat aset grafis',
+                D: 'Menyimpan data',
+                E: 'Mengatur suara'
+              },
+              jawaban: 'B'
+            },
+            { soal: '26. Platform distribusi gim terbesar untuk PC adalah:',
+              pilihan: {
+                A: 'Google Play Store',
+                B: 'App Store',
+                C: 'Steam',
+                D: 'Epic Games Store',
+                E: 'Itch.io'
+              },
+              jawaban: 'C'
+            },
+            { soal: '27. Platform distribusi gim untuk perangkat Android yang populer adalah:',
+              pilihan: {
+                A: 'Steam',
+                B: 'Google Play Store',
+                C: 'App Store',
+                D: 'Xbox Live',
+                E: 'Nintendo eShop'
+              },
+              jawaban: 'B'
+            },
+            { soal: '28. Platform distribusi gim untuk perangkat iOS adalah:',
+              pilihan: {
+                A: 'Google Play Store',
+                B: 'Steam',
+                C: 'App Store',
+                D: 'Epic Games Store',
+                E: 'Microsoft Store'
+              },
+              jawaban: 'C'
+            },
+            { soal: '29. Model monetisasi gim di mana pemain harus membeli gim sebelum dapat memainkannya disebut:',
+              pilihan: {
+                A: 'Freemium',
+                B: 'In-App Purchase',
+                C: 'Premium',
+                D: 'Iklan',
+                E: 'Subscription'
+              },
+              jawaban: 'C'
+            },
+            { soal: '30. Model monetisasi gim yang menawarkan gim gratis dengan fitur tambahan berbayar disebut:',
+              pilihan: {
+                A: 'Premium',
+                B: 'Freemium',
+                C: 'In-App Purchase',
+                D: 'Iklan',
+                E: 'Langganan'
+              },
+              jawaban: 'B'
+            },
+            { soal: '31. Model monetisasi gim yang melibatkan pembelian item dalam gim dengan uang sungguhan adalah:',
+              pilihan: {
+                A: 'Premium',
+                B: 'Freemium',
+                C: 'In-App Purchase',
+                D: 'Iklan',
+                E: 'Sponsorship'
+              },
+              jawaban: 'C'
+            },
+            { soal: '32. Model monetisasi gim yang mengandalkan pendapatan dari penayangan iklan disebut:',
+              pilihan: {
+                A: 'Premium',
+                B: 'Freemium',
+                C: 'In-App Purchase',
+                D: 'Iklan dalam Gim',
+                E: 'Langganan'
+              },
+              jawaban: 'D'
+            },
+            { soal: '33. Apa itu Unity Hub?',
+              pilihan: {
+                A: 'Platform distribusi gim',
+                B: 'Alat untuk menginstal dan mengelola berbagai versi Unity',
+                C: 'Editor grafis untuk gim',
+                D: 'Bahasa pemrograman',
+                E: 'Komponen audio di Unity'
+              },
+              jawaban: 'B'
+            },
+            { soal: '34. Saat memulai proyek baru di Unity, template proyek yang tersedia biasanya berupa:',
+              pilihan: {
+                A: '3D saja',
+                B: '2D saja',
+                C: '2D dan 3D',
+                D: 'VR saja',
+                E: 'AR saja'
+              },
+              jawaban: 'C'
+            },
+            { soal: '35. Komponen mana yang menampilkan daftar semua objek dalam sebuah scene di Unity?',
+              pilihan: {
+                A: 'Scene View',
+                B: 'Game View',
+                C: 'Hierarchy',
+                D: 'Inspector',
+                E: 'Project'
+              },
+              jawaban: 'C'
+            },
+            { soal: '36. Komponen mana yang menampilkan properti dari objek yang dipilih di Unity?',
+              pilihan: {
+                A: 'Scene View',
+                B: 'Game View',
+                C: 'Hierarchy',
+                D: 'Inspector',
+                E: 'Project'
+              },
+              jawaban: 'D'
+            },
+            { soal: '37. Apa fungsi utama dari Scene View dalam Unity?',
+              pilihan: {
+                A: 'Menyimpan aset',
+                B: 'Menampilkan pratinjau gim saat dijalankan',
+                C: 'Menampilkan dan mengatur tata letak objek dalam scene',
+                D: 'Mengedit kode skrip',
+                E: 'Mengontrol audio'
+              },
+              jawaban: 'C'
+            },
+            { soal: '38. Dalam skrip Unity, fungsi <code>Start()</code> dan <code>Update()</code> digunakan untuk:',
+              pilihan: {
+                A: 'Mengatur audio',
+                B: 'Menginisialisasi dan memperbarui perilaku objek',
+                C: 'Mengelola file',
+                D: 'Mengubah aset grafis',
+                E: 'Menyimpan data'
+              },
+              jawaban: 'B'
+            },
+            { soal: '39. Fungsi <code>OnCollisionEnter</code> dalam Unity digunakan untuk:',
+              pilihan: {
+                A: 'Menampilkan animasi',
+                B: 'Mendeteksi tabrakan antara objek',
+                C: 'Mengatur input',
+                D: 'Memutar audio',
+                E: 'Mengubah scene'
+              },
+              jawaban: 'B'
+            },
+            { soal: '40. Bagaimana cara berpindah antar level atau scene dalam Unity?',
+              pilihan: {
+                A: 'Menggunakan AudioSource',
+                B: 'Menggunakan Animator',
+                C: 'Menggunakan SceneManager',
+                D: 'Menggunakan GameObject',
+                E: 'Menggunakan Collider'
+              },
+              jawaban: 'C'
             }
-          }
+          ],
+          bab2: [
+            { soal: '1. Apa kepanjangan dari ERD dalam konteks database?',
+              pilihan: {
+                A: 'Entity Relationship Design',
+                B: 'Entity Relationship Diagram',
+                C: 'Entity Relational Data',
+                D: 'Element Relationship Diagram',
+                E: 'Entity Resource Diagram'
+              },
+              jawaban: 'B'
+            },
+            { soal: '2. Manakah yang BUKAN termasuk komponen utama ERD?',
+              pilihan: {
+                A: 'Entitas',
+                B: 'Atribut',
+                C: 'SQL Query',
+                D: 'Relasi',
+                E: 'Primary Key'
+              },
+              jawaban: 'C'
+            },
+            { soal: '3. Contoh entitas dalam database akademik adalah:',
+              pilihan: {
+                A: 'NIM',
+                B: 'Nilai',
+                C: 'Mahasiswa',
+                D: 'Tanggal Lahir',
+                E: 'IPK'
+              },
+              jawaban: 'C'
+            },
+            { soal: '4. Manakah yang merupakan contoh atribut?',
+              pilihan: {
+                A: 'Mengajar',
+                B: 'NIM',
+                C: 'Meminjam',
+                D: 'Buku',
+                E: 'Perpustakaan'
+              },
+              jawaban: 'B'
+            },
+            { soal: '5. Relasi dalam ERD berfungsi untuk:',
+              pilihan: {
+                A: 'Menampilkan data statistik',
+                B: 'Mengenkripsi data',
+                C: 'Menghubungkan entitas',
+                D: 'Mengoptimasi query',
+                E: 'Menyimpan backup data'
+              },
+              jawaban: 'C'
+            },
+            { soal: '6. Primary Key adalah:',
+              pilihan: {
+                A: 'Kunci untuk mengakses database',
+                B: 'Identitas unik suatu entitas',
+                C: 'Password administrator',
+                D: 'Index tabel',
+                E: 'Kunci relasi antar server'
+              },
+              jawaban: 'B'
+            },
+            { soal: '7. Foreign Key berfungsi untuk:',
+              pilihan: {
+                A: 'Mengamankan data sensitif',
+                B: 'Menghubungkan ke primary key tabel lain',
+                C: 'Mengurutkan data',
+                D: 'Mengkompresi database',
+                E: 'Membuat index pencarian'
+              },
+              jawaban: 'B'
+            },
+            { soal: '8. ERD terutama digunakan dalam fase:',
+              pilihan: {
+                A: 'Implementasi sistem',
+                B: 'Desain database',
+                C: 'Testing software',
+                D: 'Maintenance sistem',
+                E: 'Dokumentasi user'
+              },
+              jawaban: 'B'
+            },
+            { soal: '9. Normalisasi data dalam ERD bertujuan untuk:',
+              pilihan: {
+                A: 'Meningkatkan kecepatan query',
+                B: 'Mengurangi redundansi data',
+                C: 'Memperbesar ukuran database',
+                D: 'Menambah jumlah tabel',
+                E: 'Mengenkripsi informasi'
+              },
+              jawaban: 'B'
+            },
+            { soal: '10. Software yang biasa digunakan untuk membuat ERD adalah:',
+              pilihan: {
+                A: 'MySQL Workbench',
+                B: 'Microsoft Word',
+                C: 'Adobe Photoshop',
+                D: 'Visual Studio Code',
+                E: 'Google Chrome'
+              },
+              jawaban: 'A'
+            }
+          ]
+        };
+
+        // Konversi data soal menjadi array pertanyaan untuk game
+        const questions = [];
+        Object.values(soalData).forEach(bab => {
+          bab.forEach(item => {
+            const options = [
+              item.pilihan.A,
+              item.pilihan.B,
+              item.pilihan.C,
+              item.pilihan.D,
+              item.pilihan.E
+            ];
+            const correctIndex = item.jawaban.charCodeAt(0) - 'A'.charCodeAt(0);
+            questions.push({
+              question: item.soal,
+              options: options,
+              correct: correctIndex
+            });
+          });
         });
-      }
-  
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = `<div class="alert alert-info">Skor Anda: ${score} / ${total}</div>`;
-    }
-  
-    // Event listener untuk tombol submit
-    document.getElementById('submitBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      checkAnswers();
-      // Nonaktifkan tombol submit agar tidak bisa submit lagi
-      this.disabled = true;
-    });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function updateProgress() {
+          const progressPercent = (currentQuestion / questions.length) * 100;
+          document.querySelector('.progress').style.width = `${progressPercent}%`;
+        }
+
+        function showQuestion() {
+          const questionBox = document.querySelector('.question-box');
+          // Kosongkan konten sebelumnya
+          questionBox.innerHTML = '';
+          if (currentQuestion < questions.length) {
+            const q = questions[currentQuestion];
+            const questionEl = document.createElement('h3');
+            questionEl.className = 'mb-4';
+            questionEl.innerHTML = q.question;
+            questionBox.appendChild(questionEl);
+
+            // Buat tombol opsi untuk setiap pilihan
+            q.options.forEach((option, index) => {
+              const btn = document.createElement('button');
+              btn.className = 'option-btn';
+              btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
+              btn.addEventListener('click', function() {
+                this.style.animation = 'pixelate 0.3s';
+                // Periksa jawaban
+                if (index === q.correct) {
+                  score++;
+                  btn.style.backgroundColor = 'var(--game-success)';
+                } else {
+                  btn.style.backgroundColor = 'var(--game-danger)';
+                  // Tandai tombol jawaban yang benar
+                  document.querySelectorAll('.option-btn').forEach(b => {
+                    if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
+                      b.style.backgroundColor = 'var(--game-success)';
+                    }
+                  });
+                }
+                setTimeout(() => {
+                  currentQuestion++;
+                  updateProgress();
+                  showQuestion();
+                }, 500);
+              });
+              questionBox.appendChild(btn);
+            });
+          } else {
+            // Tampilkan hasil akhir
+            questionBox.innerHTML = `<h3>Quiz Selesai!</h3><p>Skor Anda: ${score} / ${questions.length}</p>`;
+            document.querySelector('.progress').style.width = `100%`;
+          }
+        }
+
+        // Inisialisasi quiz
+        showQuestion();
+    </script>
 </body>
 </html>
