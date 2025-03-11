@@ -1,707 +1,685 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ulangan Agama</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ulangan Pemrograman Gim & Database</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Tampilan mirip Google Form */
+    body {
+      background-color: #f8f9fa;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .question-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .question-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .option-label {
+      display: block;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .option-label:hover {
+      background-color: #f1f1f1;
+    }
+    .correct {
+      background-color: #d4edda !important;
+      border-color: #c3e6cb !important;
+    }
+    .incorrect {
+      background-color: #f8d7da !important;
+      border-color: #f5c6cb !important;
+    }
+    .answer-feedback {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+  </style>
 </head>
-<body class="bg-light">
-  <div class="container my-5">
-    <div class="card shadow">
-      <div class="card-header bg-primary text-white">
-        <h2 class="text-center">ULANGAN AGAMA ISLAM</h2>
-      </div>
-      <div class="card-body">
-        <form id="quizForm">
-          <!-- Soal akan diisi oleh JavaScript -->
-        </form>
-      </div>
-    </div>
+<body>
+  <div class="container quiz-container">
+    <h2 class="text-center mb-4">Ulangan Pemrograman Gim & Database</h2>
+    <form id="quizForm"></form>
+    <button id="submitBtn" class="btn btn-primary btn-lg w-100">Kumpulkan Jawaban</button>
+    <div id="result" class="mt-4"></div>
   </div>
-
+  
   <script>
-    // Data Soal dan Jawaban (Bab 6 – Bab 10)
-    const soal = {
-      bab6: [
-        {
-          soal:
-            "Perhatikan Q.S. Yūnus/10: 40, di bawah ini! Sambungan ayat di atas yang tepat adalah...",
+    // Data soal untuk bab1 dan bab2
+    const soalData = {
+      bab1: [
+        { soal: '1. Apa yang dimaksud dengan pemrograman gim?',
           pilihan: {
-            A: "لَهُمْ عَذَابٌ أَلِيمٌ",
-            B: "وَأَتْمَمْتُ عَلَيْكُمْ نِعْمَتِي",
-            C: "اَعْلَمُ بِالْمُفْسِدِيْنَ",
-            D: "فَاصْبِرْ إِنَّ الْعَاقِبَةَ لِلْمُتَّقِينَ",
-            E: "وَمَا أَنْتَ عَلَيْهِمْ بِجَبَّارٍ",
+            A: 'Proses pembuatan website',
+            B: 'Proses pembuatan perangkat lunak interaktif untuk hiburan atau edukasi',
+            C: 'Proses pembuatan aplikasi mobile',
+            D: 'Proses desain grafis',
+            E: 'Proses pembuatan sistem operasi'
           },
-          jawaban: "C",
+          jawaban: 'B'
         },
-        {
-          soal:
-            'فَقُلْ لِّيْ عَمَلِيْ ... 2. Dalam Q.S. Yūnus/10: 41 ada kalimat. Terjemahan yang tepat untuk kalimat di atas adalah …',
+        { soal: '2. Elemen dasar gim mencakup semua berikut kecuali:',
           pilihan: {
-            A: 'maka katakanlah "Aku telah berbuat"',
-            B: 'maka katakanlah "Ini perbuatanku"',
-            C: 'maka katakanlah "Ini hasil kerjaku"',
-            D: 'maka katakanlah "Aku yang melakukan"',
-            E: 'maka katakanlah "Bagiku pekerjaanku"',
+            A: 'Grafik dan Animasi',
+            B: 'Gameplay',
+            C: 'Fisika',
+            D: 'Audio',
+            E: 'Database'
           },
-          jawaban: "E",
+          jawaban: 'E'
         },
-        {
-          soal:
-            "Diantara isi Q.S. Yūnus/10: 40-41 adalah agar umat Islam mempunyai sikap …",
+        { soal: '3. Mana dari berikut yang termasuk elemen dasar gim?',
           pilihan: {
-            A: "Tawakal",
-            B: "Sabar",
-            C: "Ikhlas",
-            D: "Samhah",
-            E: "Tawadhu",
+            A: 'AI (Artificial Intelligence)',
+            B: 'Database Management',
+            C: 'Sistem Operasi',
+            D: 'Pengolahan Data',
+            E: 'Penyimpanan Cloud'
           },
-          jawaban: "D",
+          jawaban: 'A'
         },
-        {
-          soal:
-            "﴿وَاِنْ كَذَّبُوْكَ فَقُلْ لِّيْ عَمَلِيْ وَلَكُمْ عَمَلُكُمْۚاَنْتُمْ بَرِيْۤـُٔوْنَمَِّآ اَعْمَلُ وَاَنَا۠. Perhatikan ayat di bawah ini (بَرِيْۤءٌ مَِّّا تَعْمَلُوْنَ) Dari ayat yang digaris bawahi, bacaan tajwid yang benar dan urut adalah …",
+        { soal: '4. Apa yang dimaksud dengan game engine?',
           pilihan: {
-            A: "Ikhfa’, ghunnah, mad wajib muttasil",
-            B: "Ikhfa’ syafawi, ikhfa’, ghunnah, dan mad jaiz munfasil",
-            C: "Idgham bighunnah, mad lin, dan qalqalah sughra",
-            D: "Ikhfa’ haqiqi, mad arid lissukun, dan idgham bilaghunnah",
-            E: "Mad thabi’i, idgham mutamatsilain, dan ghunnah",
+            A: 'Perangkat keras untuk menjalankan gim',
+            B: 'Perangkat lunak untuk membuat dan mengembangkan gim',
+            C: 'Sistem operasi khusus untuk gim',
+            D: 'Aplikasi pengedit foto',
+            E: 'Bahasa pemrograman'
           },
-          jawaban: "B",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Dalam Hadis Nabi Muhammad Saw., dari Abu Hurairah r.a., bahwa al-Thufail bin ‘Amr menemui Nabi dan menceritakan bahwa Daus (salah satu kabilah Yaman) telah durhaka serta menolak dakwahnya, dan meminta agar Nabi mendoakan mereka binasa. Respon Nabi sesuai hadis tersebut adalah …",
+        { soal: '5. Game engine yang populer dan menggunakan bahasa pemrograman C# adalah:',
           pilihan: {
-            A: "Nabi mendoakan kebinasaan mereka",
-            B: "Nabi memerintahkan untuk memerangi mereka",
-            C: 'Nabi berdoa, "Ya Allah berilah petunjuk kepada kabilah Daus dan datangkanlah (mereka) bersama orang muslim (masuk Islam)."',
-            D: "Nabi mengabaikan mereka",
-            E: "Nabi meminta mereka untuk membayar jizyah",
+            A: 'Unreal Engine',
+            B: 'Godot',
+            C: 'Unity',
+            D: 'CryEngine',
+            E: 'Frostbite'
           },
-          jawaban: "C",
+          jawaban: 'C'
         },
-        {
-          soal:
-            "Perhatikan ayat di bawah ini! مَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا Terjemahan yang tepat dari ayat tersebut adalah …",
+        { soal: '6. Game engine yang menggunakan bahasa pemrograman C++ dan Blueprints adalah:',
           pilihan: {
-            A: "Barangsiapa memelihara kehidupan seorang manusia, maka seakan-akan dia telah memelihara kehidupan semua manusia",
-            B: "Barangsiapa membunuh seorang manusia, maka seakan-akan dia telah membunuh semua manusia",
-            C: "Barangsiapa menyelamatkan nyawa seseorang, maka dia akan mendapatkan pahala yang besar",
-            D: "Barangsiapa menghidupkan hati seseorang, maka dia akan mendapatkan surga",
-            E: "Barangsiapa memberikan kehidupan kepada orang lain, maka dia akan diampuni dosanya",
+            A: 'Unity',
+            B: 'Unreal Engine',
+            C: 'Godot',
+            D: 'Source Engine',
+            E: 'Lumberyard'
           },
-          jawaban: "A",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Perhatikan Q.S. Al-Maidah/5:32 di bawah ini. Dari ayat yang digarisbawahi, bacaan tajwid yang benar dan urut adalah …",
+        { soal: '7. Game engine yang menggunakan bahasa pemrograman GDScript adalah:',
           pilihan: {
-            A: "idzhar khalqi, qalqalah sughra, ikhfa’, ghunnah, dan mad thabi’i",
-            B: "Ikhfa’ syafawi, mad lin, dan idgham bilaghunnah",
-            C: "Mad wajib muttasil, idgham bighunnah, dan qalqalah kubra",
-            D: "Ikhfa’ haqiqi, mad arid lissukun, dan ghunnah",
-            E: "Mad thabi’i, idgham mutamatsilain, dan ghunnah",
+            A: 'Unity',
+            B: 'Unreal Engine',
+            C: 'Godot',
+            D: 'CryEngine',
+            E: 'Frostbite'
           },
-          jawaban: "A",
+          jawaban: 'C'
         },
-        {
-          soal:
-            "Penerapan dari Q.S. Al-Maidah/5:32 adalah …",
+        { soal: '8. Dalam Unity, apa yang dimaksud dengan "Scene"?',
           pilihan: {
-            A: "Membantu orang yang sedang kesusahan",
-            B: "Memberikan sedekah kepada fakir miskin",
-            C: "Memberikan santunan kepada anak yatim piatu",
-            D: "Menjaga lingkungan sekitar",
-            E: "Menghormati orang tua",
+            A: 'Tempat menyimpan aset gim',
+            B: 'Tempat objek-objek gim ditempatkan dan diatur',
+            C: 'Editor kode pemrograman',
+            D: 'Format audio',
+            E: 'Komponen animasi'
           },
-          jawaban: "C",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Diriwayatkan dari ‘Abdullah bin ‘Amr, jarak mencium harumnya surga adalah …",
+        { soal: '9. Apa itu GameObject dalam Unity?',
           pilihan: {
-            A: "10 tahun",
-            B: "20 tahun",
-            C: "30 tahun",
-            D: "40 tahun",
-            E: "50 tahun",
+            A: 'Objek dalam gim seperti karakter, musuh, atau item',
+            B: 'Aset untuk audio',
+            C: 'Editor untuk membuat level',
+            D: 'Format file gambar',
+            E: 'Tipe data untuk skrip'
           },
-          jawaban: "D",
+          jawaban: 'A'
         },
-        {
-          soal:
-            "Orang yang datang pada hari kiamat membawa shalat, puasa, dan zakat tetapi juga melakukan kejahatan disebut …",
+        { soal: '10. Komponen apa yang digunakan untuk mengatur posisi, rotasi, dan skala objek dalam Unity?',
           pilihan: {
-            A: "Al-Munafiq",
-            B: "Al-Muflis",
-            C: "Al-Kafir",
-            D: "Al-Fasiq",
-            E: "Al-Murtad",
+            A: 'AudioSource',
+            B: 'Collider',
+            C: 'Transform',
+            D: 'Rigidbody',
+            E: 'Animator'
           },
-          jawaban: "B",
+          jawaban: 'C'
         },
+        { soal: '11. Komponen mana yang digunakan untuk menambahkan efek fisika pada objek dalam Unity?',
+          pilihan: {
+            A: 'Transform',
+            B: 'Rigidbody',
+            C: 'Collider',
+            D: 'Animator',
+            E: 'UI'
+          },
+          jawaban: 'B'
+        },
+        { soal: '12. Fungsi Collider dalam Unity adalah untuk:',
+          pilihan: {
+            A: 'Menambahkan audio',
+            B: 'Mengatur animasi',
+            C: 'Mendeteksi tabrakan antara objek',
+            D: 'Mengatur fisika',
+            E: 'Menyimpan data pemain'
+          },
+          jawaban: 'C'
+        },
+        { soal: '13. Bagaimana cara mendeteksi input keyboard di Unity?',
+          pilihan: {
+            A: 'Input.GetAxis("Horizontal")',
+            B: 'Input.GetKey(KeyCode.Space)',
+            C: 'Input.GetMouseButton(0)',
+            D: 'Input.GetButton("Fire1")',
+            E: 'Input.GetTouch(0)'
+          },
+          jawaban: 'B'
+        },
+        { soal: '14. Bagaimana cara mendeteksi pergerakan mouse di Unity?',
+          pilihan: {
+            A: 'Input.GetKey(KeyCode.Mouse0)',
+            B: 'Input.GetAxis("Mouse X")',
+            C: 'Input.GetButton("Jump")',
+            D: 'Input.GetTouch(1)',
+            E: 'Input.GetAxis("Horizontal")'
+          },
+          jawaban: 'B'
+        },
+        { soal: '15. Untuk mendeteksi pergerakan joystick/controller, perintah apa yang digunakan dalam Unity?',
+          pilihan: {
+            A: 'Input.GetKey(KeyCode.Joystick1)',
+            B: 'Input.GetAxis("Vertical")',
+            C: 'Input.GetAxis("Horizontal")',
+            D: 'Input.GetMouseButton(1)',
+            E: 'Input.GetTouch(0)'
+          },
+          jawaban: 'C'
+        },
+        { soal: '16. Format audio mana yang terkompresi dengan ukuran file kecil?',
+          pilihan: {
+            A: 'WAV',
+            B: 'FLAC',
+            C: 'MP3',
+            D: 'AIFF',
+            E: 'OGG'
+          },
+          jawaban: 'C'
+        },
+        { soal: '17. Format audio mana yang dikenal dengan kualitas tinggi namun ukuran file lebih besar?',
+          pilihan: {
+            A: 'MP3',
+            B: 'WAV',
+            C: 'AAC',
+            D: 'WMA',
+            E: 'OGG'
+          },
+          jawaban: 'B'
+        },
+        { soal: '18. Komponen apa yang digunakan untuk memutar suara di Unity?',
+          pilihan: {
+            A: 'AudioListener',
+            B: 'AudioClip',
+            C: 'AudioSource',
+            D: 'AudioMixer',
+            E: 'SoundManager'
+          },
+          jawaban: 'C'
+        },
+        { soal: '19. Apa fungsi dari AudioMixer dalam Unity?',
+          pilihan: {
+            A: 'Menyimpan aset audio',
+            B: 'Mengontrol volume dan efek suara',
+            C: 'Mengatur file audio',
+            D: 'Mengubah format audio',
+            E: 'Menghapus suara'
+          },
+          jawaban: 'B'
+        },
+        { soal: '20. Apa yang dimaksud dengan Spatial Audio dalam konteks gim?',
+          pilihan: {
+            A: 'Audio 2D statis',
+            B: 'Audio yang berubah sesuai dengan posisi dan orientasi pemain',
+            C: 'Format file audio khusus',
+            D: 'Pengaturan volume tetap',
+            E: 'Efek audio pada menu gim'
+          },
+          jawaban: 'B'
+        },
+        { soal: '21. Teknik optimisasi gim apa yang digunakan untuk menyembunyikan objek yang tidak terlihat oleh kamera?',
+          pilihan: {
+            A: 'LOD (Level of Detail)',
+            B: 'Garbage Collection',
+            C: 'Occlusion Culling',
+            D: 'Backface Culling',
+            E: 'Frustum Culling'
+          },
+          jawaban: 'C'
+        },
+        { soal: '22. Teknik optimisasi gim yang menurunkan kualitas detail objek saat berada jauh dari kamera adalah:',
+          pilihan: {
+            A: 'Occlusion Culling',
+            B: 'Level Streaming',
+            C: 'LOD (Level of Detail)',
+            D: 'Batching',
+            E: 'Texture Compression'
+          },
+          jawaban: 'C'
+        },
+        { soal: '23. Fungsi Garbage Collection dalam konteks pemrograman gim adalah untuk:',
+          pilihan: {
+            A: 'Menambah data baru',
+            B: 'Menghapus data yang tidak digunakan',
+            C: 'Menyimpan data pemain',
+            D: 'Meningkatkan grafis',
+            E: 'Mengontrol kecepatan animasi'
+          },
+          jawaban: 'B'
+        },
+        { soal: '24. Perintah apa yang digunakan di Unity untuk mencetak log ke console untuk debugging?',
+          pilihan: {
+            A: 'Console.WriteLine()',
+            B: 'Debug.Log()',
+            C: 'Print()',
+            D: 'LogMessage()',
+            E: 'System.out.println()'
+          },
+          jawaban: 'B'
+        },
+        { soal: '25. Apa fungsi dari Profiler dalam Unity?',
+          pilihan: {
+            A: 'Mengatur input pengguna',
+            B: 'Menganalisis performa gim',
+            C: 'Membuat aset grafis',
+            D: 'Menyimpan data',
+            E: 'Mengatur suara'
+          },
+          jawaban: 'B'
+        },
+        { soal: '26. Platform distribusi gim terbesar untuk PC adalah:',
+          pilihan: {
+            A: 'Google Play Store',
+            B: 'App Store',
+            C: 'Steam',
+            D: 'Epic Games Store',
+            E: 'Itch.io'
+          },
+          jawaban: 'C'
+        },
+        { soal: '27. Platform distribusi gim untuk perangkat Android yang populer adalah:',
+          pilihan: {
+            A: 'Steam',
+            B: 'Google Play Store',
+            C: 'App Store',
+            D: 'Xbox Live',
+            E: 'Nintendo eShop'
+          },
+          jawaban: 'B'
+        },
+        { soal: '28. Platform distribusi gim untuk perangkat iOS adalah:',
+          pilihan: {
+            A: 'Google Play Store',
+            B: 'Steam',
+            C: 'App Store',
+            D: 'Epic Games Store',
+            E: 'Microsoft Store'
+          },
+          jawaban: 'C'
+        },
+        { soal: '29. Model monetisasi gim di mana pemain harus membeli gim sebelum dapat memainkannya disebut:',
+          pilihan: {
+            A: 'Freemium',
+            B: 'In-App Purchase',
+            C: 'Premium',
+            D: 'Iklan',
+            E: 'Subscription'
+          },
+          jawaban: 'C'
+        },
+        { soal: '30. Model monetisasi gim yang menawarkan gim gratis dengan fitur tambahan berbayar disebut:',
+          pilihan: {
+            A: 'Premium',
+            B: 'Freemium',
+            C: 'In-App Purchase',
+            D: 'Iklan',
+            E: 'Langganan'
+          },
+          jawaban: 'B'
+        },
+        { soal: '31. Model monetisasi gim yang melibatkan pembelian item dalam gim dengan uang sungguhan adalah:',
+          pilihan: {
+            A: 'Premium',
+            B: 'Freemium',
+            C: 'In-App Purchase',
+            D: 'Iklan',
+            E: 'Sponsorship'
+          },
+          jawaban: 'C'
+        },
+        { soal: '32. Model monetisasi gim yang mengandalkan pendapatan dari penayangan iklan disebut:',
+          pilihan: {
+            A: 'Premium',
+            B: 'Freemium',
+            C: 'In-App Purchase',
+            D: 'Iklan dalam Gim',
+            E: 'Langganan'
+          },
+          jawaban: 'D'
+        },
+        { soal: '33. Apa itu Unity Hub?',
+          pilihan: {
+            A: 'Platform distribusi gim',
+            B: 'Alat untuk menginstal dan mengelola berbagai versi Unity',
+            C: 'Editor grafis untuk gim',
+            D: 'Bahasa pemrograman',
+            E: 'Komponen audio di Unity'
+          },
+          jawaban: 'B'
+        },
+        { soal: '34. Saat memulai proyek baru di Unity, template proyek yang tersedia biasanya berupa:',
+          pilihan: {
+            A: '3D saja',
+            B: '2D saja',
+            C: '2D dan 3D',
+            D: 'VR saja',
+            E: 'AR saja'
+          },
+          jawaban: 'C'
+        },
+        { soal: '35. Komponen mana yang menampilkan daftar semua objek dalam sebuah scene di Unity?',
+          pilihan: {
+            A: 'Scene View',
+            B: 'Game View',
+            C: 'Hierarchy',
+            D: 'Inspector',
+            E: 'Project'
+          },
+          jawaban: 'C'
+        },
+        { soal: '36. Komponen mana yang menampilkan properti dari objek yang dipilih di Unity?',
+          pilihan: {
+            A: 'Scene View',
+            B: 'Game View',
+            C: 'Hierarchy',
+            D: 'Inspector',
+            E: 'Project'
+          },
+          jawaban: 'D'
+        },
+        { soal: '37. Apa fungsi utama dari Scene View dalam Unity?',
+          pilihan: {
+            A: 'Menyimpan aset',
+            B: 'Menampilkan pratinjau gim saat dijalankan',
+            C: 'Menampilkan dan mengatur tata letak objek dalam scene',
+            D: 'Mengedit kode skrip',
+            E: 'Mengontrol audio'
+          },
+          jawaban: 'C'
+        },
+        { soal: '38. Dalam skrip Unity, fungsi <code>Start()</code> dan <code>Update()</code> digunakan untuk:',
+          pilihan: {
+            A: 'Mengatur audio',
+            B: 'Menginisialisasi dan memperbarui perilaku objek',
+            C: 'Mengelola file',
+            D: 'Mengubah aset grafis',
+            E: 'Menyimpan data'
+          },
+          jawaban: 'B'
+        },
+        { soal: '39. Fungsi <code>OnCollisionEnter</code> dalam Unity digunakan untuk:',
+          pilihan: {
+            A: 'Menampilkan animasi',
+            B: 'Mendeteksi tabrakan antara objek',
+            C: 'Mengatur input',
+            D: 'Memutar audio',
+            E: 'Mengubah scene'
+          },
+          jawaban: 'B'
+        },
+        { soal: '40. Bagaimana cara berpindah antar level atau scene dalam Unity?',
+          pilihan: {
+            A: 'Menggunakan AudioSource',
+            B: 'Menggunakan Animator',
+            C: 'Menggunakan SceneManager',
+            D: 'Menggunakan GameObject',
+            E: 'Menggunakan Collider'
+          },
+          jawaban: 'C'
+        }
       ],
-      bab7: [
-        {
-          soal:
-            "Dalam Hadis Nabi Muhammad Saw. yang diriwayatkan Al-Bukhāri, bahwa maksudnya kekayaan itu adalah …",
+      bab2: [
+        { soal: '1. Apa kepanjangan dari ERD dalam konteks database?',
           pilihan: {
-            A: "Banyaknya harta",
-            B: "Kekayaan hati",
-            C: "Banyaknya ilmu",
-            D: "Kekuatan fisik",
-            E: "Banyaknya keturunan",
+            A: 'Entity Relationship Design',
+            B: 'Entity Relationship Diagram',
+            C: 'Entity Relational Data',
+            D: 'Element Relationship Diagram',
+            E: 'Entity Resource Diagram'
           },
-          jawaban: "B",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Perhatikan Q.S. Al-Ahzab/33:35 di bawah ini! Dari ayat tersebut, merupakan dalil naqli tentang salah satu cabang iman yaitu …",
+        { soal: '2. Manakah yang BUKAN termasuk komponen utama ERD?',
           pilihan: {
-            A: "Menjaga kehormatan",
-            B: "Bersedekah",
-            C: "Berpuasa",
-            D: "Bersabar",
-            E: "Bersyukur",
+            A: 'Entitas',
+            B: 'Atribut',
+            C: 'SQL Query',
+            D: 'Relasi',
+            E: 'Primary Key'
           },
-          jawaban: "A",
+          jawaban: 'C'
         },
-        {
-          soal:
-            "Di bawah ini yang merupakan pemahaman yang benar tentang sifat zuhud adalah …",
+        { soal: '3. Contoh entitas dalam database akademik adalah:',
           pilihan: {
-            A: "Menjauhi semua kenikmatan dunia",
-            B: "Tidak peduli dengan urusan dunia",
-            C: "Menggunakan harta untuk kemewahan",
-            D: "Menjadi kaya raya",
-            E: "Menjadikan harta dunia untuk mengantarkan kebahagiaan di akhirat",
+            A: 'NIM',
+            B: 'Nilai',
+            C: 'Mahasiswa',
+            D: 'Tanggal Lahir',
+            E: 'IPK'
           },
-          jawaban: "E",
+          jawaban: 'C'
         },
-        {
-          soal:
-            "Meninggalkan kenikmatan duniawi untuk mendapatkan kenikmatan akhirat merupakan salah satu ciri orang yang memiliki sifat zuhud. Namun, ciri lain dari orang zuhud adalah …",
+        { soal: '4. Manakah yang merupakan contoh atribut?',
           pilihan: {
-            A: "Menyukai kemewahan",
-            B: "Mudah putus asa",
-            C: "Selalu mencari kesenangan",
-            D: "Hanya fokus pada dunia",
-            E: "Bersikap sederhana baik saat dipuji maupun saat dicela",
+            A: 'Mengajar',
+            B: 'NIM',
+            C: 'Meminjam',
+            D: 'Buku',
+            E: 'Perpustakaan'
           },
-          jawaban: "E",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Dibawah ini merupakan tingkatan ikhlas dengan urut adalah …",
+        { soal: '5. Relasi dalam ERD berfungsi untuk:',
           pilihan: {
-            A: "awam, khawas, dan khawasul khawas",
-            B: "khawasul khawas, awam, khawas",
-            C: "awam, khawas, dan khawasul khawas",
-            D: "awam, khawasul khawas, khawas",
-            E: "khawas, awam, dan khawasul khawas",
+            A: 'Menampilkan data statistik',
+            B: 'Mengenkripsi data',
+            C: 'Menghubungkan entitas',
+            D: 'Mengoptimasi query',
+            E: 'Menyimpan backup data'
           },
-          jawaban: "C",
+          jawaban: 'C'
         },
-        {
-          soal:
-            "Di bawah ini yang termasuk ciri-ciri orang ikhlas adalah …",
+        { soal: '6. Primary Key adalah:',
           pilihan: {
-            A: "tidak pernah beramal",
-            B: "senantiasa beramal dan bersungguh-sungguh dalam beramal",
-            C: "selalu mencari pujian",
-            D: "mengabaikan kebaikan",
-            E: "hanya beramal saat diawasi",
+            A: 'Kunci untuk mengakses database',
+            B: 'Identitas unik suatu entitas',
+            C: 'Password administrator',
+            D: 'Index tabel',
+            E: 'Kunci relasi antar server'
           },
-          jawaban: "B",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Di bawah ini merupakan manfaat ikhlas adalah …",
+        { soal: '7. Foreign Key berfungsi untuk:',
           pilihan: {
-            A: "mempercepat kekayaan materi",
-            B: "terhindar dari tipu daya setan",
-            C: "mendatangkan popularitas",
-            D: "memudahkan mendapatkan jabatan",
-            E: "menjamin kehidupan yang bahagia",
+            A: 'Mengamankan data sensitif',
+            B: 'Menghubungkan ke primary key tabel lain',
+            C: 'Mengurutkan data',
+            D: 'Mengkompresi database',
+            E: 'Membuat index pencarian'
           },
-          jawaban: "B",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Dalam Hadis Nabi Muhammad Saw. yang diriwayatkan oleh Tirmidzī bahwa yang termasuk malu kepada Allah dengan sebenarnya adalah …",
+        { soal: '8. ERD terutama digunakan dalam fase:',
           pilihan: {
-            A: "tidak beramal sama sekali",
-            B: "hanya berdoa saja",
-            C: "menjaga seluruh anggota badan dari perbuatan yang dilarang oleh agama Islam",
-            D: "menghindari bergaul dengan non-Muslim",
-            E: "berpura-pura saleh",
+            A: 'Implementasi sistem',
+            B: 'Desain database',
+            C: 'Testing software',
+            D: 'Maintenance sistem',
+            E: 'Dokumentasi user'
           },
-          jawaban: "C",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Perhatikan pernyataan di bawah ini! 1) menghindari perbuatan maksiat, 2) menghantarkan hambanya melakukan kebaikan, 3) mengurangi rezeki, 4) lebih dekat dengan Allah, 5) tidak mendapatkan pekerjaan. Dari pernyataan di atas, yang termasuk manfaat sikap malu sebagai cabang iman adalah …",
+        { soal: '9. Normalisasi data dalam ERD bertujuan untuk:',
           pilihan: {
-            A: "1) dan 3) saja",
-            B: "2) dan 4) saja",
-            C: "1), 3), dan 5) saja",
-            D: "2), 4), dan 1) saja",
-            E: "semua pernyataan",
+            A: 'Meningkatkan kecepatan query',
+            B: 'Mengurangi redundansi data',
+            C: 'Memperbesar ukuran database',
+            D: 'Menambah jumlah tabel',
+            E: 'Mengenkripsi informasi'
           },
-          jawaban: "D",
+          jawaban: 'B'
         },
-        {
-          soal:
-            "Malu merupakan tanda baik atau tidaknya iman seseorang. Malu berbeda dengan tidak percaya diri. Salah satu penerapan sifat malu yang tepat di bawah ini adalah …",
+        { soal: '10. Software yang biasa digunakan untuk membuat ERD adalah:',
           pilihan: {
-            A: "malu tidak mengerjakan tugas",
-            B: "malu untuk tampil di depan umum",
-            C: "malu untuk menerima pujian",
-            D: "malu untuk mengkritik orang lain",
-            E: "malu untuk berbicara dengan orang asing",
+            A: 'MySQL Workbench',
+            B: 'Microsoft Word',
+            C: 'Adobe Photoshop',
+            D: 'Visual Studio Code',
+            E: 'Google Chrome'
           },
-          jawaban: "A",
-        },
-      ],
-      bab8: [
-        {
-          soal:
-            "Adab dari segi bahasa menunjuk kepada sesuatu yang sudah lama dilakukan dan sudah membudaya dalam kehidupan. Dari sini dapat diketahui bahwa makna dari adab adalah kecuali…",
-          pilihan: {
-            A: "sopan santun",
-            B: "tata krama",
-            C: "etika",
-            D: "peraturan",
-            E: "kehendak",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Perhatikan Q.S. Al-Hujurāt/49:6! Dari ayat tersebut, apabila seorang fasik datang kepadamu membawa berita, maka kalian hendaknya …",
-          pilihan: {
-            A: "mengabaikan berita tersebut",
-            B: "langsung menyebarkan berita tersebut",
-            C: "mempercayai berita tersebut tanpa verifikasi",
-            D: "meneliti kebenaran beritanya",
-            E: "membalas dengan menyebarkan berita palsu",
-          },
-          jawaban: "D",
-        },
-        {
-          soal:
-            "Perhatikan hadis Nabi Muhammad Saw. di bawah ini! Dari hadis tersebut, maksud muslim yang paling baik adalah …",
-          pilihan: {
-            A: "seorang muslim yang kaya raya",
-            B: "seorang muslim yang orang lain merasa aman dari gangguan lisan dan tangannya",
-            C: "seorang muslim yang pandai berbicara",
-            D: "seorang muslim yang taat menjalankan ritual saja",
-            E: "seorang muslim yang selalu beribadah",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Al-Qur’an memberikan panduan dalam menggunakan media sosial. Dalam Q.S. Al-Haj/22:30, hendaknya kalian mematuhi adab menggunakan media sosial, yaitu …",
-          pilihan: {
-            A: "menyebarkan informasi dengan bebas",
-            B: "menyampaikan informasi tanpa rekayasa atau manipulasi",
-            C: "berbagi informasi secara berlebihan",
-            D: "mengkritik setiap pendapat secara terbuka",
-            E: "mengabaikan etika dalam penyampaian",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Dalam mengupdate status atau mengunggah tulisan di media sosial, umat Islam harus mengikuti perintah dalam Q.S. Al-Hujurāt/49:12. Di bawah ini adalah isi perintahnya, yaitu …",
-          pilihan: {
-            A: "mengunggah tanpa filter",
-            B: "berkata kasar kepada orang lain",
-            C: "menyebarkan informasi hoaks",
-            D: "menyembunyikan identitas asli",
-            E: "menghindari su’udzan, tajassus, dan ghibah",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Perhatikan pernyataan berikut: 1) mengajak orang lain berbuat kebaikan, 2) memilih teman bermain dari daerah sendiri, 3) menyampaikan argumentasi dengan cara yang baik, 4) berniat baik dalam menggunakan media sosial, 5) memproduksi konten yang bersifat hate speech. Yang termasuk adab menggunakan media sosial adalah …",
-          pilihan: {
-            A: "1) dan 5) saja",
-            B: "2) dan 3) saja",
-            C: "4) saja",
-            D: "1), 2), dan 5) saja",
-            E: "3), 4), dan 1)",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Dalam Hadis Nabi Muhammad Saw. yang diriwayatkan oleh Tirmidzī, disebutkan bahwa maksud sebagian dari kebaikan Islam seseorang adalah …",
-          pilihan: {
-            A: "mendapatkan harta dunia",
-            B: "memperoleh popularitas",
-            C: "menjalankan ibadah secara seremonial",
-            D: "meninggalkan sesuatu yang tidak bermanfaat baginya",
-            E: "mendapatkan kekuasaan politik",
-          },
-          jawaban: "D",
-        },
-        {
-          soal:
-            "Dalam Hadis Nabi Muhammad Saw. yang diriwayatkan Muslim, barangsiapa yang menunjukkan kepada kebaikan, maka …",
-          pilihan: {
-            A: "dia akan mendapatkan pahala yang lebih kecil",
-            B: "dia akan mendapatkan pahala yang sama seperti orang yang menjalankan kebaikan tersebut",
-            C: "kebaikan itu tidak dihitung",
-            D: "dia akan mendapatkan pahala yang berlipat ganda",
-            E: "pahalanya ditahan sampai hari kiamat",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Saat ini banyak ustadz dan artis menggunakan media sosial untuk mengupload kajian keislaman. Media sosial dapat bermanfaat sebagai …",
-          pilihan: {
-            A: "sarana hiburan semata",
-            B: "sarana dalam berdakwah",
-            C: "media untuk mencari popularitas",
-            D: "platform untuk politik praktis",
-            E: "alat untuk promosi bisnis",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Di bawah ini merupakan penerapan adab dalam menggunakan media sosial yang benar, yaitu …",
-          pilihan: {
-            A: "saling menghormati dan menghargai antaranggota dalam satu grup",
-            B: "mengunggah konten secara berlebihan",
-            C: "mengkritik tanpa dasar",
-            D: "menyebarkan berita hoaks",
-            E: "menggunakan bahasa kasar",
-          },
-          jawaban: "A",
-        },
-      ],
-      bab9: [
-        {
-          soal:
-            "Perhatikan hadis di bawah ini! Hadis tersebut menjadi dasar penetapan hukum menikah bagi seorang laki-laki. Menikah hukumnya wajib bagi orang yang …",
-          pilihan: {
-            A: "belum pernah menikah",
-            B: "sudah kaya raya",
-            C: "sudah mampu menikah secara lahir batin serta tidak sanggup menghindar dari zina",
-            D: "berumur di atas 25 tahun",
-            E: "memiliki harta yang cukup",
-          },
-          jawaban: "C",
-        },
-        {
-          soal:
-            "Seorang pria dan wanita melaksanakan umrah ke tanah suci. Di sela ibadah, sebelum tahalul, mereka melangsungkan pernikahan yang disaksikan dua saksi. Hukum pernikahan tersebut adalah …",
-          pilihan: {
-            A: "sah",
-            B: "haram",
-            C: "batal",
-            D: "mubah",
-            E: "sunnah",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Perhatikan pernyataan berikut: 1) harta, 2) status, 3) jabatan, 4) agama, 5) kecantikan/ketampanan, 6) keturunan. Yang termasuk pertimbangan dalam menikah menurut Nabi Muhammad Saw. adalah …",
-          pilihan: {
-            A: "1) dan 2) saja",
-            B: "2), 3), dan 4) saja",
-            C: "1), 3), dan 5) saja",
-            D: "4), 5), 6), dan 1) saja",
-            E: "semua pernyataan",
-          },
-          jawaban: "D",
-        },
-        {
-          soal:
-            "Rukun nikah harus dipenuhi agar pernikahan sah. Rukun nikah terdiri atas beberapa unsur, kecuali …",
-          pilihan: {
-            A: "Calon suami",
-            B: "Calon istri",
-            C: "Mahar",
-            D: "Wali",
-            E: "bapak calon istri",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Kewajiban material suami kepada istri adalah …",
-          pilihan: {
-            A: "menikahkan istri dengan harta yang besar",
-            B: "memberi pakaian mewah",
-            C: "memberi nafkah istri sesuai kemampuannya",
-            D: "memberikan rumah mewah",
-            E: "memberikan mobil mewah",
-          },
-          jawaban: "C",
-        },
-        {
-          soal:
-            "Di bawah ini yang bukan merupakan tujuan nikah adalah …",
-          pilihan: {
-            A: "mewujudkan cinta kasih",
-            B: "membangun keluarga sakinah",
-            C: "mencari keberkahan dalam hidup",
-            D: "mendapatkan keturunan",
-            E: "terpenuhinya kebutuhan biologis semata",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Perhatikan daftar berikut: 1) Calon suami; 2) Calon istri; 3) Mahar; 4) Wali; 5) 2 orang saksi; 6) Walimah; 7) Ijab qabul. Yang termasuk rukun menikah adalah …",
-          pilihan: {
-            A: "1, 2, 3, 4, 5, 6, 7",
-            B: "1, 2, 3, 4, 5",
-            C: "1, 2, 4, 5, 7",
-            D: "2, 3, 4, 6, 7",
-            E: "1, 2, 4, 6, 7",
-          },
-          jawaban: "C",
-        },
-        {
-          soal:
-            "Batas usia minimal menurut UU No. 16 Tahun 2019 baik untuk laki-laki maupun perempuan adalah …",
-          pilihan: {
-            A: "17 tahun",
-            B: "18 tahun",
-            C: "19 tahun",
-            D: "21 tahun",
-            E: "25 tahun",
-          },
-          jawaban: "C",
-        },
-        {
-          soal:
-            "Hukum menikah ditujukan untuk orang yang sudah mampu secara lahir batin namun dapat mengendalikan diri dari godaan perzinaan adalah …",
-          pilihan: {
-            A: "wajib",
-            B: "sunah",
-            C: "haram",
-            D: "makruh",
-            E: "mubah",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Di bawah ini yang bukan termasuk hikmah dalam pernikahan adalah …",
-          pilihan: {
-            A: "terhindar dari fitnah",
-            B: "menjalin persatuan keluarga",
-            C: "terhindar dari bahan ejekan dari masyarakat",
-            D: "menambah keberkahan hidup",
-            E: "mewujudkan cinta kasih",
-          },
-          jawaban: "C",
-        },
-      ],
-      bab10: [
-        {
-          soal:
-            "Ajaran Islam tidak hanya mementingkan akhirat, tetapi juga kehidupan dunia. Pemikiran ini dikemukakan oleh …",
-          pilihan: {
-            A: "Jamaludin al-Afghani",
-            B: "Muhammad Abduh",
-            C: "Rifa’ah Baidawi",
-            D: "KH. Ahmad Dahlan",
-            E: "KH. Hasyim Asy’ari",
-          },
-          jawaban: "A",
-        },
-        {
-          soal:
-            "Perhatikan tokoh berikut: 1) Muhammad Ali Pasya, 2) Muhammad Abduh, 3) Rifa’ah Baidawi Rafi’at at-Tahtawi, 4) KH. Ahmad Dahlan, 5) KH. Hasyim Asy’ari, 6) Muhammad Iqbal. Tokoh Islam masa modern yang berkiprah di Mesir adalah …",
-          pilihan: {
-            A: "1), 2), dan 3)",
-            B: "2), 3), dan 4)",
-            C: "3), 4), dan 5)",
-            D: "4), 5), dan 6)",
-            E: "1), 3), dan 6)",
-          },
-          jawaban: "A",
-        },
-        {
-          soal:
-            "Menurut Harun Nasution, periode sejarah Islam dari tahun 1800 sampai sekarang disebut …",
-          pilihan: {
-            A: "masa klasik",
-            B: "masa pertengahan",
-            C: "masa kontemporer",
-            D: "masa modern",
-            E: "masa pramodern",
-          },
-          jawaban: "D",
-        },
-        {
-          soal:
-            "Pintu ijtihad masih terbuka lebar bagi umat Islam. Ijtihad sebagai dasar penting dalam menafsirkan ajaran Islam dikemukakan oleh …",
-          pilihan: {
-            A: "KH. Ahmad Dahlan",
-            B: "KH. Hasyim Asy’ari",
-            C: "Muhammad Abduh dan Muhammad Iqbal",
-            D: "Jamaludin al-Afghani",
-            E: "Muhammad Ali Pasya",
-          },
-          jawaban: "C",
-        },
-        {
-          soal:
-            "Tokoh pembaharu abad ke-18 yang mendirikan sekolah Maktebi Ma’aarif, Maktebi Ulum’i edibiyet, serta sekolah kedokteran, militer, dan teknik adalah …",
-          pilihan: {
-            A: "Muhammad Abduh",
-            B: "Rifa’ah Baidawi",
-            C: "KH. Ahmad Dahlan",
-            D: "Sultan Mahmud II",
-            E: "Muhammad Iqbal",
-          },
-          jawaban: "D",
-        },
-        {
-          soal:
-            "Perhatikan kitab berikut: 1) Al-Qadha wa al-Qadar, 2) Risalah tauhid, 3) Syarh Nahjil Balaghah, 4) Ishlahu al-Mahakim al-Syar’iyyah, 5) Adab al-Alim wa al-Muta’allim. Karya mana yang merupakan karya Muhammad Abduh?",
-          pilihan: {
-            A: "1) dan 5)",
-            B: "2), 3), dan 4)",
-            C: "3), 4), dan 5)",
-            D: "1), 2), dan 3)",
-            E: "1), 4), dan 5)",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Siapa tokoh pembaharu yang dikenal sebagai bapak pendiri Negara Pakistan?",
-          pilihan: {
-            A: "KH. Ahmad Dahlan",
-            B: "KH. Hasyim Asy’ari",
-            C: "Muhammad Abduh",
-            D: "Jamaludin al-Afghani",
-            E: "Muhammad Iqbal",
-          },
-          jawaban: "E",
-        },
-        {
-          soal:
-            "Di bawah ini adalah pokok-pokok pikiran KH. Ahmad Dahlan, kecuali …",
-          pilihan: {
-            A: "fondasi dalam pemerintahan dalam Islam mempunyai tujuan memberi persamaan bagi setiap muslim, melayani kepentingan dengan cara perundingan, dan menjaga keadilan",
-            B: "penekanan pada pendidikan agama",
-            C: "penguatan ukhuwah Islamiyah",
-            D: "penekanan pada pembaruan sosial",
-            E: "semua pernyataan merupakan pokok pikiran KH. Ahmad Dahlan",
-          },
-          jawaban: "A",
-        },
-        {
-          soal:
-            "KH. Hasyim Asy’ari menulis banyak kitab. Karya beliau yang menekankan pentingnya persatuan umat Islam dalam merespon upaya Belanda adalah …",
-          pilihan: {
-            A: "Risalah tauhid",
-            B: "Al-Mawa’idz",
-            C: "Syarh Nahjil Balaghah",
-            D: "Ishlahu al-Mahakim al-Syar’iyyah",
-            E: "Adab al-Alim wa al-Muta’allim",
-          },
-          jawaban: "B",
-        },
-        {
-          soal:
-            "Di bawah ini yang bukan merupakan hikmah mempelajari perkembangan Islam pada abad modern adalah …",
-          pilihan: {
-            A: "mendorong umat Islam untuk menguasai IPTEK",
-            B: "memperkuat identitas keislaman",
-            C: "meningkatkan kualitas pendidikan",
-            D: "menjaga agar tidak tersesat",
-            E: "mendorong dialog antar agama",
-          },
-          jawaban: "A",
-        },
-      ],
+          jawaban: 'A'
+        }
+      ]
     };
 
-    // Fungsi untuk menampilkan soal
-    function tampilkanSoal() {
-      const form = document.getElementById("quizForm");
-      let html = "";
-
-      for (const bab in soal) {
-        html += `<h4 class="mb-4">${bab.toUpperCase()}</h4>`;
-        soal[bab].forEach((item, idx) => {
-          html += `<div class="mb-3">
-                      <p class="fw-bold">${idx + 1}. ${item.soal}</p>`;
+    // Fungsi untuk merender soal ke dalam form
+    const quizForm = document.getElementById('quizForm');
+    function renderQuiz() {
+      for (const bab in soalData) {
+        // Buat section untuk tiap bab
+        const babSection = document.createElement('div');
+        babSection.classList.add('mb-4');
+  
+        const babTitle = document.createElement('h4');
+        babTitle.textContent = bab.toUpperCase();
+        babTitle.classList.add('mb-3', 'text-primary');
+        babSection.appendChild(babTitle);
+  
+        // Render tiap pertanyaan dalam bab
+        soalData[bab].forEach((item, idx) => {
+          const questionCard = document.createElement('div');
+          questionCard.classList.add('question-card', 'mb-3', 'p-3', 'border', 'rounded');
+          questionCard.dataset.bab = bab;
+          questionCard.dataset.index = idx;
+  
+          const questionTitle = document.createElement('p');
+          questionTitle.classList.add('question-title');
+          questionTitle.innerHTML = item.soal;
+          questionCard.appendChild(questionTitle);
+  
+          // Render pilihan jawaban
           for (const opt in item.pilihan) {
-            html += `<div class="form-check">
-                        <input class="form-check-input" type="radio" name="jawaban_${bab}_${idx}" value="${opt}" required>
-                        <label class="form-check-label">${opt}. ${item.pilihan[opt]}</label>
-                      </div>`;
+            const optionDiv = document.createElement('div');
+            optionDiv.classList.add('form-check', 'mb-1');
+  
+            const optionInput = document.createElement('input');
+            optionInput.classList.add('form-check-input');
+            optionInput.type = 'radio';
+            optionInput.name = `${bab}_${idx}`;
+            optionInput.id = `${bab}_${idx}_${opt}`;
+            optionInput.value = opt;
+            optionInput.required = true;
+  
+            const optionLabel = document.createElement('label');
+            optionLabel.classList.add('form-check-label', 'option-label');
+            optionLabel.setAttribute('for', `${bab}_${idx}_${opt}`);
+            optionLabel.innerHTML = `${opt}. ${item.pilihan[opt]}`;
+  
+            optionDiv.appendChild(optionInput);
+            optionDiv.appendChild(optionLabel);
+            questionCard.appendChild(optionDiv);
           }
-          html += `</div>`;
+  
+          // Tempat untuk feedback jawaban
+          const feedbackDiv = document.createElement('div');
+          feedbackDiv.classList.add('answer-feedback');
+          questionCard.appendChild(feedbackDiv);
+  
+          babSection.appendChild(questionCard);
         });
+  
+        quizForm.appendChild(babSection);
       }
-
-      html += `<button type="submit" class="btn btn-primary w-100">Kumpulkan Jawaban</button>`;
-      form.innerHTML = html;
     }
-
-    // Fungsi untuk menghitung skor
-    function hitungSkor(event) {
-      event.preventDefault();
+    renderQuiz();
+  
+    // Fungsi untuk memeriksa jawaban dan menampilkan feedback
+    function checkAnswers() {
       let score = 0;
       let total = 0;
-      const hasil = {};
-
-      for (const bab in soal) {
-        hasil[bab] = [];
-        soal[bab].forEach((item, idx) => {
-          const jawabanUser = document.querySelector(
-            `input[name="jawaban_${bab}_${idx}"]:checked`
-          );
-          if (jawabanUser) {
-            const benar = jawabanUser.value === item.jawaban;
-            if (benar) score++;
-            total++;
-            hasil[bab][idx] = {
-              jawaban_user: jawabanUser.value,
-              jawaban_benar: item.jawaban,
-              status: benar,
-            };
+  
+      for (const bab in soalData) {
+        soalData[bab].forEach((item, idx) => {
+          total++;
+          const questionCard = document.querySelector(`div.question-card[data-bab="${bab}"][data-index="${idx}"]`);
+          const selected = document.querySelector(`input[name="${bab}_${idx}"]:checked`);
+          const feedbackDiv = questionCard.querySelector('.answer-feedback');
+  
+          // Nonaktifkan opsi untuk pertanyaan ini
+          const options = questionCard.querySelectorAll('input[type="radio"]');
+          options.forEach(option => {
+            option.disabled = true;
+          });
+  
+          if (selected) {
+            if (selected.value === item.jawaban) {
+              score++;
+              feedbackDiv.innerHTML = `<span class="text-success">Jawaban Anda benar.</span>`;
+              // Tandai opsi yang benar
+              const correctLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${item.jawaban}"]`);
+              if (correctLabel) correctLabel.classList.add('correct');
+            } else {
+              feedbackDiv.innerHTML = `<span class="text-danger">Jawaban Anda salah. Jawaban yang benar adalah ${item.jawaban}.</span>`;
+              // Tandai opsi yang dipilih salah
+              const userLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${selected.value}"]`);
+              if (userLabel) userLabel.classList.add('incorrect');
+              // Tandai opsi yang benar
+              const correctLabel = questionCard.querySelector(`label[for="${bab}_${idx}_${item.jawaban}"]`);
+              if (correctLabel) correctLabel.classList.add('correct');
+            }
           }
         });
       }
-
-      // Simpan hasil di localStorage
-      localStorage.setItem("hasil", JSON.stringify(hasil));
-      localStorage.setItem("score", score);
-      localStorage.setItem("total", total);
-
-      // Redirect ke halaman hasil
-      window.location.href = "hasil.html";
+  
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `<div class="alert alert-info">Skor Anda: ${score} / ${total}</div>`;
     }
-
-    // Pasang event listener untuk form
-    document.getElementById("quizForm").addEventListener("submit", hitungSkor);
-
-    // Tampilkan soal saat halaman dimuat
-    tampilkanSoal();
+  
+    // Event listener untuk tombol submit
+    document.getElementById('submitBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      checkAnswers();
+      // Nonaktifkan tombol submit agar tidak bisa submit lagi
+      this.disabled = true;
+    });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
