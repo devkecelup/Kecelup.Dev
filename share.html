@@ -1,55 +1,102 @@
-<!-- share.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <!-- Same styles as index.html -->
-    <style>
-        .share-box {
-            text-align: center;
-            padding: 3rem;
-        }
-
-        .share-message {
-            font-size: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .social-icon {
-            font-size: 3rem;
-            color: var(--game-primary);
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            transform: scale(1.2);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Quiz - Code Quest</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --game-primary: #6C5CE7;
+      --game-secondary: #A8A5E6;
+      --game-success: #00B894;
+      --game-danger: #D63031;
+    }
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      min-height: 100vh;
+      font-family: 'Press Start 2P', cursive;
+    }
+    @media (max-width: 768px) {
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+    }
+    .game-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      border: 3px solid var(--game-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .game-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .game-title {
+      font-size: 2.5rem;
+      text-shadow: 3px 3px 0 var(--game-primary);
+      margin-bottom: 1rem;
+    }
+    .character {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%236C5CE7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5" fill="%23ffffff"/></svg>');
+      background-size: contain;
+      animation: float 3s ease-in-out infinite;
+    }
+    .share-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 2px solid var(--game-primary);
+      text-align: center;
+    }
+    .copy-btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--game-primary);
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container game-container">
-        <div class="share-box">
-            <h2>🔥 Aku Sudah Menaklukkan Code Quest! 🔥</h2>
-            <div class="share-message">
-                Dapatkan skor 85/100 dalam tantangan coding game!<br>
-                Berani mencoba? 😎
-            </div>
-            <div class="social-icons">
-                <i class="fab fa-whatsapp social-icon"></i>
-                <i class="fab fa-instagram social-icon"></i>
-                <i class="fab fa-facebook social-icon"></i>
-                <i class="fab fa-twitter social-icon"></i>
-            </div>
-            <button class="option-btn" onclick="location.href='index.html'">
-                <i class="fas fa-gamepad"></i> Mulai Petualangan
-            </button>
-        </div>
+  <div class="container game-container">
+    <div class="game-header">
+      <div class="character"></div>
+      <h1 class="game-title">SHARE QUIZ</h1>
     </div>
+    <div class="share-box">
+      <p>Bagikan link quiz ini:</p>
+      <input type="text" id="shareLink" value="https://contohwebsite.com/quiz" readonly style="width:80%; padding:0.5rem; border-radius:5px; border:none; text-align:center;">
+      <br />
+      <button class="copy-btn" onclick="copyLink()">Salin Link</button>
+    </div>
+  </div>
+
+  <script>
+    function copyLink() {
+      const linkInput = document.getElementById('shareLink');
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // Untuk perangkat mobile
+      document.execCommand('copy');
+      alert('Link berhasil disalin!');
+    }
+  </script>
 </body>
 </html>
