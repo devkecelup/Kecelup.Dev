@@ -21,10 +21,13 @@
       min-height: 100vh;
       font-family: 'Press Start 2P', cursive;
       position: relative;
+      margin: 0;
+      padding: 0;
     }
+    /* Container utama quiz */
     .game-container {
       max-width: 800px;
-      margin: 2rem auto;
+      margin: 100px auto 2rem auto; /* beri jarak atas agar tidak tertutup lives */
       padding: 2rem;
       background: rgba(0, 0, 0, 0.7);
       border-radius: 20px;
@@ -85,23 +88,6 @@
       background: var(--game-primary);
       transition: width 0.5s ease;
     }
-    /* Tampilan nyawa dengan ikon hati */
-    #livesDisplay {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      text-align: right;
-    }
-    /* Tombol untuk dapatkan nyawa ekstra via Instagram */
-    #extraLifeBtn {
-      background: var(--game-secondary);
-      border: 2px solid var(--game-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-bottom: 1rem;
-      display: block;
-      width: 100%;
-    }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -112,23 +98,48 @@
       100% { filter: blur(0px); }
     }
     .share-icon {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
       font-size: 1.5rem;
       cursor: pointer;
       color: white;
+      z-index: 1000;
+    }
+    /* Lives dan tombol extra life diletakkan di posisi fixed di kiri atas */
+    #livesContainer {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+    #extraLifeContainer {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      z-index: 1000;
+    }
+    #extraLifeBtn {
+      background: var(--game-secondary);
+      border: 2px solid var(--game-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="container game-container">
-    <!-- Tampilan nyawa: ikon hati -->
-    <div id="livesDisplay"></div>
-    <!-- Tombol untuk extra life via Instagram -->
-    <button id="extraLifeBtn" onclick="getExtraLife()">
+  <!-- Lives dan Extra Life -->
+  <div id="livesContainer"></div>
+  <div id="extraLifeContainer">
+    <button id="extraLifeBtn" onclick="getExtraLife()"> 
       <i class="fab fa-instagram"></i> Follow Instagram untuk +1 Nyawa
     </button>
+  </div>
+
+  <div class="container game-container">
     <div class="game-header">
       <div class="character"></div>
       <h1 class="game-title">CODE QUEST</h1>
@@ -139,9 +150,10 @@
     <div class="question-box">
       <!-- Konten pertanyaan akan disuntikkan secara dinamis -->
     </div>
-    <!-- Ikon share -->
-    <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
   </div>
+
+  <!-- Ikon share -->
+  <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
 
   <!-- Audio untuk suara benar dan salah -->
   <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
@@ -477,17 +489,17 @@
         });
       });
     });
-    // Jika total soal kurang dari 40, duplikasi array (atau tambahkan soal dummy) agar total 40 soal.
-    while(questions.length < 40){
+    // Duplikasi atau potong array agar total soal tepat 40
+    while (questions.length < 40) {
       questions.push(...questions.slice(0, Math.min(40 - questions.length, questions.length)));
     }
-    // Jika lebih dari 40, potong array-nya.
     questions.length = 40;
 
     let currentQuestion = 0;
     let score = 0;
     let streak = 0; // menghitung jawaban benar berturut-turut
     let lives = 4; // total nyawa awal (maksimal 4)
+    let extraLifeClaimed = false; // hanya satu kali klaim extra life
     const results = []; // menyimpan detail tiap pertanyaan
 
     function updateProgress() {
@@ -496,7 +508,7 @@
     }
 
     function updateLivesDisplay() {
-      const display = document.getElementById('livesDisplay');
+      const display = document.getElementById('livesContainer');
       let heartsHTML = "";
       for (let i = 0; i < lives; i++) {
         heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
@@ -517,7 +529,7 @@
     }
 
     function gameOver() {
-      // Redirect ke halaman kalah.html jika nyawa habis
+      // Simpan hasil dan redirect ke halaman kalah.html
       localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
       window.location.href = 'kalah.html';
     }
@@ -560,12 +572,12 @@
                 }
               });
               document.getElementById('wrongSound').play();
-              // Kurangi nyawa jika salah (tidak boleh kurang dari 0)
-              if(lives > 0){
+              // Kurangi nyawa jika salah (tidak kurang dari 0)
+              if (lives > 0) {
                 lives--;
                 updateLivesDisplay();
               }
-              if(lives <= 0) {
+              if (lives <= 0) {
                 setTimeout(() => { gameOver(); }, 500);
                 return;
               }
@@ -587,24 +599,23 @@
           questionBox.appendChild(btn);
         });
       } else {
-        // Jika semua soal sudah dijawab, simpan hasil dan redirect ke halaman hasil
+        // Jika semua soal sudah dijawab, simpan hasil dan redirect ke halaman hasil.html
         localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
         window.location.href = 'hasil.html';
       }
     }
 
-    // Fungsi untuk menambah nyawa ekstra via Instagram
+    // Fungsi untuk menambah nyawa ekstra via Instagram (hanya satu kali)
     function getExtraLife() {
-      // Jika nyawa sudah penuh (maksimum 4), jangan tambahkan
-      if(lives >= 4) {
-        alert("Nyawa sudah penuh!");
+      if(extraLifeClaimed) {
+        alert("Anda sudah mendapatkan nyawa ekstra!");
         return;
       }
       // Buka akun Instagram (ganti URL sesuai kebutuhan)
       window.open("https://www.instagram.com/akun_saya", "_blank");
       alert("Tunggu 30 detik untuk verifikasi follow Instagram...");
+      extraLifeClaimed = true;
       setTimeout(() => {
-        // Tambahkan 1 nyawa (maksimal 4)
         if(lives < 4) {
           lives++;
           updateLivesDisplay();
