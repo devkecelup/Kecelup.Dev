@@ -121,7 +121,6 @@
   </div>
 
   <script>
-    // Data kategori dengan soal sample (tambahkan soal sesuai kebutuhan)
     const categories = {
       programming: {
         name: "Pemrograman",
@@ -129,55 +128,30 @@
         questions: [
           {
             soal: "Apa kepanjangan dari HTML?",
-            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language", "None of the above"],
+            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
             jawaban: "A"
           },
           {
             soal: "Tag HTML untuk membuat paragraf adalah:",
-            pilihan: ["<div>", "<span>", "<p>", "<para>", "<paragraph>"],
+            pilihan: ["<div>", "<span>", "<p>", "<para>"],
             jawaban: "C"
           },
+          // Tambahkan 18 soal lainnya
           {
-            soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
-            pilihan: ["<link>", "<a>", "<href>", "<nav>", "<ul>"],
-            jawaban: "B"
-          },
-          {
-            soal: "Fungsi dari tag <head> dalam HTML adalah:",
-            pilihan: ["Menampilkan konten halaman", "Menyimpan metadata dan link ke resources", "Menyimpan script saja", "Menyimpan gambar saja", "Menyimpan data pengguna"],
-            jawaban: "B"
-          },
-          {
-            soal: "Tag apa yang digunakan untuk memasukkan gambar?",
-            pilihan: ["<img>", "<picture>", "<image>", "<src>", "<figure>"],
+            soal: "Properti CSS untuk mengubah warna teks?",
+            pilihan: ["color", "font-color", "text-color", "background-color"],
             jawaban: "A"
           },
           {
-            soal: "Atribut apa yang wajib ada dalam tag <img>?",
-            pilihan: ["alt", "src", "title", "href", "class"],
-            jawaban: "B"
+            soal: "Manakah yang bukan jenis positioning CSS?",
+            pilihan: ["static", "relative", "fixed", "sticky"],
+            jawaban: "E"
           },
           {
-            soal: "Tag HTML untuk membuat daftar terurut adalah:",
-            pilihan: ["<ul>", "<ol>", "<dl>", "<list>", "<li>"],
-            jawaban: "B"
-          },
-          {
-            soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
-            pilihan: ["<ol>", "<ul>", "<dl>", "<list>", "<menu>"],
-            jawaban: "B"
-          },
-          {
-            soal: "Bagaimana cara membuat tabel di HTML?",
-            pilihan: ["<table>", "<grid>", "<div>", "<form>", "<section>"],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML untuk menandai heading level 1 adalah:",
-            pilihan: ["<h1>", "<header>", "<title>", "<h6>", "<head>"],
+            soal: "Fungsi PHP untuk menampilkan output?",
+            pilihan: ["echo()", "print()", "output()", "console.log()"],
             jawaban: "A"
           }
-          // Tambahkan soal lainnya hingga mencapai jumlah yang diinginkan (misalnya total 20 soal)
         ]
       },
       bahasa: {
@@ -186,30 +160,15 @@
         questions: [
           {
             soal: "Apa jenis kata yang menyatakan tindakan?",
-            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina", "Numeralia"],
+            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina"],
             jawaban: "B"
           },
+          // Tambahkan 14 soal lainnya
           {
-            soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita", "Karya sejarah"],
-            jawaban: "B"
-          },
-          {
-            soal: "Manakah kata hubung dalam bahasa Indonesia?",
-            pilihan: ["dan", "makan", "tidur", "lari", "baca"],
-            jawaban: "A"
-          },
-          {
-            soal: "Apa istilah untuk kalimat yang efektif?",
-            pilihan: ["Rumit", "Singkat dan jelas", "Besar", "Banyak kata", "Tidak jelas"],
-            jawaban: "B"
-          },
-          {
-            soal: "Apa istilah lain dari puisi?",
-            pilihan: ["Sajak", "Prosa", "Novel", "Cerpen", "Drama"],
-            jawaban: "A"
+            soal: "Amanat dalam cerita disebut juga?",
+            pilihan: ["Tema", "Alur", "Setting", "Moral"],
+            jawaban: "D"
           }
-          // Tambahkan soal lainnya (misalnya total 15 soal)
         ]
       },
       history: {
@@ -218,35 +177,19 @@
         questions: [
           {
             soal: "Kapan Indonesia merdeka?",
-            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928", "10 November 1945"],
+            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928"],
             jawaban: "A"
           },
+          // Tambahkan 14 soal lainnya
           {
-            soal: "Siapa penemu benua Amerika?",
-            pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
-            jawaban: "A"
-          },
-          {
-            soal: "Siapa Presiden pertama Indonesia?",
-            pilihan: ["Soekarno", "Soeharto", "Habibie", "Megawati", "BJ Habibie"],
-            jawaban: "A"
-          },
-          {
-            soal: "Apa nama perjanjian yang mengakhiri perang kemerdekaan Indonesia?",
-            pilihan: ["Linggarjati", "Renville", "Roem–Van Roijen", "Amsterdam", "The Hague"],
-            jawaban: "C"
-          },
-          {
-            soal: "Negara manakah yang pertama mengakui kemerdekaan Indonesia?",
-            pilihan: ["India", "Uni Soviet", "Amerika Serikat", "Inggris", "Australia"],
+            soal: "Kerajaan Hindu pertama di Indonesia?",
+            pilihan: ["Kutai", "Tarumanegara", "Majapahit", "Sriwijaya"],
             jawaban: "A"
           }
-          // Tambahkan soal lainnya (misalnya total 15 soal)
         ]
       }
     };
 
-    // Fungsi untuk memulai kuis berdasarkan kategori yang dipilih
     function startQuiz(category) {
       localStorage.setItem('selectedCategory', category);
       window.location.href = 'quiz.html';
