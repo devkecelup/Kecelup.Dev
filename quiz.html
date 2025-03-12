@@ -186,78 +186,282 @@
     // Ambil kategori dari localStorage, default "programming" jika tidak ada
     const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
 
-    // Data kategori (contoh data Pemrograman)
+    // Data kategori: 40 soal (HTML, CSS, PHP) - semuanya di "programming" dengan tag HTML di-escape
     const categories = {
       programming: {
         name: "Pemrograman",
         icon: "fa-code",
         questions: [
+          // ============== 15 SOAL HTML ==============
           {
             soal: "Apa kepanjangan dari HTML?",
             pilihan: [
-              "HyperText Markup Language", 
-              "HighText Machine Language", 
-              "Hyperlink and Text Markup Language", 
+              "HyperText Markup Language",
+              "HighText Machine Language",
+              "Hyperlink and Text Markup Language",
               "Home Tool Markup Language"
             ],
             jawaban: "A"
           },
           {
             soal: "Tag HTML untuk membuat paragraf adalah:",
-            pilihan: ["<div>", "<span>", "<p>", "<para>"],
+            pilihan: ["&lt;div&gt;", "&lt;span&gt;", "&lt;p&gt;", "&lt;para&gt;"],
             jawaban: "C"
           },
           {
             soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
-            pilihan: ["<link>", "<a>", "<href>", "<nav>"],
+            pilihan: ["&lt;link&gt;", "&lt;a&gt;", "&lt;href&gt;", "&lt;nav&gt;"],
             jawaban: "B"
           },
           {
-            soal: "Fungsi dari tag <head> dalam HTML adalah:",
+            soal: "Fungsi dari tag &lt;head&gt; dalam HTML adalah:",
             pilihan: [
-              "Menampilkan konten halaman", 
-              "Menyimpan metadata dan link ke resources", 
-              "Menyimpan script saja", 
+              "Menampilkan konten halaman",
+              "Menyimpan metadata dan link ke resources",
+              "Menyimpan script saja",
               "Menyimpan gambar saja"
             ],
             jawaban: "B"
           },
           {
             soal: "Tag apa yang digunakan untuk memasukkan gambar?",
-            pilihan: ["<img>", "<picture>", "<image>", "<src>"],
+            pilihan: ["&lt;img&gt;", "&lt;picture&gt;", "&lt;image&gt;", "&lt;src&gt;"],
             jawaban: "A"
           },
           {
-            soal: "Atribut apa yang wajib ada dalam tag <img>?",
+            soal: "Atribut apa yang wajib ada dalam tag &lt;img&gt;?",
             pilihan: ["alt", "src", "title", "href"],
             jawaban: "B"
           },
           {
             soal: "Tag HTML untuk membuat daftar terurut adalah:",
-            pilihan: ["<ul>", "<ol>", "<dl>", "<list>"],
+            pilihan: ["&lt;ul&gt;", "&lt;ol&gt;", "&lt;dl&gt;", "&lt;list&gt;"],
             jawaban: "B"
           },
           {
             soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
-            pilihan: ["<ol>", "<ul>", "<dl>", "<list>"],
+            pilihan: ["&lt;ol&gt;", "&lt;ul&gt;", "&lt;dl&gt;", "&lt;list&gt;"],
             jawaban: "B"
           },
           {
             soal: "Bagaimana cara membuat tabel di HTML?",
-            pilihan: ["<table>", "<grid>", "<div>", "<form>"],
+            pilihan: ["&lt;table&gt;", "&lt;grid&gt;", "&lt;div&gt;", "&lt;form&gt;"],
             jawaban: "A"
           },
           {
             soal: "Tag HTML untuk menandai heading level 1 adalah:",
-            pilihan: ["<h1>", "<header>", "<title>", "<h6>"],
+            pilihan: ["&lt;h1&gt;", "&lt;header&gt;", "&lt;title&gt;", "&lt;h6&gt;"],
             jawaban: "A"
+          },
+          {
+            soal: "Tag HTML apa yang digunakan untuk menyisipkan video?",
+            pilihan: ["&lt;video&gt;", "&lt;clip&gt;", "&lt;source&gt;", "&lt;media&gt;"],
+            jawaban: "A"
+          },
+          {
+            soal: "Atribut mana yang digunakan untuk mengatur ukuran video di tag &lt;video&gt;?",
+            pilihan: ["width", "size", "length", "dimension"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML apa yang digunakan untuk menyisipkan audio?",
+            pilihan: ["&lt;audio&gt;", "&lt;sound&gt;", "&lt;music&gt;", "&lt;track&gt;"],
+            jawaban: "A"
+          },
+          {
+            soal: "Atribut mana yang digunakan untuk menentukan sumber file pada tag &lt;audio&gt;?",
+            pilihan: ["src", "file", "href", "data"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML apa yang digunakan untuk membuat hyperlink yang membuka di jendela baru?",
+            pilihan: [
+              "&lt;a target='_blank'&gt;",
+              "&lt;link target='_new'&gt;",
+              "&lt;a new&gt;",
+              "&lt;button&gt;"
+            ],
+            jawaban: "A"
+          },
+
+          // ============== 10 SOAL CSS ==============
+          {
+            soal: "Apa fungsi CSS dalam web development?",
+            pilihan: [
+              "Mengatur struktur halaman",
+              "Mengatur tampilan visual halaman",
+              "Menyimpan data",
+              "Memproses logika server"
+            ],
+            jawaban: "B"
+          },
+          {
+            soal: "Properti CSS yang digunakan untuk mengubah warna latar belakang adalah:",
+            pilihan: ["color", "background-color", "font-color", "bg-color"],
+            jawaban: "B"
+          },
+          {
+            soal: "Bagaimana cara menyisipkan komentar dalam kode CSS?",
+            pilihan: ["// Komentar", "/* Komentar */", "&lt;!-- Komentar --&gt;", "# Komentar"],
+            jawaban: "B"
+          },
+          {
+            soal: "Properti CSS untuk mengubah ukuran font adalah:",
+            pilihan: ["font-size", "text-size", "size", "font-style"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa fungsi properti margin dalam CSS?",
+            pilihan: [
+              "Memberikan jarak di dalam elemen",
+              "Memberikan jarak di luar elemen",
+              "Mengubah warna elemen",
+              "Menentukan ukuran elemen"
+            ],
+            jawaban: "B"
+          },
+          {
+            soal: "Apa fungsi properti padding dalam CSS?",
+            pilihan: [
+              "Memberikan jarak di dalam elemen",
+              "Memberikan jarak di luar elemen",
+              "Mengubah warna latar belakang",
+              "Menentukan batas elemen"
+            ],
+            jawaban: "A"
+          },
+          {
+            soal: "Bagaimana cara mengubah warna teks dalam CSS?",
+            pilihan: ["text-color", "color", "font-color", "background-color"],
+            jawaban: "B"
+          },
+          {
+            soal: "Properti CSS apa yang digunakan untuk mengubah jenis font?",
+            pilihan: ["font-weight", "font-style", "font-family", "text-transform"],
+            jawaban: "C"
+          },
+          {
+            soal: "Apa itu selector dalam CSS?",
+            pilihan: [
+              "Pola untuk memilih elemen HTML",
+              "Fungsi JavaScript",
+              "Properti CSS",
+              "Metode HTML"
+            ],
+            jawaban: "A"
+          },
+          {
+            soal: "Bagaimana cara membuat elemen tampil sebagai blok di CSS?",
+            pilihan: [
+              "display: inline",
+              "display: block",
+              "display: none",
+              "visibility: hidden"
+            ],
+            jawaban: "B"
+          },
+
+          // ============== 15 SOAL PHP ==============
+          {
+            soal: "Apa kepanjangan dari PHP?",
+            pilihan: [
+              "Personal Hypertext Processor",
+              "PHP Hypertext Preprocessor",
+              "Public Home Page",
+              "Private Home Page"
+            ],
+            jawaban: "B"
+          },
+          {
+            soal: "Bagaimana cara mencetak 'Hello World' dalam PHP?",
+            pilihan: [
+              "echo 'Hello World';",
+              "console.log('Hello World');",
+              "document.write('Hello World');",
+              "alert('Hello World');"
+            ],
+            jawaban: "A"
+          },
+          {
+            soal: "Dalam PHP, variabel diawali dengan karakter:",
+            pilihan: ["$", "%", "&", "#"],
+            jawaban: "A"
+          },
+          {
+            soal: "Fungsi apa yang digunakan untuk menyertakan file dalam PHP?",
+            pilihan: ["include", "import", "require_once", "attach"],
+            jawaban: "A"
+          },
+          {
+            soal: "Bagaimana cara mendapatkan data dari form menggunakan method POST di PHP?",
+            pilihan: ["$_GET", "$_POST", "$_REQUEST", "$_FORM"],
+            jawaban: "B"
+          },
+          {
+            soal: "Fungsi untuk menghitung jumlah elemen dalam array di PHP adalah:",
+            pilihan: ["size()", "length()", "count()", "sum()"],
+            jawaban: "C"
+          },
+          {
+            soal: "Apa itu PHP session?",
+            pilihan: [
+              "Mekanisme untuk menyimpan data pengguna di server",
+              "Fungsi untuk memproses data form",
+              "Metode untuk mengirim email",
+              "Cara menyimpan data ke database"
+            ],
+            jawaban: "A"
+          },
+          {
+            soal: "Fungsi untuk mengubah string menjadi huruf kecil di PHP adalah:",
+            pilihan: ["strtoupper()", "strtolower()", "lower()", "toLowerCase()"],
+            jawaban: "B"
+          },
+          {
+            soal: "Bagaimana cara memulai session di PHP?",
+            pilihan: ["session_start()", "start_session()", "init_session()", "begin_session()"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa perbedaan antara include dan require di PHP?",
+            pilihan: [
+              "Tidak ada perbedaan",
+              "require menghentikan eksekusi jika file tidak ditemukan",
+              "include lebih cepat dari require",
+              "include menghentikan eksekusi jika file tidak ditemukan"
+            ],
+            jawaban: "B"
+          },
+          {
+            soal: "Ekstensi file default untuk script PHP adalah:",
+            pilihan: [".php", ".html", ".js", ".cpp"],
+            jawaban: "A"
+          },
+          {
+            soal: "Manakah dari berikut yang digunakan untuk menampilkan output di PHP?",
+            pilihan: ["echo", "console.log", "alert", "scanf"],
+            jawaban: "A"
+          },
+          {
+            soal: "Bagaimana cara membuat komentar satu baris di PHP?",
+            pilihan: ["// Komentar", "/* Komentar */", "# Komentar", "<!-- Komentar -->"],
+            jawaban: "A"
+          },
+          {
+            soal: "Bagaimana cara mendefinisikan konstanta di PHP?",
+            pilihan: ["define()", "const", "var", "static"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa yang akan dicetak oleh perintah 'echo 2+3;' di PHP?",
+            pilihan: ["2+3", "5", "error", "2 3"],
+            jawaban: "B"
           }
-          // Tambahkan soal lain sesuai kebutuhan
         ]
       }
     };
 
-    // Pilih data soal sesuai kategori (di sini hanya "programming" yang didefinisikan)
+    // Pilih data soal sesuai kategori (hanya "programming" di sini)
     const categoryData = categories[selectedCategory];
     document.getElementById('categoryName').textContent = categoryData.name;
     document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
@@ -327,19 +531,19 @@
         // Tampilkan teks pertanyaan
         const questionEl = document.createElement('h3');
         questionEl.className = 'mb-4';
-        questionEl.textContent = q.soal; // gunakan textContent agar aman
+        questionEl.textContent = q.soal; // Gunakan textContent
         questionBox.appendChild(questionEl);
 
         // Tampilkan opsi jawaban
         q.pilihan.forEach((option, index) => {
-          if (!option) return; // Pastikan opsinya tidak undefined atau kosong
+          if (!option) return; // Pastikan opsinya tidak undefined
 
           const btn = document.createElement('button');
           btn.className = 'option-btn';
-          // Gunakan innerHTML dengan hati-hati jika mengandung tag <p>, <div>, dsb.
-          // Bisa pakai textContent, tapi di sini kita menambahkan huruf di depan
+          // Gunakan innerHTML untuk menampilkan huruf + teks
           btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span>. ${option}`;
 
+          // Event klik
           btn.addEventListener('click', function() {
             handleAnswer(index, q.jawaban);
           });
@@ -369,14 +573,13 @@
         } else if (idx === selectedIndex) {
           btn.style.backgroundColor = 'var(--game-danger)';
         }
-        btn.disabled = true; // Nonaktifkan setelah diklik
+        btn.disabled = true;
       });
 
       if (isCorrect) {
         score++;
         streak++;
         document.getElementById('correctSound').play();
-        // Bonus flame setiap 5 jawaban benar berturut-turut
         if (streak % 5 === 0) {
           showStreakBonus();
         }
