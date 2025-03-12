@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code Quest - Quiz</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     :root {
       --game-primary: #6C5CE7;
@@ -14,27 +14,52 @@
       --game-success: #00B894;
       --game-danger: #D63031;
     }
-
     body {
       background: linear-gradient(135deg, #1a1a2e, #16213e);
       color: white;
-      min-height: 100vh;
       font-family: 'Press Start 2P', cursive;
       margin: 0;
       padding: 0;
     }
-
+    /* Header Kuis */
+    .question-header {
+      background: rgba(0,0,0,0.7);
+      padding: 1rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      text-align: center;
+      border: 2px solid var(--game-primary);
+    }
+    .category-badge {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background: var(--game-primary);
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .progress-bar {
+      height: 15px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      margin: 0 auto;
+      width: 80%;
+    }
+    .progress {
+      height: 100%;
+      background: var(--game-primary);
+      transition: width 0.5s ease;
+    }
+    /* Lives & Extra Life */
     #livesContainer, #extraLifeContainer {
       position: fixed;
       top: 20px;
       left: 20px;
       z-index: 1000;
     }
-
     #extraLifeContainer {
       top: 70px;
     }
-
     #extraLifeBtn {
       background: var(--game-secondary);
       border: 2px solid var(--game-primary);
@@ -44,49 +69,29 @@
       font-size: 0.8rem;
       color: white;
     }
-
+    /* Container Kuis */
     .game-container {
       max-width: 800px;
       margin: 120px auto 2rem auto;
       padding: 2rem;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       border-radius: 20px;
       border: 3px solid var(--game-primary);
       position: relative;
       overflow: hidden;
     }
-
-    .question-header {
-      background: rgba(0,0,0,0.7);
-      padding: 1rem;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      text-align: center;
-      border: 2px solid var(--game-primary);
-    }
-
-    .category-badge {
-      font-size: 1.2rem;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      background: var(--game-primary);
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-
     .question-box {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       padding: 2rem;
       border-radius: 15px;
       margin-bottom: 2rem;
       border: 2px solid var(--game-primary);
     }
-
     .option-btn {
       width: 100%;
       margin: 0.5rem 0;
       padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       border: 2px solid var(--game-primary);
       color: white;
       text-align: left;
@@ -94,25 +99,11 @@
       transition: all 0.3s ease;
       cursor: pointer;
     }
-
     .option-btn:hover {
       background: var(--game-primary);
       transform: translateX(10px);
     }
-
-    .progress-bar {
-      height: 15px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      margin-bottom: 1rem;
-    }
-
-    .progress {
-      height: 100%;
-      background: var(--game-primary);
-      transition: width 0.5s ease;
-    }
-
+    /* Streak Counter */
     .streak-counter {
       position: fixed;
       bottom: 20px;
@@ -121,38 +112,38 @@
       padding: 1rem;
       border-radius: 15px;
       border: 2px solid var(--game-success);
+      z-index: 1000;
     }
-
-    @keyframes trophyBounce {
-      0%, 100% { transform: translateY(0) scale(1); }
-      25% { transform: translateY(-20px) scale(1.2); }
-      50% { transform: translateY(0) scale(1); }
-      75% { transform: translateY(-10px) scale(1.1); }
+    /* Ikon Share */
+    .share-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+      z-index: 1000;
     }
-
-    .trophy-animation {
+    /* Animasi Bonus (Flame) untuk streak kelipatan 5 */
+    @keyframes flameAnimation {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.8; }
+    }
+    .flame {
+      width: 100px;
+      height: 150px;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 5rem;
-      color: gold;
       z-index: 2000;
-      animation: trophyBounce 1s ease-out;
-      text-shadow: 0 0 10px rgba(255,215,0,0.5);
-    }
-
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background: var(--game-primary);
-      pointer-events: none;
+      animation: flameAnimation 1s infinite;
     }
   </style>
 </head>
 <body>
-  <!-- Header Kategori -->
+  <!-- Header Kuis -->
   <div class="question-header">
     <div class="category-badge" id="categoryBadge">
       <i class="fas fa-code"></i>
@@ -163,7 +154,7 @@
     </div>
   </div>
 
-  <!-- Nyawa dan Extra Life -->
+  <!-- Lives & Extra Life -->
   <div id="livesContainer"></div>
   <div id="extraLifeContainer">
     <button id="extraLifeBtn" onclick="getExtraLife()"> 
@@ -173,8 +164,8 @@
 
   <!-- Konten Kuis -->
   <div class="container game-container">
-    <div class="question-box">
-      <!-- Pertanyaan akan dimuat dinamis -->
+    <div class="question-box" id="questionBox">
+      <!-- Pertanyaan dimuat secara dinamis -->
     </div>
   </div>
 
@@ -184,19 +175,49 @@
     <span id="streakCount">0</span> COMBO
   </div>
 
+  <!-- Ikon Share -->
+  <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
+
   <!-- Audio -->
   <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
   <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
-    // Data Soal Lengkap
+    // Ambil kategori yang dipilih dari localStorage, default ke "programming" jika tidak ada
+    const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
+
+    // Data kategori (format konsisten: properti "soal", "pilihan" (array), dan "jawaban" sebagai huruf)
     const categories = {
       programming: {
         name: "Pemrograman",
         icon: "fa-code",
         questions: [
-          // ... (Soal programming dari jawaban sebelumnya)
-          // Tambahan soal hingga total 40
+          {
+            soal: "Apa kepanjangan dari HTML?",
+            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language", "None of the above"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML untuk membuat paragraf adalah:",
+            pilihan: ["<div>", "<span>", "<p>", "<para>", "<paragraph>"],
+            jawaban: "C"
+          },
+          {
+            soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
+            pilihan: ["<link>", "<a>", "<href>", "<nav>", "<ul>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Fungsi dari tag <head> dalam HTML adalah:",
+            pilihan: ["Menampilkan konten halaman", "Menyimpan metadata dan link ke resources", "Menyimpan script saja", "Menyimpan gambar saja", "Menyimpan data pengguna"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag apa yang digunakan untuk memasukkan gambar?",
+            pilihan: ["<img>", "<picture>", "<image>", "<src>", "<figure>"],
+            jawaban: "A"
+          }
+          // Tambahkan soal lain untuk kategori Pemrograman...
         ]
       },
       bahasa: {
@@ -210,14 +231,10 @@
           },
           {
             soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: ["Karya sastra berbentuk dialog", 
-                     "Karya sastra berirama", 
-                     "Karya ilmiah", 
-                     "Laporan berita", 
-                     "Karya sejarah"],
+            pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita", "Karya sejarah"],
             jawaban: "B"
-          },
-          // Tambahan 38 soal bahasa Indonesia...
+          }
+          // Tambahkan soal lain untuk kategori Bahasa Indonesia...
         ]
       },
       history: {
@@ -226,30 +243,25 @@
         questions: [
           {
             soal: "Kapan Indonesia merdeka?",
-            pilihan: ["17 Agustus 1945", 
-                     "27 Desember 1949", 
-                     "1 Juni 1945", 
-                     "28 Oktober 1928", 
-                     "10 November 1945"],
+            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928", "10 November 1945"],
             jawaban: "A"
           },
           {
             soal: "Siapa penemu benua Amerika?",
-            pilihan: ["Christopher Columbus", 
-                     "Vasco da Gama", 
-                     "Ferdinand Magellan", 
-                     "James Cook", 
-                     "Marco Polo"],
+            pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
             jawaban: "A"
-          },
-          // Tambahan 38 soal sejarah...
+          }
+          // Tambahkan soal lain untuk kategori Sejarah...
         ]
       }
     };
 
-    // Inisialisasi Game
-    const selectedCategory = localStorage.getItem('selectedCategory');
+    // Pilih data soal berdasarkan kategori yang dipilih
     const categoryData = categories[selectedCategory];
+    // Perbarui tampilan header kategori
+    document.getElementById('categoryName').textContent = categoryData.name;
+    document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
+
     let questions = categoryData.questions;
     let currentQuestion = 0;
     let score = 0;
@@ -258,94 +270,102 @@
     let extraLifeClaimed = false;
     const results = [];
 
-    // Update Tampilan Kategori
-    document.getElementById('categoryName').textContent = categoryData.name;
-    document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
-
-    // Fungsi Animasi Trophy
-    function showTrophyAnimation() {
-      const trophy = document.createElement('div');
-      trophy.className = 'trophy-animation';
-      trophy.innerHTML = '<i class="fas fa-trophy"></i>';
-      document.body.appendChild(trophy);
-      
-      // Tambahkan confetti
-      for(let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
-        document.body.appendChild(confetti);
-      }
-      
-      setTimeout(() => {
-        trophy.remove();
-        document.querySelectorAll('.confetti').forEach(c => c.remove());
-      }, 2000);
+    function updateProgress() {
+      const progressPercent = (currentQuestion / questions.length) * 100;
+      document.querySelector('.progress').style.width = `${progressPercent}%`;
     }
 
-    // Fungsi Update Streak
-    function updateStreak(isCorrect) {
-      if(isCorrect) {
-        streak++;
-        if(streak % 5 === 0) {
-          showTrophyAnimation();
-        }
-      } else {
-        streak = 0;
+    function updateLivesDisplay() {
+      const display = document.getElementById('livesContainer');
+      let heartsHTML = "";
+      for (let i = 0; i < lives; i++) {
+        heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
       }
+      display.innerHTML = heartsHTML;
+      // Tampilkan tombol extra life hanya jika lives === 1 dan belum diklaim
+      if(lives === 1 && !extraLifeClaimed) {
+        document.getElementById('extraLifeContainer').style.display = 'block';
+      } else {
+        document.getElementById('extraLifeContainer').style.display = 'none';
+      }
+    }
+
+    function updateStreak() {
       document.getElementById('streakCount').textContent = streak;
     }
 
-    // Fungsi Tampilkan Pertanyaan
+    // Animasi bonus (flame) untuk streak kelipatan 5
+    function showStreakBonus() {
+      const flame = document.createElement('div');
+      flame.classList.add('flame');
+      flame.innerHTML = `
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF4500" d="M32 2C20 12 20 30 32 42s12 10 12 18-6 10-12 10-12-6-12-10 4-10 12-18S44 22 32 2z"/>
+        </svg>
+      `;
+      document.body.appendChild(flame);
+      setTimeout(() => flame.remove(), 2000);
+    }
+
+    function gameOver() {
+      localStorage.setItem('quizResults', JSON.stringify({
+        score: score,
+        total: questions.length,
+        details: results
+      }));
+      window.location.href = 'kalah.html';
+    }
+
     function showQuestion() {
-      const questionBox = document.querySelector('.question-box');
+      const questionBox = document.getElementById('questionBox');
       questionBox.innerHTML = '';
-      
-      if(currentQuestion < questions.length) {
+      if (currentQuestion < questions.length) {
         const q = questions[currentQuestion];
         const questionEl = document.createElement('h3');
         questionEl.className = 'mb-4';
         questionEl.innerHTML = q.soal;
         questionBox.appendChild(questionEl);
-
         q.pilihan.forEach((option, index) => {
           const btn = document.createElement('button');
           btn.className = 'option-btn';
           btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
-          
           btn.addEventListener('click', function() {
-            const isCorrect = index === q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0);
-            
-            if(isCorrect) {
+            this.style.animation = 'pixelate 0.3s';
+            let isCorrect = false;
+            if (index === q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) {
               score++;
+              streak++;
               btn.style.backgroundColor = 'var(--game-success)';
+              isCorrect = true;
               document.getElementById('correctSound').play();
-              updateStreak(true);
+              if (streak % 5 === 0) {
+                showStreakBonus();
+              }
             } else {
               btn.style.backgroundColor = 'var(--game-danger)';
-              document.getElementById('wrongSound').play();
-              updateStreak(false);
-              lives--;
-              if(lives <= 0) gameOver();
-            }
-
-            // Tandai jawaban benar
-            if(!isCorrect) {
+              streak = 0;
               document.querySelectorAll('.option-btn').forEach(b => {
-                if(b.innerHTML.startsWith(String.fromCharCode(65 + q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) + '.')) {
+                if (b.innerHTML.startsWith(String.fromCharCode(65 + q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) + '.')) {
                   b.style.backgroundColor = 'var(--game-success)';
                 }
               });
+              document.getElementById('wrongSound').play();
+              if(lives > 0) {
+                lives--;
+                updateLivesDisplay();
+              }
+              if(lives <= 0) {
+                setTimeout(() => { gameOver(); }, 500);
+                return;
+              }
             }
-
             results.push({
               question: q.soal,
               selected: index,
               correct: q.jawaban,
               isCorrect: isCorrect
             });
-
+            updateStreak();
             setTimeout(() => {
               currentQuestion++;
               updateProgress();
@@ -353,7 +373,6 @@
               showQuestion();
             }, 1000);
           });
-          
           questionBox.appendChild(btn);
         });
       } else {
@@ -366,8 +385,23 @@
       }
     }
 
-    // Fungsi Lainnya (updateProgress, updateLivesDisplay, getExtraLife, gameOver)
-    // ... (Implementasi fungsi-fungsi dari jawaban sebelumnya)
+    // Fungsi untuk mendapatkan nyawa ekstra via Instagram (hanya muncul jika lives === 1)
+    function getExtraLife() {
+      if(extraLifeClaimed) {
+        alert("Anda sudah mendapatkan nyawa ekstra!");
+        return;
+      }
+      window.open("https://www.instagram.com/akun_saya", "_blank");
+      alert("Tunggu 30 detik untuk verifikasi follow Instagram...");
+      extraLifeClaimed = true;
+      setTimeout(() => {
+        if(lives < 4) {
+          lives++;
+          updateLivesDisplay();
+          alert("Verifikasi berhasil! Nyawa bertambah 1.");
+        }
+      }, 30000);
+    }
 
     // Inisialisasi
     updateLivesDisplay();
