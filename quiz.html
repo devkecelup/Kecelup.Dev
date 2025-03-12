@@ -183,16 +183,16 @@
   <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
-    // Ambil kategori dari localStorage, default "programming" jika tidak ada
+    // Kategori default "programming" jika localStorage kosong
     const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
 
-    // Data kategori: 40 soal (HTML, CSS, PHP) - semuanya di "programming" dengan tag HTML di-escape
+    // 40 soal (HTML, CSS, PHP) - 4 opsi tiap soal, tag HTML di-escape
     const categories = {
       programming: {
         name: "Pemrograman",
         icon: "fa-code",
         questions: [
-          // ============== 15 SOAL HTML ==============
+          // ============== 15 Soal HTML (4 opsi) ==============
           {
             soal: "Apa kepanjangan dari HTML?",
             pilihan: [
@@ -284,7 +284,7 @@
             jawaban: "A"
           },
 
-          // ============== 10 SOAL CSS ==============
+          // ============== 10 Soal CSS (4 opsi) ==============
           {
             soal: "Apa fungsi CSS dalam web development?",
             pilihan: [
@@ -361,7 +361,7 @@
             jawaban: "B"
           },
 
-          // ============== 15 SOAL PHP ==============
+          // ============== 15 Soal PHP (4 opsi) ==============
           {
             soal: "Apa kepanjangan dari PHP?",
             pilihan: [
@@ -444,7 +444,7 @@
           },
           {
             soal: "Bagaimana cara membuat komentar satu baris di PHP?",
-            pilihan: ["// Komentar", "/* Komentar */", "# Komentar", "<!-- Komentar -->"],
+            pilihan: ["// Komentar", "/* Komentar */", "# Komentar", "&lt;!-- Komentar --&gt;"],
             jawaban: "A"
           },
           {
@@ -461,7 +461,7 @@
       }
     };
 
-    // Pilih data soal sesuai kategori (hanya "programming" di sini)
+    // Pilih data soal sesuai kategori
     const categoryData = categories[selectedCategory];
     document.getElementById('categoryName').textContent = categoryData.name;
     document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
@@ -486,7 +486,6 @@
         heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
       }
       display.innerHTML = heartsHTML;
-      // Tampilkan tombol extra life jika sisa nyawa 1 dan belum diklaim
       if (lives === 1 && !extraLifeClaimed) {
         document.getElementById('extraLifeContainer').style.display = 'block';
       } else {
@@ -498,7 +497,7 @@
       document.getElementById('streakCount').textContent = streak;
     }
 
-    // Animasi bonus (flame) jika streak kelipatan 5
+    // Animasi flame setiap 5 streak
     function showStreakBonus() {
       const flame = document.createElement('div');
       flame.classList.add('flame');
@@ -512,7 +511,6 @@
     }
 
     function gameOver() {
-      // Simpan hasil ke localStorage, lalu ke kalah.html
       localStorage.setItem('quizResults', JSON.stringify({
         score: score,
         total: questions.length,
@@ -523,24 +521,21 @@
 
     function showQuestion() {
       const questionBox = document.getElementById('questionBox');
-      questionBox.innerHTML = ''; // Kosongkan isi sebelumnya
+      questionBox.innerHTML = '';
 
       if (currentQuestion < questions.length) {
         const q = questions[currentQuestion];
-
-        // Tampilkan teks pertanyaan
+        // Tampilkan pertanyaan
         const questionEl = document.createElement('h3');
         questionEl.className = 'mb-4';
-        questionEl.textContent = q.soal; // Gunakan textContent
+        questionEl.textContent = q.soal;
         questionBox.appendChild(questionEl);
 
-        // Tampilkan opsi jawaban
+        // Tampilkan pilihan
         q.pilihan.forEach((option, index) => {
-          if (!option) return; // Pastikan opsinya tidak undefined
-
+          // Buat tombol opsi
           const btn = document.createElement('button');
           btn.className = 'option-btn';
-          // Gunakan innerHTML untuk menampilkan huruf + teks
           btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span>. ${option}`;
 
           // Event klik
@@ -551,7 +546,7 @@
           questionBox.appendChild(btn);
         });
       } else {
-        // Soal habis, simpan hasil ke localStorage, lalu ke hasil.html
+        // Soal habis -> simpan hasil -> hasil.html
         localStorage.setItem('quizResults', JSON.stringify({
           score: score,
           total: questions.length,
@@ -565,7 +560,6 @@
       const correctIndex = correctAnswer.charCodeAt(0) - 'A'.charCodeAt(0);
       const isCorrect = (selectedIndex === correctIndex);
 
-      // Ubah warna tombol
       const optionButtons = document.querySelectorAll('.option-btn');
       optionButtons.forEach((btn, idx) => {
         if (idx === correctIndex) {
@@ -593,7 +587,7 @@
         }
       }
 
-      // Simpan hasil jawaban
+      // Simpan detail jawaban
       results.push({
         question: questions[currentQuestion].soal,
         selected: selectedIndex,
@@ -606,7 +600,7 @@
       updateLivesDisplay();
       updateProgress();
 
-      // Lanjut ke soal berikutnya setelah 1 detik
+      // Pindah ke soal berikutnya setelah 1 detik
       setTimeout(() => {
         currentQuestion++;
         showQuestion();
