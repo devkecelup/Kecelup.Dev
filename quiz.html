@@ -165,7 +165,7 @@
   <!-- Container Kuis -->
   <div class="container game-container">
     <div class="question-box" id="questionBox">
-      <!-- Pertanyaan dimuat secara dinamis -->
+      <!-- Pertanyaan akan dimuat secara dinamis -->
     </div>
   </div>
 
@@ -185,8 +185,7 @@
   <script>
     // Ambil kategori yang dipilih dari localStorage, default ke "programming" jika tidak ada
     const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
-
-    // Data kategori dengan soal (format konsisten: soal, pilihan (array), jawaban (huruf))
+    // Data kategori khusus Pemrograman (pastikan format soal konsisten: soal, pilihan (array), jawaban sebagai huruf)
     const categories = {
       programming: {
         name: "Pemrograman",
@@ -241,77 +240,68 @@
             soal: "Tag HTML untuk menandai heading level 1 adalah:",
             pilihan: ["<h1>", "<header>", "<title>", "<h6>", "<head>"],
             jawaban: "A"
-          }
-          // Tambahkan soal lainnya agar total mencapai, misalnya, 20 soal untuk kategori Pemrograman
-        ]
-      },
-      bahasa: {
-        name: "Bahasa Indonesia",
-        icon: "fa-book",
-        questions: [
-          {
-            soal: "Apa jenis kata yang menyatakan tindakan?",
-            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina", "Numeralia"],
-            jawaban: "B"
           },
           {
-            soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita", "Karya sejarah"],
-            jawaban: "B"
-          },
-          {
-            soal: "Manakah kata hubung dalam bahasa Indonesia?",
-            pilihan: ["dan", "makan", "tidur", "lari", "baca"],
+            soal: "Tag HTML apa yang digunakan untuk menyisipkan video?",
+            pilihan: ["<video>", "<media>", "<clip>", "<source>", "<movie>"],
             jawaban: "A"
           },
           {
-            soal: "Apa istilah untuk kalimat yang efektif?",
-            pilihan: ["Rumit", "Singkat dan jelas", "Besar", "Banyak kata", "Tidak jelas"],
-            jawaban: "B"
-          },
-          {
-            soal: "Apa istilah lain dari puisi?",
-            pilihan: ["Sajak", "Prosa", "Novel", "Cerpen", "Drama"],
-            jawaban: "A"
-          }
-          // Tambahkan soal lainnya (total misalnya 15 soal untuk Bahasa Indonesia)
-        ]
-      },
-      history: {
-        name: "Sejarah",
-        icon: "fa-landmark",
-        questions: [
-          {
-            soal: "Kapan Indonesia merdeka?",
-            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928", "10 November 1945"],
+            soal: "Atribut mana yang digunakan untuk mengatur ukuran video di tag <video>?",
+            pilihan: ["width", "height", "size", "scale", "dimension"],
             jawaban: "A"
           },
           {
-            soal: "Siapa penemu benua Amerika?",
-            pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
+            soal: "Tag HTML apa yang digunakan untuk menyisipkan audio?",
+            pilihan: ["<audio>", "<sound>", "<music>", "<track>", "<source>"],
             jawaban: "A"
           },
           {
-            soal: "Siapa Presiden pertama Indonesia?",
-            pilihan: ["Soekarno", "Soeharto", "Habibie", "Megawati", "BJ Habibie"],
+            soal: "Atribut mana yang digunakan untuk menentukan sumber file pada tag <audio>?",
+            pilihan: ["src", "source", "href", "file", "data"],
             jawaban: "A"
           },
           {
-            soal: "Apa nama perjanjian yang mengakhiri perang kemerdekaan Indonesia?",
-            pilihan: ["Linggarjati", "Renville", "Roem–Van Roijen", "Amsterdam", "The Hague"],
+            soal: "Tag HTML apa yang digunakan untuk membuat hyperlink yang membuka di jendela baru?",
+            pilihan: ["<a target='_blank'>", "<link target='_new'>", "<a new>", "<a>", "<button>"],
+            jawaban: "A"
+          },
+          // Tambahkan soal lainnya hingga mencapai total, misalnya, 20 soal
+          {
+            soal: "Tag HTML manakah yang tidak digunakan untuk mengatur struktur dokumen?",
+            pilihan: ["<body>", "<header>", "<footer>", "<section>", "<div>"],
+            jawaban: "E"
+          },
+          {
+            soal: "Atribut mana yang wajib ada pada tag <a> untuk membuat tautan yang valid?",
+            pilihan: ["href", "src", "link", "target", "rel"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML apa yang digunakan untuk menampilkan daftar definisi?",
+            pilihan: ["<ul>", "<ol>", "<dl>", "<list>", "<dd>"],
             jawaban: "C"
           },
           {
-            soal: "Negara manakah yang pertama mengakui kemerdekaan Indonesia?",
-            pilihan: ["India", "Uni Soviet", "Amerika Serikat", "Inggris", "Australia"],
+            soal: "Manakah tag HTML yang digunakan untuk menyisipkan line break?",
+            pilihan: ["<br>", "<hr>", "<break>", "<lb>", "<line>"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML apa yang digunakan untuk menyisipkan komentar?",
+            pilihan: ["//", "/* */", "<!-- -->", "#", "<comment>"],
+            jawaban: "C"
+          },
+          {
+            soal: "Atribut mana yang digunakan untuk mengatur tooltip pada elemen HTML?",
+            pilihan: ["title", "tooltip", "alt", "data-title", "placeholder"],
             jawaban: "A"
           }
-          // Tambahkan soal lainnya (total misalnya 15 soal untuk Sejarah)
         ]
       }
     };
 
-    // Pilih data soal berdasarkan kategori yang dipilih
+    // Gunakan data kategori "programming" (karena selectedCategory default ke "programming")
     const categoryData = categories[selectedCategory];
     // Perbarui tampilan header kategori
     document.getElementById('categoryName').textContent = categoryData.name;
@@ -387,6 +377,7 @@
           btn.addEventListener('click', function() {
             this.style.animation = 'pixelate 0.3s';
             let isCorrect = false;
+            // Cek apakah jawaban yang dipilih sesuai dengan indeks jawaban benar
             if (index === q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) {
               score++;
               streak++;
@@ -405,11 +396,11 @@
                 }
               });
               document.getElementById('wrongSound').play();
-              if(lives > 0) {
+              if (lives > 0) {
                 lives--;
                 updateLivesDisplay();
               }
-              if(lives <= 0) {
+              if (lives <= 0) {
                 setTimeout(() => { gameOver(); }, 500);
                 return;
               }
@@ -458,7 +449,7 @@
       }, 30000);
     }
 
-    // Inisialisasi
+    // Inisialisasi tampilan
     updateLivesDisplay();
     showQuestion();
   </script>
