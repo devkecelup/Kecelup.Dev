@@ -85,13 +85,13 @@
       background: var(--game-primary);
       transition: width 0.5s ease;
     }
-    /* Tampilan nyawa */
+    /* Tampilan nyawa dengan ikon hati */
     #livesDisplay {
       font-size: 1rem;
       margin-bottom: 1rem;
       text-align: right;
     }
-    /* Tombol untuk dapatkan nyawa ekstra */
+    /* Tombol untuk dapatkan nyawa ekstra via Instagram */
     #extraLifeBtn {
       background: var(--game-secondary);
       border: 2px solid var(--game-primary);
@@ -123,8 +123,12 @@
 </head>
 <body>
   <div class="container game-container">
-    <div id="livesDisplay">Nyawa: 4</div>
-    <button id="extraLifeBtn" onclick="getExtraLife()">Follow Instagram untuk +1 Nyawa</button>
+    <!-- Tampilan nyawa: ikon hati -->
+    <div id="livesDisplay"></div>
+    <!-- Tombol untuk extra life via Instagram -->
+    <button id="extraLifeBtn" onclick="getExtraLife()">
+      <i class="fab fa-instagram"></i> Follow Instagram untuk +1 Nyawa
+    </button>
     <div class="game-header">
       <div class="character"></div>
       <h1 class="game-title">CODE QUEST</h1>
@@ -473,7 +477,7 @@
         });
       });
     });
-    // Jika total soal kurang dari 40, kita duplikasi (atau tambahkan soal dummy) untuk mencapai 40 soal.
+    // Jika total soal kurang dari 40, duplikasi array (atau tambahkan soal dummy) agar total 40 soal.
     while(questions.length < 40){
       questions.push(...questions.slice(0, Math.min(40 - questions.length, questions.length)));
     }
@@ -483,7 +487,7 @@
     let currentQuestion = 0;
     let score = 0;
     let streak = 0; // menghitung jawaban benar berturut-turut
-    let lives = 4; // total nyawa awal
+    let lives = 4; // total nyawa awal (maksimal 4)
     const results = []; // menyimpan detail tiap pertanyaan
 
     function updateProgress() {
@@ -492,7 +496,12 @@
     }
 
     function updateLivesDisplay() {
-      document.getElementById('livesDisplay').innerText = `Nyawa: ${lives}`;
+      const display = document.getElementById('livesDisplay');
+      let heartsHTML = "";
+      for (let i = 0; i < lives; i++) {
+        heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
+      }
+      display.innerHTML = heartsHTML;
     }
 
     function showStreakIcon() {
@@ -508,9 +517,9 @@
     }
 
     function gameOver() {
-      // Simpan hasil dan redirect ke halaman hasil
+      // Redirect ke halaman kalah.html jika nyawa habis
       localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
-      window.location.href = 'hasil.html';
+      window.location.href = 'kalah.html';
     }
 
     function showQuestion() {
@@ -551,11 +560,12 @@
                 }
               });
               document.getElementById('wrongSound').play();
-              // Kurangi nyawa jika salah
-              lives--;
-              updateLivesDisplay();
+              // Kurangi nyawa jika salah (tidak boleh kurang dari 0)
+              if(lives > 0){
+                lives--;
+                updateLivesDisplay();
+              }
               if(lives <= 0) {
-                // Jika nyawa habis, game over
                 setTimeout(() => { gameOver(); }, 500);
                 return;
               }
@@ -583,11 +593,24 @@
       }
     }
 
-    // Fungsi untuk menambah nyawa (misalnya setelah follow Instagram)
+    // Fungsi untuk menambah nyawa ekstra via Instagram
     function getExtraLife() {
-      lives++;
-      updateLivesDisplay();
-      alert('Nyawa bertambah 1!');
+      // Jika nyawa sudah penuh (maksimum 4), jangan tambahkan
+      if(lives >= 4) {
+        alert("Nyawa sudah penuh!");
+        return;
+      }
+      // Buka akun Instagram (ganti URL sesuai kebutuhan)
+      window.open("https://www.instagram.com/akun_saya", "_blank");
+      alert("Tunggu 30 detik untuk verifikasi follow Instagram...");
+      setTimeout(() => {
+        // Tambahkan 1 nyawa (maksimal 4)
+        if(lives < 4) {
+          lives++;
+          updateLivesDisplay();
+          alert("Verifikasi berhasil! Nyawa bertambah 1.");
+        }
+      }, 30000);
     }
 
     // Inisialisasi
