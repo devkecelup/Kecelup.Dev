@@ -351,62 +351,99 @@
     }
 
     function showQuestion() {
-      const questionBox = document.getElementById('questionBox');
-      questionBox.innerHTML = '';
-      if (currentQuestion < questions.length) {
-        const q = questions[currentQuestion];
-        const questionEl = document.createElement('h3');
-        questionEl.className = 'mb-4';
-        questionEl.innerHTML = q.soal;
-        questionBox.appendChild(questionEl);
-        q.pilihan.forEach((option, index) => {
-          const btn = document.createElement('button');
-          btn.className = 'option-btn';
-          btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
-          btn.addEventListener('click', function() {
-            this.style.animation = 'pixelate 0.3s';
-            let isCorrect = false;
-            if (index === q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) {
-              score++;
-              streak++;
-              btn.style.backgroundColor = 'var(--game-success)';
-              isCorrect = true;
-              document.getElementById('correctSound').play();
-              if (streak % 5 === 0) {
-                showStreakBonus();
-              }
-            } else {
-              btn.style.backgroundColor = 'var(--game-danger)';
-              streak = 0;
-              document.querySelectorAll('.option-btn').forEach(b => {
-                if (b.innerHTML.startsWith(String.fromCharCode(65 + q.jawaban.charCodeAt(0) - 'A'.charCodeAt(0)) + '.')) {
-                  b.style.backgroundColor = 'var(--game-success)';
-                }
-              });
-              document.getElementById('wrongSound').play();
-              if(lives > 0) {
-                lives--;
-                updateLivesDisplay();
-              }
-              if(lives <= 0) {
-                setTimeout(() => { gameOver(); }, 500);
-                return;
-              }
-            }
-            results.push({
-              question: q.soal,
-              selected: index,
-              correct: q.jawaban,
-              isCorrect: isCorrect
-            });
-            updateStreak();
-            setTimeout(() => {
-              currentQuestion++;
-              updateProgress();
-              updateLivesDisplay();
-              showQuestion();
-            }, 1000);
-          });
+  const questionBox = document.getElementById('questionBox');
+  questionBox.innerHTML = ''; // Kosongkan konten sebelumnya
+
+  if (currentQuestion < questions.length) {
+    const q = questions[currentQuestion];
+    
+    // Tampilkan pertanyaan
+    const questionEl = document.createElement('h3');
+    questionEl.className = 'mb-4';
+    questionEl.textContent = q.soal; // Gunakan textContent untuk menghindari masalah HTML
+    questionBox.appendChild(questionEl);
+
+    // Tampilkan pilihan jawaban
+    q.pilihan.forEach((option, index) => {
+      // Pastikan opsi tidak kosong
+      if (!option) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      
+      // Tambahkan huruf (A, B, C, D) sebelum opsi
+      btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span>. ${option}`;
+      
+      // Tambahkan event listener untuk menangani klik
+      btn.addEventListener('click', function () {
+        handleAnswer(index, q.jawaban); // Panggil fungsi handleAnswer
+      });
+
+      questionBox.appendChild(btn);
+    });
+  } else {
+    // Jika semua soal telah dijawab, arahkan ke halaman hasil
+    localStorage.setItem('quizResults', JSON.stringify({
+      score: score,
+      total: questions.length,
+      details: results
+    }));
+    window.location.href = 'hasil.html';
+  }
+}
+
+function handleAnswer(selectedIndex, correctAnswer) {
+  const correctIndex = correctAnswer.charCodeAt(0) - 'A'.charCodeAt(0); // Konversi jawaban ke index
+  const isCorrect = selectedIndex === correctIndex;
+
+  // Update tampilan berdasarkan jawaban
+  const optionButtons = document.querySelectorAll('.option-btn');
+  optionButtons.forEach((btn, index) => {
+    if (index === correctIndex) {
+      btn.style.backgroundColor = 'var(--game-success)'; // Warna hijau untuk jawaban benar
+    } else if (index === selectedIndex) {
+      btn.style.backgroundColor = 'var(--game-danger)'; // Warna merah untuk jawaban salah
+    }
+    btn.disabled = true; // Nonaktifkan tombol setelah dipilih
+  });
+
+  // Update skor dan nyawa
+  if (isCorrect) {
+    score++;
+    streak++;
+    document.getElementById('correctSound').play();
+    if (streak % 5 === 0) {
+      showStreakBonus();
+    }
+  } else {
+    streak = 0;
+    lives--;
+    document.getElementById('wrongSound').play();
+    if (lives <= 0) {
+      setTimeout(() => gameOver(), 500);
+      return;
+    }
+  }
+
+  // Simpan hasil jawaban
+  results.push({
+    question: questions[currentQuestion].soal,
+    selected: selectedIndex,
+    correct: correctIndex,
+    isCorrect: isCorrect
+  });
+
+  // Update tampilan nyawa dan progress
+  updateLivesDisplay();
+  updateStreak();
+  updateProgress();
+
+  // Lanjut ke soal berikutnya setelah 1 detik
+  setTimeout(() => {
+    currentQuestion++;
+    showQuestion();
+  }, 1000);
+});
           questionBox.appendChild(btn);
         });
       } else {
