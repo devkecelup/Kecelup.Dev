@@ -188,102 +188,698 @@
 
     // 40 soal (HTML, CSS, PHP) - 4 opsi tiap soal, tag HTML di-escape
     const categories = {
-      programming: {
-        name: "Pemrograman",
-        icon: "fa-code",
-        questions: [
-          // ============== 15 Soal HTML (4 opsi) ==============
-          {
-            soal: "Apa kepanjangan dari HTML?",
-            pilihan: [
-              "HyperText Markup Language",
-              "HighText Machine Language",
-              "Hyperlink and Text Markup Language",
-              "Home Tool Markup Language"
-            ],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML untuk membuat paragraf adalah:",
-            pilihan: ["&lt;div&gt;", "&lt;span&gt;", "&lt;p&gt;", "&lt;para&gt;"],
-            jawaban: "C"
-          },
-          {
-            soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
-            pilihan: ["&lt;link&gt;", "&lt;a&gt;", "&lt;href&gt;", "&lt;nav&gt;"],
-            jawaban: "B"
-          },
-          {
-            soal: "Fungsi dari tag head dalam HTML adalah:",
-            pilihan: [
-              "Menampilkan konten halaman",
-              "Menyimpan metadata dan link ke resources",
-              "Menyimpan script saja",
-              "Menyimpan gambar saja"
-            ],
-            jawaban: "B"
-          },
-          {
-            soal: "Tag apa yang digunakan untuk memasukkan gambar?",
-            pilihan: ["&lt;img&gt;", "&lt;picture&gt;", "&lt;image&gt;", "&lt;src&gt;"],
-            jawaban: "A"
-          },
-          {
-            soal: "Atribut apa yang wajib ada dalam tag img?",
-            pilihan: ["alt", "src", "title", "href"],
-            jawaban: "B"
-          },
-          {
-            soal: "Tag HTML untuk membuat daftar terurut adalah:",
-            pilihan: ["&lt;ul&gt;", "&lt;ol&gt;", "&lt;dl&gt;", "&lt;list&gt;"],
-            jawaban: "B"
-          },
-          {
-            soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
-            pilihan: ["&lt;ol&gt;", "&lt;ul&gt;", "&lt;dl&gt;", "&lt;list&gt;"],
-            jawaban: "B"
-          },
-          {
-            soal: "Bagaimana cara membuat tabel di HTML?",
-            pilihan: ["&lt;table&gt;", "&lt;grid&gt;", "&lt;div&gt;", "&lt;form&gt;"],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML untuk menandai heading level 1 adalah:",
-            pilihan: ["&lt;h1&gt;", "&lt;header&gt;", "&lt;title&gt;", "&lt;h6&gt;"],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML apa yang digunakan untuk menyisipkan video?",
-            pilihan: ["&lt;video&gt;", "&lt;clip&gt;", "&lt;source&gt;", "&lt;media&gt;"],
-            jawaban: "A"
-          },
-          {
-            soal: "Atribut mana yang digunakan untuk mengatur ukuran video di tag video?",
-            pilihan: ["width", "size", "length", "dimension"],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML apa yang digunakan untuk menyisipkan audio?",
-            pilihan: ["&lt;audio&gt;", "&lt;sound&gt;", "&lt;music&gt;", "&lt;track&gt;"],
-            jawaban: "A"
-          },
-          {
-            soal: "Atribut mana yang digunakan untuk menentukan sumber file pada tag audio?",
-            pilihan: ["src", "file", "href", "data"],
-            jawaban: "A"
-          },
-          {
-            soal: "Tag HTML apa yang digunakan untuk membuat hyperlink yang membuka di jendela baru?",
-            pilihan: [
-              "&lt;a target='_blank'&gt;",
-              "&lt;link target='_new'&gt;",
-              "&lt;a new&gt;",
-              "&lt;button&gt;"
-            ],
-            jawaban: "A"
-          }
-        ] 
+  programming: {
+    name: "Pemrograman",
+    icon: "fa-code",
+    questions: [
+      // ============== 15 Soal HTML ==============
+      {
+        soal: "Apa kepanjangan dari HTML?",
+        pilihan: [
+          "HyperText Markup Language",
+          "HighText Machine Language",
+          "Hyperlink and Text Markup Language",
+          "Home Tool Markup Language",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Tag HTML untuk membuat paragraf adalah:",
+        pilihan: [
+          "&lt;div&gt;",
+          "&lt;span&gt;",
+          "&lt;p&gt;",
+          "&lt;para&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "C"
+      },
+      {
+        soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
+        pilihan: [
+          "&lt;link&gt;",
+          "&lt;a&gt;",
+          "&lt;href&gt;",
+          "&lt;nav&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Fungsi dari tag head dalam HTML adalah:",
+        pilihan: [
+          "Menampilkan konten halaman",
+          "Menyimpan metadata dan link ke resources",
+          "Menyimpan script saja",
+          "Menyimpan gambar saja",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Tag apa yang digunakan untuk memasukkan gambar?",
+        pilihan: [
+          "&lt;img&gt;",
+          "&lt;picture&gt;",
+          "&lt;image&gt;",
+          "&lt;src&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Atribut apa yang wajib ada dalam tag img?",
+        pilihan: [
+          "alt",
+          "src",
+          "title",
+          "href",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Tag HTML untuk membuat daftar terurut adalah:",
+        pilihan: [
+          "&lt;ul&gt;",
+          "&lt;ol&gt;",
+          "&lt;dl&gt;",
+          "&lt;list&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
+        pilihan: [
+          "&lt;ol&gt;",
+          "&lt;ul&gt;",
+          "&lt;dl&gt;",
+          "&lt;list&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Bagaimana cara membuat tabel di HTML?",
+        pilihan: [
+          "&lt;table&gt;",
+          "&lt;grid&gt;",
+          "&lt;div&gt;",
+          "&lt;form&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Tag HTML untuk menandai heading level 1 adalah:",
+        pilihan: [
+          "&lt;h1&gt;",
+          "&lt;header&gt;",
+          "&lt;title&gt;",
+          "&lt;h6&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Tag HTML apa yang digunakan untuk menyisipkan video?",
+        pilihan: [
+          "&lt;video&gt;",
+          "&lt;clip&gt;",
+          "&lt;source&gt;",
+          "&lt;media&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Atribut mana yang digunakan untuk mengatur ukuran video di tag video?",
+        pilihan: [
+          "width",
+          "size",
+          "length",
+          "dimension",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Tag HTML apa yang digunakan untuk menyisipkan audio?",
+        pilihan: [
+          "&lt;audio&gt;",
+          "&lt;sound&gt;",
+          "&lt;music&gt;",
+          "&lt;track&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Atribut mana yang digunakan untuk menentukan sumber file pada tag audio?",
+        pilihan: [
+          "src",
+          "file",
+          "href",
+          "data",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Tag HTML apa yang digunakan untuk membuat hyperlink yang membuka di jendela baru?",
+        pilihan: [
+          "&lt;a target='_blank'&gt;",
+          "&lt;link target='_new'&gt;",
+          "&lt;a new&gt;",
+          "&lt;button&gt;",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // ============== 10 Soal CSS ==============
+      {
+        soal: "Apa fungsi CSS dalam web development?",
+        pilihan: [
+          "Mengatur struktur halaman",
+          "Mengatur tampilan visual halaman",
+          "Menyimpan data",
+          "Memproses logika server",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Properti CSS yang digunakan untuk mengubah warna latar belakang adalah:",
+        pilihan: [
+          "color",
+          "background-color",
+          "font-color",
+          "bg-color",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Bagaimana cara menyisipkan komentar dalam kode CSS?",
+        pilihan: [
+          "// Komentar",
+          "/* Komentar */",
+          "&lt;!-- Komentar --&gt;",
+          "# Komentar",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Properti CSS untuk mengubah ukuran font adalah:",
+        pilihan: [
+          "font-size",
+          "text-size",
+          "size",
+          "font-style",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa fungsi properti margin dalam CSS?",
+        pilihan: [
+          "Memberikan jarak di dalam elemen",
+          "Memberikan jarak di luar elemen",
+          "Mengubah warna elemen",
+          "Menentukan ukuran elemen",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Apa fungsi properti padding dalam CSS?",
+        pilihan: [
+          "Memberikan jarak di dalam elemen",
+          "Memberikan jarak di luar elemen",
+          "Mengubah warna latar belakang",
+          "Menentukan batas elemen",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Bagaimana cara mengubah warna teks dalam CSS?",
+        pilihan: [
+          "text-color",
+          "color",
+          "font-color",
+          "background-color",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Properti CSS apa yang digunakan untuk mengubah jenis font?",
+        pilihan: [
+          "font-weight",
+          "font-style",
+          "font-family",
+          "text-transform",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "C"
+      },
+      {
+        soal: "Apa itu selector dalam CSS?",
+        pilihan: [
+          "Pola untuk memilih elemen HTML",
+          "Fungsi JavaScript",
+          "Properti CSS",
+          "Metode HTML",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Bagaimana cara membuat elemen tampil sebagai blok di CSS?",
+        pilihan: [
+          "display: inline",
+          "display: block",
+          "display: none",
+          "visibility: hidden",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+
+      // ============== 35 Soal PHP ==============
+      // --- Topik 1: Dasar Pemrograman PHP ---
+      {
+        soal: "Apa kepanjangan dari PHP?",
+        pilihan: [
+          "Personal Hypertext Processor",
+          "PHP Hypertext Preprocessor",
+          "Public Home Page",
+          "Private Home Page",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Bagaimana cara mencetak 'Hello World' dalam PHP?",
+        pilihan: [
+          "echo 'Hello World';",
+          "print('Hello World');",
+          "console.log('Hello World');",
+          "document.write('Hello World');",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Ekstensi file default untuk script PHP adalah:",
+        pilihan: [
+          ".php",
+          ".html",
+          ".js",
+          ".txt",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 2: PHP Case Sensitive ---
+      {
+        soal: "Apakah PHP case sensitive terhadap nama fungsi?",
+        pilihan: [
+          "Ya, semua fungsi case sensitive",
+          "Tidak, nama fungsi tidak case sensitive",
+          "Hanya jika fungsi menggunakan parameter khusus",
+          "Tergantung versi PHP",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Apakah PHP case sensitive terhadap nama variabel?",
+        pilihan: [
+          "Ya, variabel bersifat case sensitive",
+          "Tidak, variabel tidak case sensitive",
+          "Hanya konstanta yang case sensitive",
+          "Tidak ada perbedaan",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apakah PHP case sensitive terhadap nama konstanta yang didefinisikan tanpa parameter ketiga?",
+        pilihan: [
+          "Ya, konstanta bersifat case sensitive",
+          "Tidak, konstanta tidak case sensitive",
+          "Bergantung pada nilai konstanta",
+          "Hanya pada konstanta sistem",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 3: Variable dalam PHP ---
+      {
+        soal: "Dalam PHP, variabel diawali dengan karakter:",
+        pilihan: [
+          "$",
+          "#",
+          "&",
+          "@",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Manakah dari berikut yang merupakan penulisan variabel yang valid dalam PHP?",
+        pilihan: [
+          "$varName",
+          "varName",
+          "$123var",
+          "$-var",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa fungsi tanda dolar ($) dalam PHP?",
+        pilihan: [
+          "Menunjukkan awal nama variabel",
+          "Menyatakan string",
+          "Menginisiasi fungsi",
+          "Menandai komentar",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 4: Operator ---
+      {
+        soal: "Operator mana yang digunakan untuk menggabungkan string di PHP?",
+        pilihan: [
+          "+",
+          ".",
+          "&",
+          "concat",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Apa hasil dari ekspresi: 5 + '10' ?",
+        pilihan: [
+          "15",
+          "510",
+          "error",
+          "5+10",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Operator mana yang digunakan untuk perbandingan identitas di PHP?",
+        pilihan: [
+          "==",
+          "===",
+          "=",
+          "!=",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+
+      // --- Topik 5: Kondisi atau Percabangan ---
+      {
+        soal: "Struktur percabangan untuk memilih alternatif adalah:",
+        pilihan: [
+          "if",
+          "switch",
+          "for",
+          "while",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Bagaimana menulis kondisi IF untuk mengecek apakah $a > 10?",
+        pilihan: [
+          "if($a > 10)",
+          "if($a >= 10)",
+          "if($a < 10)",
+          "if($a == 10)",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Kata kunci yang digunakan untuk menangani kondisi alternatif jika IF tidak terpenuhi adalah:",
+        pilihan: [
+          "else",
+          "default",
+          "elseif",
+          "otherwise",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 6: Loops ---
+      {
+        soal: "Looping mana yang digunakan untuk iterasi dengan jumlah pasti?",
+        pilihan: [
+          "while",
+          "do-while",
+          "for",
+          "foreach",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "C"
+      },
+      {
+        soal: "Apa perbedaan utama antara while dan do-while loop dalam PHP?",
+        pilihan: [
+          "while mengecek kondisi di awal, do-while di akhir",
+          "do-while tidak mengecek kondisi",
+          "while selalu berjalan sekali",
+          "Tidak ada perbedaan",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Looping mana yang ideal untuk mengiterasi array asosiatif?",
+        pilihan: [
+          "for",
+          "foreach",
+          "while",
+          "do-while",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+
+      // --- Topik 7: Function ---
+      {
+        soal: "Bagaimana cara mendefinisikan fungsi di PHP?",
+        pilihan: [
+          "function namaFungsi() {}",
+          "def namaFungsi() {}",
+          "func namaFungsi() {}",
+          "procedure namaFungsi() {}",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa yang dimaksud dengan parameter dalam fungsi PHP?",
+        pilihan: [
+          "Nilai yang dikembalikan fungsi",
+          "Variabel yang tersedia di dalam fungsi",
+          "Nilai yang diterima oleh fungsi",
+          "Nama fungsi itu sendiri",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "C"
+      },
+      {
+        soal: "Bagaimana cara mengembalikan nilai dari fungsi di PHP?",
+        pilihan: [
+          "return",
+          "yield",
+          "echo",
+          "print",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 8: Form ---
+      {
+        soal: "Bagaimana mengakses data form yang dikirim dengan method GET di PHP?",
+        pilihan: [
+          "$_GET",
+          "$_POST",
+          "$_REQUEST",
+          "$_FORM",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa perbedaan utama antara method GET dan POST pada form PHP?",
+        pilihan: [
+          "GET mengirim data melalui URL, POST melalui body",
+          "GET untuk data sensitif, POST untuk data umum",
+          "POST mengirim data melalui URL, GET melalui body",
+          "Tidak ada perbedaan",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Metode mana yang dapat digunakan untuk mengamankan data form dari serangan XSS?",
+        pilihan: [
+          "htmlspecialchars()",
+          "strip_tags()",
+          "mysqli_real_escape_string()",
+          "Semua benar",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "D"
+      },
+
+      // --- Topik 9: Advance ---
+      {
+        soal: "Apa fungsi dari 'require_once' dalam PHP?",
+        pilihan: [
+          "Menyertakan file hanya sekali",
+          "Menyertakan file berkali-kali",
+          "Membuat koneksi database",
+          "Mendeklarasikan fungsi",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Bagaimana cara mengatur level error reporting di PHP?",
+        pilihan: [
+          "error_reporting()",
+          "set_error()",
+          "display_errors()",
+          "report_error()",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa itu namespace dalam PHP?",
+        pilihan: [
+          "Pengelompokkan kode agar tidak terjadi konflik",
+          "Menyimpan variabel",
+          "Pengganti class",
+          "Fungsi untuk mengatur memori",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+
+      // --- Topik 10: OOP dalam PHP ---
+      {
+        soal: "Bagaimana cara mendefinisikan kelas di PHP?",
+        pilihan: [
+          "class NamaKelas {}",
+          "function NamaKelas() {}",
+          "define NamaKelas {}",
+          "object NamaKelas {}",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Apa itu constructor dalam OOP PHP?",
+        pilihan: [
+          "Fungsi untuk menginisialisasi objek saat dibuat",
+          "Fungsi untuk menghancurkan objek",
+          "Method untuk menampilkan properti",
+          "Fungsi untuk mengakses variabel global",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Keyword mana yang digunakan untuk mewarisi kelas dalam PHP?",
+        pilihan: [
+          "implements",
+          "extends",
+          "inherits",
+          "includes",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+
+      // --- Tambahan Soal PHP ---
+      {
+        soal: "Bagaimana cara membuka file dalam mode baca di PHP menggunakan fungsi fopen()?",
+        pilihan: [
+          "fopen('filename', 'r')",
+          "fopen('filename', 'w')",
+          "fopen('filename', 'a')",
+          "fopen('filename', 'read')",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Fungsi mana yang digunakan untuk menutup file yang telah dibuka di PHP?",
+        pilihan: [
+          "close()",
+          "fclose()",
+          "endFile()",
+          "file_close()",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Bagaimana cara menangani error menggunakan try-catch di PHP?",
+        pilihan: [
+          "try { ... } catch (Exception $e) { ... }",
+          "ifError { ... } else { ... }",
+          "error_try { ... } catch { ... }",
+          "tryCatch { ... }",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      },
+      {
+        soal: "Fungsi apa yang digunakan untuk mengkonversi string ke tipe data integer di PHP?",
+        pilihan: [
+          "int()",
+          "intval()",
+          "strToInt()",
+          "convertInt()",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "B"
+      },
+      {
+        soal: "Apa output dari perintah: <?php echo 3 * (2 + 4); ?> ?",
+        pilihan: [
+          "18",
+          "20",
+          "24",
+          "10",
+          "Tidak ada jawaban lain"
+        ],
+        jawaban: "A"
+      }
+    ]
+  }
       },
       
   bahasa: {
