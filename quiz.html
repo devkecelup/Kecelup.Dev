@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- Header sama dengan kode sebelumnya -->
+  <style>
+    /* Tambahkan style khusus untuk halaman kuis */
+    .question-header {
+      background: rgba(0,0,0,0.7);
+      padding: 1rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      text-align: center;
+      border: 2px solid var(--game-primary);
+    }
+
+    .category-badge {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background: var(--game-primary);
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .streak-counter {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.7);
+      padding: 1rem;
+      border-radius: 15px;
+      border: 2px solid var(--game-success);
+    }
+  </style>
+</head>
+<body>
+  <!-- Bagian Header Kuis -->
+  <div class="question-header">
+    <div class="category-badge" id="categoryBadge">
+      <i class="fas fa-code"></i>
+      <span id="categoryName">Pemrograman</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Nyawa dan Extra Life -->
+  <div id="livesContainer"></div>
+  <div id="extraLifeContainer">
+    <button id="extraLifeBtn" onclick="getExtraLife()">
+      <i class="fab fa-instagram"></i> +1 Nyawa
+    </button>
+  </div>
+
+  <!-- Konten Kuis -->
+  <div class="container game-container">
+    <div class="question-box">
+      <!-- Pertanyaan akan dimuat dinamis -->
+    </div>
+  </div>
+
+  <!-- Streak Counter -->
+  <div class="streak-counter">
+    <i class="fas fa-fire" style="color: orange;"></i>
+    <span id="streakCount">0</span> COMBO
+  </div>
+
+  <script>
+    // Inisialisasi kuis
+    const selectedCategory = localStorage.getItem('selectedCategory');
+    const categoryData = categories[selectedCategory];
+    
+    // Update tampilan kategori
+    document.getElementById('categoryName').textContent = categoryData.name;
+    document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
+
+    // Modifikasi logika kuis untuk menggunakan data kategori
+    const questions = categoryData.questions;
+    
+    // ... (logika kuis dari kode sebelumnya)
+    
+    // Update streak counter
+    function updateStreak() {
+      document.getElementById('streakCount').textContent = streak;
+    }
+
+    // Di dalam fungsi jawaban benar:
+    streak++;
+    updateStreak();
+    if(streak % 5 === 0) showStreakBonus();
+  </script>
+</body>
+</html>
