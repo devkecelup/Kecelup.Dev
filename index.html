@@ -20,14 +20,34 @@
       color: white;
       min-height: 100vh;
       font-family: 'Press Start 2P', cursive;
-      position: relative;
       margin: 0;
       padding: 0;
     }
-    /* Container utama quiz */
+    /* Lives dan extra life ditempatkan secara fixed di kiri atas */
+    #livesContainer, #extraLifeContainer {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+    #livesContainer {
+      margin-bottom: 50px;
+    }
+    #extraLifeContainer {
+      top: 70px; /* sedikit di bawah lives */
+    }
+    #extraLifeBtn {
+      background: var(--game-secondary);
+      border: 2px solid var(--game-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: white;
+    }
     .game-container {
       max-width: 800px;
-      margin: 100px auto 2rem auto; /* beri jarak atas agar tidak tertutup lives */
+      margin: 120px auto 2rem auto; /* beri jarak atas agar tidak tertutup lives */
       padding: 2rem;
       background: rgba(0, 0, 0, 0.7);
       border-radius: 20px;
@@ -38,7 +58,6 @@
     .game-header {
       text-align: center;
       margin-bottom: 2rem;
-      position: relative;
     }
     .game-title {
       font-size: 2.5rem;
@@ -58,7 +77,6 @@
       padding: 2rem;
       border-radius: 15px;
       margin-bottom: 2rem;
-      position: relative;
       border: 2px solid var(--game-primary);
     }
     .option-btn {
@@ -106,33 +124,12 @@
       color: white;
       z-index: 1000;
     }
-    /* Lives dan tombol extra life diletakkan di posisi fixed di kiri atas */
-    #livesContainer {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-    #extraLifeContainer {
-      position: fixed;
-      top: 60px;
-      left: 20px;
-      z-index: 1000;
-    }
-    #extraLifeBtn {
-      background: var(--game-secondary);
-      border: 2px solid var(--game-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: white;
-    }
   </style>
 </head>
 <body>
-  <!-- Lives dan Extra Life -->
+  <!-- Lives Display -->
   <div id="livesContainer"></div>
+  <!-- Extra Life Button (hanya muncul jika lives === 1 dan belum diklaim) -->
   <div id="extraLifeContainer">
     <button id="extraLifeBtn" onclick="getExtraLife()"> 
       <i class="fab fa-instagram"></i> Follow Instagram untuk +1 Nyawa
@@ -148,7 +145,7 @@
       </div>
     </div>
     <div class="question-box">
-      <!-- Konten pertanyaan akan disuntikkan secara dinamis -->
+      <!-- Pertanyaan akan disuntikkan secara dinamis -->
     </div>
   </div>
 
@@ -497,9 +494,9 @@
 
     let currentQuestion = 0;
     let score = 0;
-    let streak = 0; // menghitung jawaban benar berturut-turut
-    let lives = 4; // total nyawa awal (maksimal 4)
-    let extraLifeClaimed = false; // hanya satu kali klaim extra life
+    let streak = 0; // hitung jawaban benar berturut-turut
+    let lives = 4; // nyawa awal (maksimal 4)
+    let extraLifeClaimed = false; // hanya sekali klaim extra life
     const results = []; // menyimpan detail tiap pertanyaan
 
     function updateProgress() {
@@ -514,6 +511,12 @@
         heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
       }
       display.innerHTML = heartsHTML;
+      // Tampilkan extra life button hanya jika lives === 1 dan belum diklaim
+      if(lives === 1 && !extraLifeClaimed) {
+        document.getElementById('extraLifeContainer').style.display = 'block';
+      } else {
+        document.getElementById('extraLifeContainer').style.display = 'none';
+      }
     }
 
     function showStreakIcon() {
@@ -572,12 +575,12 @@
                 }
               });
               document.getElementById('wrongSound').play();
-              // Kurangi nyawa jika salah (tidak kurang dari 0)
-              if (lives > 0) {
+              // Kurangi nyawa jika salah
+              if(lives > 0) {
                 lives--;
                 updateLivesDisplay();
               }
-              if (lives <= 0) {
+              if(lives <= 0) {
                 setTimeout(() => { gameOver(); }, 500);
                 return;
               }
@@ -605,7 +608,7 @@
       }
     }
 
-    // Fungsi untuk menambah nyawa ekstra via Instagram (hanya satu kali)
+    // Fungsi untuk menambah nyawa ekstra via Instagram (hanya sekali, hanya muncul saat lives === 1)
     function getExtraLife() {
       if(extraLifeClaimed) {
         alert("Anda sudah mendapatkan nyawa ekstra!");
@@ -624,7 +627,7 @@
       }, 30000);
     }
 
-    // Inisialisasi
+    // Inisialisasi tampilan
     updateLivesDisplay();
     showQuestion();
   </script>
