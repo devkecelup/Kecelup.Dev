@@ -162,7 +162,7 @@
     </button>
   </div>
 
-  <!-- Konten Kuis -->
+  <!-- Container Kuis -->
   <div class="container game-container">
     <div class="question-box" id="questionBox">
       <!-- Pertanyaan dimuat secara dinamis -->
@@ -186,7 +186,7 @@
     // Ambil kategori yang dipilih dari localStorage, default ke "programming" jika tidak ada
     const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
 
-    // Data kategori (format konsisten: properti "soal", "pilihan" (array), dan "jawaban" sebagai huruf)
+    // Data kategori dengan soal (format konsisten: soal, pilihan (array), jawaban (huruf))
     const categories = {
       programming: {
         name: "Pemrograman",
@@ -216,8 +216,33 @@
             soal: "Tag apa yang digunakan untuk memasukkan gambar?",
             pilihan: ["<img>", "<picture>", "<image>", "<src>", "<figure>"],
             jawaban: "A"
+          },
+          {
+            soal: "Atribut apa yang wajib ada dalam tag <img>?",
+            pilihan: ["alt", "src", "title", "href", "class"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag HTML untuk membuat daftar terurut adalah:",
+            pilihan: ["<ul>", "<ol>", "<dl>", "<list>", "<li>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
+            pilihan: ["<ol>", "<ul>", "<dl>", "<list>", "<menu>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Bagaimana cara membuat tabel di HTML?",
+            pilihan: ["<table>", "<grid>", "<div>", "<form>", "<section>"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML untuk menandai heading level 1 adalah:",
+            pilihan: ["<h1>", "<header>", "<title>", "<h6>", "<head>"],
+            jawaban: "A"
           }
-          // Tambahkan soal lain untuk kategori Pemrograman...
+          // Tambahkan soal lainnya agar total mencapai, misalnya, 20 soal untuk kategori Pemrograman
         ]
       },
       bahasa: {
@@ -233,8 +258,23 @@
             soal: "Apa yang dimaksud dengan puisi?",
             pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita", "Karya sejarah"],
             jawaban: "B"
+          },
+          {
+            soal: "Manakah kata hubung dalam bahasa Indonesia?",
+            pilihan: ["dan", "makan", "tidur", "lari", "baca"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa istilah untuk kalimat yang efektif?",
+            pilihan: ["Rumit", "Singkat dan jelas", "Besar", "Banyak kata", "Tidak jelas"],
+            jawaban: "B"
+          },
+          {
+            soal: "Apa istilah lain dari puisi?",
+            pilihan: ["Sajak", "Prosa", "Novel", "Cerpen", "Drama"],
+            jawaban: "A"
           }
-          // Tambahkan soal lain untuk kategori Bahasa Indonesia...
+          // Tambahkan soal lainnya (total misalnya 15 soal untuk Bahasa Indonesia)
         ]
       },
       history: {
@@ -250,8 +290,23 @@
             soal: "Siapa penemu benua Amerika?",
             pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
             jawaban: "A"
+          },
+          {
+            soal: "Siapa Presiden pertama Indonesia?",
+            pilihan: ["Soekarno", "Soeharto", "Habibie", "Megawati", "BJ Habibie"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa nama perjanjian yang mengakhiri perang kemerdekaan Indonesia?",
+            pilihan: ["Linggarjati", "Renville", "Roem–Van Roijen", "Amsterdam", "The Hague"],
+            jawaban: "C"
+          },
+          {
+            soal: "Negara manakah yang pertama mengakui kemerdekaan Indonesia?",
+            pilihan: ["India", "Uni Soviet", "Amerika Serikat", "Inggris", "Australia"],
+            jawaban: "A"
           }
-          // Tambahkan soal lain untuk kategori Sejarah...
+          // Tambahkan soal lainnya (total misalnya 15 soal untuk Sejarah)
         ]
       }
     };
