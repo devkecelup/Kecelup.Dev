@@ -8,20 +8,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
+    /* CSS yang tetap sama */
     :root {
       --game-primary: #6C5CE7;
       --game-secondary: #A8A5E6;
       --game-success: #00B894;
       --game-danger: #D63031;
     }
+    
     body {
       background: linear-gradient(135deg, #1a1a2e, #16213e);
       color: white;
       min-height: 100vh;
       font-family: 'Press Start 2P', cursive;
     }
-   
-    }
+    
     .game-container {
       max-width: 800px;
       margin: 2rem auto;
@@ -32,16 +33,19 @@
       position: relative;
       overflow: hidden;
     }
+    
     .game-header {
       text-align: center;
       margin-bottom: 2rem;
       position: relative;
     }
+    
     .game-title {
       font-size: 2.5rem;
       text-shadow: 3px 3px 0 var(--game-primary);
       margin-bottom: 1rem;
     }
+    
     .character {
       width: 150px;
       height: 150px;
@@ -50,6 +54,7 @@
       background-size: contain;
       animation: float 3s ease-in-out infinite;
     }
+    
     .result-box {
       background: rgba(255, 255, 255, 0.1);
       padding: 2rem;
@@ -57,15 +62,19 @@
       margin-bottom: 2rem;
       border: 2px solid var(--game-primary);
     }
+    
     .question-result {
       margin-bottom: 1.5rem;
     }
+    
     .correct {
       color: var(--game-success);
     }
+    
     .incorrect {
       color: var(--game-danger);
     }
+    
     .share-icon {
       position: absolute;
       top: 20px;
@@ -73,6 +82,11 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: white;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
@@ -85,28 +99,57 @@
     <div class="result-box" id="resultBox">
       <!-- Detail hasil quiz akan ditampilkan di sini -->
     </div>
-    <!-- Ikon share -->
     <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
   </div>
 
   <script>
+    // Ambil data hasil quiz dari localStorage
     const quizResults = JSON.parse(localStorage.getItem('quizResults'));
     const resultBox = document.getElementById('resultBox');
+
     if (quizResults) {
       const { score, total, details } = quizResults;
-      let html = `<h2>Skor Anda: ${score} / ${total}</h2>`;
+      
+      // Header hasil
+      let html = `
+        <div class="text-center mb-4">
+          <h2 class="mb-3">SKOR AKHIR</h2>
+          <div class="display-4">${score}/${total}</div>
+          <div class="mt-2">${(score/total*100).toFixed(1)}%</div>
+        </div>
+      `;
+
+      // Detail jawaban
       details.forEach((item, index) => {
-        html += `<div class="question-result">
-                    <p><strong>${index + 1}. ${item.question}</strong></p>
-                    <p>Jawaban Anda: <span class="${item.isCorrect ? 'correct' : 'incorrect'}">
-                      ${String.fromCharCode(65 + item.selected)}. ${item.options[item.selected]}
-                    </span></p>
-                    <p>Jawaban yang benar: ${String.fromCharCode(65 + item.correct)}. ${item.options[item.correct]}</p>
-                 </div>`;
+        const options = item.options || []; // Handle jika tidak ada data options
+        html += `
+          <div class="question-result">
+            <p><strong>Soal ${index + 1}:</strong> ${item.question}</p>
+            <p class="${item.isCorrect ? 'correct' : 'incorrect'}">
+              Jawaban Anda: ${String.fromCharCode(65 + item.selected)}. ${options[item.selected] || 'Tidak ada jawaban'}
+            </p>
+            <p>Jawaban Benar: ${String.fromCharCode(65 + item.correct)}. ${options[item.correct] || 'Data tidak tersedia'}</p>
+          </div>
+        `;
       });
+
+      // Tombol aksi
+      html += `
+        <div class="text-center mt-4">
+          <button class="btn btn-primary me-2" onclick="location.href='index.html'">Menu Utama</button>
+          <button class="btn btn-success" onclick="location.reload()">Coba Lagi</button>
+        </div>
+      `;
+
       resultBox.innerHTML = html;
     } else {
-      resultBox.innerHTML = "<p>Tidak ada hasil quiz.</p>";
+      resultBox.innerHTML = `
+        <div class="text-center">
+          <h2 class="mb-3">Tidak Ada Hasil Quiz</h2>
+          <p>Silakan kerjakan quiz terlebih dahulu!</p>
+          <button class="btn btn-primary" onclick="location.href='index.html'">Kembali ke Menu</button>
+        </div>
+      `;
     }
   </script>
 </body>
