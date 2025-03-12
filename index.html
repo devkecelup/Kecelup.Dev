@@ -104,7 +104,6 @@
       <h2 class="category-title">Pemrograman</h2>
       <p>HTML, CSS, PHP</p>
     </div>
-
     <!-- Kategori Bahasa Indonesia -->
     <div class="category-card" onclick="startQuiz('bahasa')">
       <div class="category-image" style="background-image: url('https://i.ibb.co/3C5Zx9k/book-bg.png')"></div>
@@ -112,7 +111,6 @@
       <h2 class="category-title">Bahasa Indonesia</h2>
       <p>Tata Bahasa & Sastra</p>
     </div>
-
     <!-- Kategori Sejarah -->
     <div class="category-card" onclick="startQuiz('history')">
       <div class="category-image" style="background-image: url('https://i.ibb.co/6n7hL3T/history-bg.png')"></div>
@@ -123,7 +121,7 @@
   </div>
 
   <script>
-    // Data kategori dengan soal (contoh soal; silakan lengkapi sesuai kebutuhan)
+    // Data kategori dengan soal sample (tambahkan soal sesuai kebutuhan)
     const categories = {
       programming: {
         name: "Pemrograman",
@@ -138,8 +136,48 @@
             soal: "Tag HTML untuk membuat paragraf adalah:",
             pilihan: ["<div>", "<span>", "<p>", "<para>", "<paragraph>"],
             jawaban: "C"
+          },
+          {
+            soal: "Manakah tag HTML yang digunakan untuk membuat tautan?",
+            pilihan: ["<link>", "<a>", "<href>", "<nav>", "<ul>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Fungsi dari tag <head> dalam HTML adalah:",
+            pilihan: ["Menampilkan konten halaman", "Menyimpan metadata dan link ke resources", "Menyimpan script saja", "Menyimpan gambar saja", "Menyimpan data pengguna"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag apa yang digunakan untuk memasukkan gambar?",
+            pilihan: ["<img>", "<picture>", "<image>", "<src>", "<figure>"],
+            jawaban: "A"
+          },
+          {
+            soal: "Atribut apa yang wajib ada dalam tag <img>?",
+            pilihan: ["alt", "src", "title", "href", "class"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag HTML untuk membuat daftar terurut adalah:",
+            pilihan: ["<ul>", "<ol>", "<dl>", "<list>", "<li>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Tag HTML untuk membuat daftar tidak terurut adalah:",
+            pilihan: ["<ol>", "<ul>", "<dl>", "<list>", "<menu>"],
+            jawaban: "B"
+          },
+          {
+            soal: "Bagaimana cara membuat tabel di HTML?",
+            pilihan: ["<table>", "<grid>", "<div>", "<form>", "<section>"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML untuk menandai heading level 1 adalah:",
+            pilihan: ["<h1>", "<header>", "<title>", "<h6>", "<head>"],
+            jawaban: "A"
           }
-          // Tambahkan soal lainnya…
+          // Tambahkan soal lainnya hingga mencapai jumlah yang diinginkan (misalnya total 20 soal)
         ]
       },
       bahasa: {
@@ -153,16 +191,25 @@
           },
           {
             soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: [
-              "Karya sastra berbentuk dialog",
-              "Karya sastra berirama",
-              "Karya ilmiah",
-              "Laporan berita",
-              "Karya sejarah"
-            ],
+            pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita", "Karya sejarah"],
             jawaban: "B"
+          },
+          {
+            soal: "Manakah kata hubung dalam bahasa Indonesia?",
+            pilihan: ["dan", "makan", "tidur", "lari", "baca"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa istilah untuk kalimat yang efektif?",
+            pilihan: ["Rumit", "Singkat dan jelas", "Besar", "Banyak kata", "Tidak jelas"],
+            jawaban: "B"
+          },
+          {
+            soal: "Apa istilah lain dari puisi?",
+            pilihan: ["Sajak", "Prosa", "Novel", "Cerpen", "Drama"],
+            jawaban: "A"
           }
-          // Tambahkan soal lainnya…
+          // Tambahkan soal lainnya (misalnya total 15 soal)
         ]
       },
       history: {
@@ -178,15 +225,30 @@
             soal: "Siapa penemu benua Amerika?",
             pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
             jawaban: "A"
+          },
+          {
+            soal: "Siapa Presiden pertama Indonesia?",
+            pilihan: ["Soekarno", "Soeharto", "Habibie", "Megawati", "BJ Habibie"],
+            jawaban: "A"
+          },
+          {
+            soal: "Apa nama perjanjian yang mengakhiri perang kemerdekaan Indonesia?",
+            pilihan: ["Linggarjati", "Renville", "Roem–Van Roijen", "Amsterdam", "The Hague"],
+            jawaban: "C"
+          },
+          {
+            soal: "Negara manakah yang pertama mengakui kemerdekaan Indonesia?",
+            pilihan: ["India", "Uni Soviet", "Amerika Serikat", "Inggris", "Australia"],
+            jawaban: "A"
           }
-          // Tambahkan soal lainnya…
+          // Tambahkan soal lainnya (misalnya total 15 soal)
         ]
       }
     };
 
+    // Fungsi untuk memulai kuis berdasarkan kategori yang dipilih
     function startQuiz(category) {
       localStorage.setItem('selectedCategory', category);
-      // Semua kategori diarahkan ke quiz.html
       window.location.href = 'quiz.html';
     }
   </script>
