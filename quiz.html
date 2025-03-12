@@ -21,6 +21,7 @@
       margin: 0;
       padding: 0;
     }
+    /* Header Kuis */
     .question-header {
       background: rgba(0,0,0,0.7);
       padding: 1rem;
@@ -49,6 +50,7 @@
       background: var(--game-primary);
       transition: width 0.5s ease;
     }
+    /* Lives & Extra Life */
     #livesContainer, #extraLifeContainer {
       position: fixed;
       top: 20px;
@@ -67,6 +69,7 @@
       font-size: 0.8rem;
       color: white;
     }
+    /* Container Kuis */
     .game-container {
       max-width: 800px;
       margin: 120px auto 2rem auto;
@@ -100,6 +103,7 @@
       background: var(--game-primary);
       transform: translateX(10px);
     }
+    /* Streak Counter */
     .streak-counter {
       position: fixed;
       bottom: 20px;
@@ -110,6 +114,7 @@
       border: 2px solid var(--game-success);
       z-index: 1000;
     }
+    /* Ikon Share */
     .share-icon {
       position: fixed;
       top: 20px;
@@ -119,6 +124,7 @@
       color: white;
       z-index: 1000;
     }
+    /* Animasi Bonus (Flame) untuk streak kelipatan 5 */
     @keyframes flameAnimation {
       0% { transform: scale(0.8); opacity: 0.8; }
       50% { transform: scale(1.2); opacity: 1; }
@@ -137,6 +143,7 @@
   </style>
 </head>
 <body>
+  <!-- Header Kuis -->
   <div class="question-header">
     <div class="category-badge" id="categoryBadge">
       <i class="fas fa-code"></i>
@@ -147,6 +154,7 @@
     </div>
   </div>
 
+  <!-- Lives & Extra Life -->
   <div id="livesContainer"></div>
   <div id="extraLifeContainer">
     <button id="extraLifeBtn" onclick="getExtraLife()"> 
@@ -154,25 +162,31 @@
     </button>
   </div>
 
+  <!-- Container Kuis -->
   <div class="container game-container">
     <div class="question-box" id="questionBox">
       <!-- Pertanyaan dimuat secara dinamis -->
     </div>
   </div>
 
+  <!-- Streak Counter -->
   <div class="streak-counter">
     <i class="fas fa-fire" style="color: orange;"></i>
     <span id="streakCount">0</span> COMBO
   </div>
 
+  <!-- Ikon Share -->
   <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
 
+  <!-- Audio -->
   <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
   <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
+    // Ambil kategori dari localStorage, default "programming" jika tidak ada
     const selectedCategory = localStorage.getItem('selectedCategory') || "programming";
 
+    // Data kategori (contoh data Pemrograman)
     const categories = {
       programming: {
         name: "Pemrograman",
@@ -180,7 +194,12 @@
         questions: [
           {
             soal: "Apa kepanjangan dari HTML?",
-            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
+            pilihan: [
+              "HyperText Markup Language", 
+              "HighText Machine Language", 
+              "Hyperlink and Text Markup Language", 
+              "Home Tool Markup Language"
+            ],
             jawaban: "A"
           },
           {
@@ -195,7 +214,12 @@
           },
           {
             soal: "Fungsi dari tag <head> dalam HTML adalah:",
-            pilihan: ["Menampilkan konten halaman", "Menyimpan metadata dan link ke resources", "Menyimpan script saja", "Menyimpan gambar saja"],
+            pilihan: [
+              "Menampilkan konten halaman", 
+              "Menyimpan metadata dan link ke resources", 
+              "Menyimpan script saja", 
+              "Menyimpan gambar saja"
+            ],
             jawaban: "B"
           },
           {
@@ -228,72 +252,12 @@
             pilihan: ["<h1>", "<header>", "<title>", "<h6>"],
             jawaban: "A"
           }
-        ]
-      },
-      bahasa: {
-        name: "Bahasa Indonesia",
-        icon: "fa-book",
-        questions: [
-          {
-            soal: "Apa jenis kata yang menyatakan tindakan?",
-            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina"],
-            jawaban: "B"
-          },
-          {
-            soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: ["Karya sastra berbentuk dialog", "Karya sastra berirama", "Karya ilmiah", "Laporan berita"],
-            jawaban: "B"
-          },
-          {
-            soal: "Manakah kata hubung dalam bahasa Indonesia?",
-            pilihan: ["dan", "makan", "tidur", "lari"],
-            jawaban: "A"
-          },
-          {
-            soal: "Apa istilah untuk kalimat yang efektif?",
-            pilihan: ["Rumit", "Singkat dan jelas", "Besar", "Banyak kata"],
-            jawaban: "B"
-          },
-          {
-            soal: "Apa istilah lain dari puisi?",
-            pilihan: ["Sajak", "Prosa", "Novel", "Cerpen"],
-            jawaban: "A"
-          }
-        ]
-      },
-      history: {
-        name: "Sejarah",
-        icon: "fa-landmark",
-        questions: [
-          {
-            soal: "Kapan Indonesia merdeka?",
-            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928"],
-            jawaban: "A"
-          },
-          {
-            soal: "Siapa penemu benua Amerika?",
-            pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook"],
-            jawaban: "A"
-          },
-          {
-            soal: "Siapa Presiden pertama Indonesia?",
-            pilihan: ["Soekarno", "Soeharto", "Habibie", "Megawati"],
-            jawaban: "A"
-          },
-          {
-            soal: "Apa nama perjanjian yang mengakhiri perang kemerdekaan Indonesia?",
-            pilihan: ["Linggarjati", "Renville", "Roem–Van Roijen", "Amsterdam"],
-            jawaban: "C"
-          },
-          {
-            soal: "Negara manakah yang pertama mengakui kemerdekaan Indonesia?",
-            pilihan: ["India", "Uni Soviet", "Amerika Serikat", "Inggris"],
-            jawaban: "A"
-          }
+          // Tambahkan soal lain sesuai kebutuhan
         ]
       }
     };
 
+    // Pilih data soal sesuai kategori (di sini hanya "programming" yang didefinisikan)
     const categoryData = categories[selectedCategory];
     document.getElementById('categoryName').textContent = categoryData.name;
     document.querySelector('#categoryBadge i').className = `fas ${categoryData.icon}`;
@@ -318,7 +282,8 @@
         heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
       }
       display.innerHTML = heartsHTML;
-      if(lives === 1 && !extraLifeClaimed) {
+      // Tampilkan tombol extra life jika sisa nyawa 1 dan belum diklaim
+      if (lives === 1 && !extraLifeClaimed) {
         document.getElementById('extraLifeContainer').style.display = 'block';
       } else {
         document.getElementById('extraLifeContainer').style.display = 'none';
@@ -329,6 +294,7 @@
       document.getElementById('streakCount').textContent = streak;
     }
 
+    // Animasi bonus (flame) jika streak kelipatan 5
     function showStreakBonus() {
       const flame = document.createElement('div');
       flame.classList.add('flame');
@@ -342,6 +308,7 @@
     }
 
     function gameOver() {
+      // Simpan hasil ke localStorage, lalu ke kalah.html
       localStorage.setItem('quizResults', JSON.stringify({
         score: score,
         total: questions.length,
@@ -351,102 +318,36 @@
     }
 
     function showQuestion() {
-  const questionBox = document.getElementById('questionBox');
-  questionBox.innerHTML = ''; // Kosongkan konten sebelumnya
+      const questionBox = document.getElementById('questionBox');
+      questionBox.innerHTML = ''; // Kosongkan isi sebelumnya
 
-  if (currentQuestion < questions.length) {
-    const q = questions[currentQuestion];
-    
-    // Tampilkan pertanyaan
-    const questionEl = document.createElement('h3');
-    questionEl.className = 'mb-4';
-    questionEl.textContent = q.soal; // Gunakan textContent untuk menghindari masalah HTML
-    questionBox.appendChild(questionEl);
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
 
-    // Tampilkan pilihan jawaban
-    q.pilihan.forEach((option, index) => {
-      // Pastikan opsi tidak kosong
-      if (!option) return;
+        // Tampilkan teks pertanyaan
+        const questionEl = document.createElement('h3');
+        questionEl.className = 'mb-4';
+        questionEl.textContent = q.soal; // gunakan textContent agar aman
+        questionBox.appendChild(questionEl);
 
-      const btn = document.createElement('button');
-      btn.className = 'option-btn';
-      
-      // Tambahkan huruf (A, B, C, D) sebelum opsi
-      btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span>. ${option}`;
-      
-      // Tambahkan event listener untuk menangani klik
-      btn.addEventListener('click', function () {
-        handleAnswer(index, q.jawaban); // Panggil fungsi handleAnswer
-      });
+        // Tampilkan opsi jawaban
+        q.pilihan.forEach((option, index) => {
+          if (!option) return; // Pastikan opsinya tidak undefined atau kosong
 
-      questionBox.appendChild(btn);
-    });
-  } else {
-    // Jika semua soal telah dijawab, arahkan ke halaman hasil
-    localStorage.setItem('quizResults', JSON.stringify({
-      score: score,
-      total: questions.length,
-      details: results
-    }));
-    window.location.href = 'hasil.html';
-  }
-}
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          // Gunakan innerHTML dengan hati-hati jika mengandung tag <p>, <div>, dsb.
+          // Bisa pakai textContent, tapi di sini kita menambahkan huruf di depan
+          btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span>. ${option}`;
 
-function handleAnswer(selectedIndex, correctAnswer) {
-  const correctIndex = correctAnswer.charCodeAt(0) - 'A'.charCodeAt(0); // Konversi jawaban ke index
-  const isCorrect = selectedIndex === correctIndex;
+          btn.addEventListener('click', function() {
+            handleAnswer(index, q.jawaban);
+          });
 
-  // Update tampilan berdasarkan jawaban
-  const optionButtons = document.querySelectorAll('.option-btn');
-  optionButtons.forEach((btn, index) => {
-    if (index === correctIndex) {
-      btn.style.backgroundColor = 'var(--game-success)'; // Warna hijau untuk jawaban benar
-    } else if (index === selectedIndex) {
-      btn.style.backgroundColor = 'var(--game-danger)'; // Warna merah untuk jawaban salah
-    }
-    btn.disabled = true; // Nonaktifkan tombol setelah dipilih
-  });
-
-  // Update skor dan nyawa
-  if (isCorrect) {
-    score++;
-    streak++;
-    document.getElementById('correctSound').play();
-    if (streak % 5 === 0) {
-      showStreakBonus();
-    }
-  } else {
-    streak = 0;
-    lives--;
-    document.getElementById('wrongSound').play();
-    if (lives <= 0) {
-      setTimeout(() => gameOver(), 500);
-      return;
-    }
-  }
-
-  // Simpan hasil jawaban
-  results.push({
-    question: questions[currentQuestion].soal,
-    selected: selectedIndex,
-    correct: correctIndex,
-    isCorrect: isCorrect
-  });
-
-  // Update tampilan nyawa dan progress
-  updateLivesDisplay();
-  updateStreak();
-  updateProgress();
-
-  // Lanjut ke soal berikutnya setelah 1 detik
-  setTimeout(() => {
-    currentQuestion++;
-    showQuestion();
-  }, 1000);
-}
           questionBox.appendChild(btn);
         });
       } else {
+        // Soal habis, simpan hasil ke localStorage, lalu ke hasil.html
         localStorage.setItem('quizResults', JSON.stringify({
           score: score,
           total: questions.length,
@@ -456,8 +357,61 @@ function handleAnswer(selectedIndex, correctAnswer) {
       }
     }
 
+    function handleAnswer(selectedIndex, correctAnswer) {
+      const correctIndex = correctAnswer.charCodeAt(0) - 'A'.charCodeAt(0);
+      const isCorrect = (selectedIndex === correctIndex);
+
+      // Ubah warna tombol
+      const optionButtons = document.querySelectorAll('.option-btn');
+      optionButtons.forEach((btn, idx) => {
+        if (idx === correctIndex) {
+          btn.style.backgroundColor = 'var(--game-success)';
+        } else if (idx === selectedIndex) {
+          btn.style.backgroundColor = 'var(--game-danger)';
+        }
+        btn.disabled = true; // Nonaktifkan setelah diklik
+      });
+
+      if (isCorrect) {
+        score++;
+        streak++;
+        document.getElementById('correctSound').play();
+        // Bonus flame setiap 5 jawaban benar berturut-turut
+        if (streak % 5 === 0) {
+          showStreakBonus();
+        }
+      } else {
+        streak = 0;
+        lives--;
+        document.getElementById('wrongSound').play();
+        if (lives <= 0) {
+          setTimeout(() => gameOver(), 500);
+          return;
+        }
+      }
+
+      // Simpan hasil jawaban
+      results.push({
+        question: questions[currentQuestion].soal,
+        selected: selectedIndex,
+        correct: correctIndex,
+        isCorrect: isCorrect
+      });
+
+      // Update tampilan
+      updateStreak();
+      updateLivesDisplay();
+      updateProgress();
+
+      // Lanjut ke soal berikutnya setelah 1 detik
+      setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+      }, 1000);
+    }
+
     function getExtraLife() {
-      if(extraLifeClaimed) {
+      if (extraLifeClaimed) {
         alert("Anda sudah mendapatkan nyawa ekstra!");
         return;
       }
@@ -465,7 +419,7 @@ function handleAnswer(selectedIndex, correctAnswer) {
       alert("Tunggu 30 detik untuk verifikasi follow Instagram...");
       extraLifeClaimed = true;
       setTimeout(() => {
-        if(lives < 4) {
+        if (lives < 4) {
           lives++;
           updateLivesDisplay();
           alert("Verifikasi berhasil! Nyawa bertambah 1.");
@@ -473,6 +427,7 @@ function handleAnswer(selectedIndex, correctAnswer) {
       }, 30000);
     }
 
+    // Inisialisasi
     updateLivesDisplay();
     showQuestion();
   </script>
