@@ -14,7 +14,6 @@
       --game-success: #00B894;
       --game-danger: #D63031;
     }
-
     body {
       background: linear-gradient(135deg, #1a1a2e, #16213e);
       color: white;
@@ -23,7 +22,19 @@
       margin: 0;
       padding: 0;
     }
-
+    .game-header {
+      text-align: center;
+      padding: 2rem;
+    }
+    .game-logo {
+      width: 200px;
+      margin-bottom: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
     .category-container {
       max-width: 1000px;
       margin: 2rem auto;
@@ -32,7 +43,12 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
     }
-
+    /* Responsive: satu kolom pada layar kecil */
+    @media (max-width: 768px) {
+      .category-container {
+        grid-template-columns: 1fr;
+      }
+    }
     .category-card {
       background: rgba(0, 0, 0, 0.7);
       border: 3px solid var(--game-primary);
@@ -48,18 +64,15 @@
       flex-direction: column;
       justify-content: center;
     }
-
     .category-card:hover {
       transform: translateY(-10px);
       box-shadow: 0 0 20px var(--game-primary);
     }
-
     .category-icon {
       font-size: 4rem;
       margin-bottom: 1rem;
       color: var(--game-primary);
     }
-
     .category-image {
       width: 100%;
       height: 150px;
@@ -68,48 +81,23 @@
       background-position: center;
       margin-bottom: 1rem;
     }
-
     .category-title {
       font-size: 1.5rem;
       text-shadow: 2px 2px 0 var(--game-primary);
       margin-bottom: 1rem;
     }
-
-    .game-header {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .game-logo {
-      width: 200px;
-      margin-bottom: 2rem;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* Style untuk halaman kuis */
-    .question-box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2rem;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      border: 2px solid var(--game-primary);
-    }
   </style>
 </head>
 <body>
-  <!-- Halaman Pilihan Kategori -->
+  <!-- Header dengan logo dan judul -->
   <div class="game-header">
     <img src="https://i.ibb.co/0jQ7Z3T/game-logo.png" alt="Code Quest Logo" class="game-logo">
     <h1>PILIH KATEGORI</h1>
   </div>
 
+  <!-- Grid Kategori -->
   <div class="category-container">
-    <!-- Kategori 1: Pemrograman -->
+    <!-- Kategori Pemrograman -->
     <div class="category-card" onclick="startQuiz('programming')">
       <div class="category-image" style="background-image: url('https://i.ibb.co/4ZQ3Y7J/code-bg.png')"></div>
       <i class="fas fa-code category-icon"></i>
@@ -117,7 +105,7 @@
       <p>HTML, CSS, PHP</p>
     </div>
 
-    <!-- Kategori 2: Bahasa Indonesia -->
+    <!-- Kategori Bahasa Indonesia -->
     <div class="category-card" onclick="startQuiz('bahasa')">
       <div class="category-image" style="background-image: url('https://i.ibb.co/3C5Zx9k/book-bg.png')"></div>
       <i class="fas fa-book category-icon"></i>
@@ -125,7 +113,7 @@
       <p>Tata Bahasa & Sastra</p>
     </div>
 
-    <!-- Kategori 3: Sejarah -->
+    <!-- Kategori Sejarah -->
     <div class="category-card" onclick="startQuiz('history')">
       <div class="category-image" style="background-image: url('https://i.ibb.co/6n7hL3T/history-bg.png')"></div>
       <i class="fas fa-landmark category-icon"></i>
@@ -135,13 +123,23 @@
   </div>
 
   <script>
-    // Data kategori
+    // Data kategori dengan soal (contoh soal; silakan lengkapi sesuai kebutuhan)
     const categories = {
       programming: {
         name: "Pemrograman",
         icon: "fa-code",
         questions: [
-          /* Soal pemrograman dari kode sebelumnya */
+          {
+            soal: "Apa kepanjangan dari HTML?",
+            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language", "None of the above"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML untuk membuat paragraf adalah:",
+            pilihan: ["<div>", "<span>", "<p>", "<para>", "<paragraph>"],
+            jawaban: "C"
+          }
+          // Tambahkan soal lainnya…
         ]
       },
       bahasa: {
@@ -155,13 +153,16 @@
           },
           {
             soal: "Apa yang dimaksud dengan puisi?",
-            pilihan: ["Karya sastra berbentuk dialog", 
-                     "Karya sastra berirama", 
-                     "Karya ilmiah", 
-                     "Laporan berita", 
-                     "Karya sejarah"],
+            pilihan: [
+              "Karya sastra berbentuk dialog",
+              "Karya sastra berirama",
+              "Karya ilmiah",
+              "Laporan berita",
+              "Karya sejarah"
+            ],
             jawaban: "B"
           }
+          // Tambahkan soal lainnya…
         ]
       },
       history: {
@@ -170,28 +171,22 @@
         questions: [
           {
             soal: "Kapan Indonesia merdeka?",
-            pilihan: ["17 Agustus 1945", 
-                     "27 Desember 1949", 
-                     "1 Juni 1945", 
-                     "28 Oktober 1928", 
-                     "10 November 1945"],
+            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928", "10 November 1945"],
             jawaban: "A"
           },
           {
             soal: "Siapa penemu benua Amerika?",
-            pilihan: ["Christopher Columbus", 
-                     "Vasco da Gama", 
-                     "Ferdinand Magellan", 
-                     "James Cook", 
-                     "Marco Polo"],
+            pilihan: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "James Cook", "Marco Polo"],
             jawaban: "A"
           }
+          // Tambahkan soal lainnya…
         ]
       }
     };
 
     function startQuiz(category) {
       localStorage.setItem('selectedCategory', category);
+      // Semua kategori diarahkan ke quiz.html
       window.location.href = 'quiz.html';
     }
   </script>
