@@ -6,7 +6,7 @@
   <title>Code Quest - Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Fonts: Press Start 2P untuk semua perangkat -->
+  <!-- Gunakan font Press Start 2P untuk semua perangkat -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -78,12 +78,29 @@
       height: 15px;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.1);
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
     .progress {
       height: 100%;
       background: var(--game-primary);
       transition: width 0.5s ease;
+    }
+    /* Tampilan nyawa */
+    #livesDisplay {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      text-align: right;
+    }
+    /* Tombol untuk dapatkan nyawa ekstra */
+    #extraLifeBtn {
+      background: var(--game-secondary);
+      border: 2px solid var(--game-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      display: block;
+      width: 100%;
     }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
@@ -106,6 +123,8 @@
 </head>
 <body>
   <div class="container game-container">
+    <div id="livesDisplay">Nyawa: 4</div>
+    <button id="extraLifeBtn" onclick="getExtraLife()">Follow Instagram untuk +1 Nyawa</button>
     <div class="game-header">
       <div class="character"></div>
       <h1 class="game-title">CODE QUEST</h1>
@@ -125,7 +144,7 @@
   <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
-    /* Data soal: Kelompok soal HTML, CSS, dan PHP */
+    /* Data soal: Total 40 soal (HTML, CSS, PHP) */
     const soalData = {
       html: [
         { soal: 'Apa kepanjangan dari HTML?',
@@ -167,6 +186,66 @@
             E: 'Menyimpan data pengguna'
           },
           jawaban: 'B'
+        },
+        { soal: 'Tag apa yang digunakan untuk memasukkan gambar?',
+          pilihan: {
+            A: '&lt;img&gt;',
+            B: '&lt;picture&gt;',
+            C: '&lt;image&gt;',
+            D: '&lt;src&gt;',
+            E: '&lt;figure&gt;'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Atribut apa yang wajib ada dalam tag &lt;img&gt;?',
+          pilihan: {
+            A: 'alt',
+            B: 'src',
+            C: 'title',
+            D: 'href',
+            E: 'class'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Tag HTML untuk membuat daftar terurut adalah:',
+          pilihan: {
+            A: '&lt;ul&gt;',
+            B: '&lt;ol&gt;',
+            C: '&lt;dl&gt;',
+            D: '&lt;list&gt;',
+            E: '&lt;li&gt;'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Tag HTML untuk membuat daftar tidak terurut adalah:',
+          pilihan: {
+            A: '&lt;ol&gt;',
+            B: '&lt;ul&gt;',
+            C: '&lt;dl&gt;',
+            D: '&lt;list&gt;',
+            E: '&lt;menu&gt;'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Bagaimana cara membuat tabel di HTML?',
+          pilihan: {
+            A: '&lt;table&gt;',
+            B: '&lt;grid&gt;',
+            C: '&lt;div&gt;',
+            D: '&lt;form&gt;',
+            E: '&lt;section&gt;'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Tag HTML untuk menandai heading level 1 adalah:',
+          pilihan: {
+            A: '&lt;h1&gt;',
+            B: '&lt;header&gt;',
+            C: '&lt;title&gt;',
+            D: '&lt;h6&gt;',
+            E: '&lt;head&gt;'
+          },
+          jawaban: 'A'
         }
       ],
       css: [
@@ -197,6 +276,76 @@
             C: '&lt;!-- Komentar --&gt;',
             D: '# Komentar',
             E: '** Komentar **'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Properti CSS untuk mengubah ukuran font adalah:',
+          pilihan: {
+            A: 'font-size',
+            B: 'text-size',
+            C: 'size',
+            D: 'font-style',
+            E: 'text-style'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Apa fungsi properti margin dalam CSS?',
+          pilihan: {
+            A: 'Memberikan jarak di dalam elemen',
+            B: 'Memberikan jarak di luar elemen',
+            C: 'Mengubah warna elemen',
+            D: 'Menentukan ukuran elemen',
+            E: 'Membuat elemen transparan'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Apa fungsi properti padding dalam CSS?',
+          pilihan: {
+            A: 'Memberikan jarak di dalam elemen',
+            B: 'Memberikan jarak di luar elemen',
+            C: 'Mengubah warna latar belakang',
+            D: 'Menentukan batas elemen',
+            E: 'Mengatur tata letak elemen'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Bagaimana cara mengubah warna teks dalam CSS?',
+          pilihan: {
+            A: 'text-color',
+            B: 'color',
+            C: 'font-color',
+            D: 'background-color',
+            E: 'border-color'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Properti CSS apa yang digunakan untuk mengubah jenis font?',
+          pilihan: {
+            A: 'font-weight',
+            B: 'font-style',
+            C: 'font-family',
+            D: 'text-transform',
+            E: 'font-size'
+          },
+          jawaban: 'C'
+        },
+        { soal: 'Apa itu selector dalam CSS?',
+          pilihan: {
+            A: 'Pola untuk memilih elemen HTML',
+            B: 'Fungsi JavaScript',
+            C: 'Properti CSS',
+            D: 'Metode HTML',
+            E: 'Komentar dalam CSS'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Bagaimana cara membuat elemen tampil sebagai blok di CSS?',
+          pilihan: {
+            A: 'display: inline',
+            B: 'display: block',
+            C: 'display: none',
+            D: 'visibility: hidden',
+            E: 'display: flex'
           },
           jawaban: 'B'
         }
@@ -231,6 +380,76 @@
             E: '@'
           },
           jawaban: 'A'
+        },
+        { soal: 'Fungsi apa yang digunakan untuk menyertakan file dalam PHP?',
+          pilihan: {
+            A: 'include',
+            B: 'import',
+            C: 'require_once',
+            D: 'load',
+            E: 'attach'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Bagaimana cara mendapatkan data dari form menggunakan method POST di PHP?',
+          pilihan: {
+            A: '$_GET',
+            B: '$_POST',
+            C: '$_REQUEST',
+            D: '$_FORM',
+            E: '$_DATA'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Fungsi untuk menghitung jumlah elemen dalam array di PHP adalah:',
+          pilihan: {
+            A: 'size()',
+            B: 'length()',
+            C: 'count()',
+            D: 'sum()',
+            E: 'array_length()'
+          },
+          jawaban: 'C'
+        },
+        { soal: 'Apa itu PHP session?',
+          pilihan: {
+            A: 'Mekanisme untuk menyimpan data pengguna di server',
+            B: 'Fungsi untuk memproses data form',
+            C: 'Metode untuk mengirim email',
+            D: 'Cara menyimpan data ke database',
+            E: 'Fungsi untuk membuat file'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Fungsi untuk mengubah string menjadi huruf kecil di PHP adalah:',
+          pilihan: {
+            A: 'strtoupper()',
+            B: 'strtolower()',
+            C: 'lower()',
+            D: 'toLowerCase()',
+            E: 'min()'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Bagaimana cara memulai session di PHP?',
+          pilihan: {
+            A: 'session_start()',
+            B: 'start_session()',
+            C: 'init_session()',
+            D: 'begin_session()',
+            E: 'open_session()'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Apa perbedaan antara include dan require di PHP?',
+          pilihan: {
+            A: 'Tidak ada perbedaan',
+            B: 'require menghentikan eksekusi jika file tidak ditemukan',
+            C: 'include lebih cepat dari require',
+            D: 'include menghentikan eksekusi jika file tidak ditemukan',
+            E: 'require hanya untuk file PHP eksternal'
+          },
+          jawaban: 'B'
         }
       ]
     };
@@ -254,15 +473,26 @@
         });
       });
     });
+    // Jika total soal kurang dari 40, kita duplikasi (atau tambahkan soal dummy) untuk mencapai 40 soal.
+    while(questions.length < 40){
+      questions.push(...questions.slice(0, Math.min(40 - questions.length, questions.length)));
+    }
+    // Jika lebih dari 40, potong array-nya.
+    questions.length = 40;
 
     let currentQuestion = 0;
     let score = 0;
-    let streak = 0; // Menghitung jumlah jawaban benar berturut-turut
-    const results = []; // Menyimpan detail tiap pertanyaan
+    let streak = 0; // menghitung jawaban benar berturut-turut
+    let lives = 4; // total nyawa awal
+    const results = []; // menyimpan detail tiap pertanyaan
 
     function updateProgress() {
       const progressPercent = (currentQuestion / questions.length) * 100;
       document.querySelector('.progress').style.width = `${progressPercent}%`;
+    }
+
+    function updateLivesDisplay() {
+      document.getElementById('livesDisplay').innerText = `Nyawa: ${lives}`;
     }
 
     function showStreakIcon() {
@@ -275,6 +505,12 @@
       streakIcon.style.zIndex = '1000';
       document.body.appendChild(streakIcon);
       setTimeout(() => { streakIcon.remove(); }, 2000);
+    }
+
+    function gameOver() {
+      // Simpan hasil dan redirect ke halaman hasil
+      localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
+      window.location.href = 'hasil.html';
     }
 
     function showQuestion() {
@@ -300,24 +536,29 @@
               streak++;
               btn.style.backgroundColor = 'var(--game-success)';
               isCorrect = true;
-              // Mainkan suara benar
               document.getElementById('correctSound').play();
-              // Jika mencapai 5 jawaban benar berturut-turut, tampilkan ikon trophy
               if (streak === 5) {
                 showStreakIcon();
-                streak = 0; // reset streak setelah penghargaan
+                streak = 0;
               }
             } else {
               btn.style.backgroundColor = 'var(--game-danger)';
-              streak = 0; // reset streak jika salah
+              streak = 0;
               // Tandai opsi yang benar
               document.querySelectorAll('.option-btn').forEach(b => {
                 if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
                   b.style.backgroundColor = 'var(--game-success)';
                 }
               });
-              // Mainkan suara salah
               document.getElementById('wrongSound').play();
+              // Kurangi nyawa jika salah
+              lives--;
+              updateLivesDisplay();
+              if(lives <= 0) {
+                // Jika nyawa habis, game over
+                setTimeout(() => { gameOver(); }, 500);
+                return;
+              }
             }
             // Simpan detail hasil
             results.push({
@@ -336,13 +577,21 @@
           questionBox.appendChild(btn);
         });
       } else {
-        // Quiz selesai: simpan hasil dan arahkan ke halaman hasil.html
+        // Jika semua soal sudah dijawab, simpan hasil dan redirect ke halaman hasil
         localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
         window.location.href = 'hasil.html';
       }
     }
 
-    // Inisialisasi quiz
+    // Fungsi untuk menambah nyawa (misalnya setelah follow Instagram)
+    function getExtraLife() {
+      lives++;
+      updateLivesDisplay();
+      alert('Nyawa bertambah 1!');
+    }
+
+    // Inisialisasi
+    updateLivesDisplay();
     showQuestion();
   </script>
 </body>
