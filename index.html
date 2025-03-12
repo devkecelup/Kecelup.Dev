@@ -6,8 +6,8 @@
   <title>Code Quest - Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Fonts: Press Start 2P untuk desktop, Poppins untuk mobile -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <!-- Google Fonts: Press Start 2P untuk semua perangkat -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     :root {
       --game-primary: #6C5CE7;
@@ -20,9 +20,7 @@
       color: white;
       min-height: 100vh;
       font-family: 'Press Start 2P', cursive;
-    }
-    /* Untuk perangkat mobile gunakan font Poppins */
-   
+      position: relative;
     }
     .game-container {
       max-width: 800px;
@@ -122,417 +120,125 @@
     <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
   </div>
 
+  <!-- Audio untuk suara benar dan salah -->
+  <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+  <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
-    <script>
-        // Data soal (bab1 dan bab2) dari kode sebelumnya
-        const soalData = {
-          bab1: [
-            { soal: '1. Apa yang dimaksud dengan pemrograman gim?',
-              pilihan: {
-                A: 'Proses pembuatan website',
-                B: 'Proses pembuatan perangkat lunak interaktif untuk hiburan atau edukasi',
-                C: 'Proses pembuatan aplikasi mobile',
-                D: 'Proses desain grafis',
-                E: 'Proses pembuatan sistem operasi'
-              },
-              jawaban: 'B'
-            },
-            { soal: '2. Elemen dasar gim mencakup semua berikut kecuali:',
-              pilihan: {
-                A: 'Grafik dan Animasi',
-                B: 'Gameplay',
-                C: 'Fisika',
-                D: 'Audio',
-                E: 'Database'
-              },
-              jawaban: 'E'
-            },
-            { soal: '3. Mana dari berikut yang termasuk elemen dasar gim?',
-              pilihan: {
-                A: 'AI (Artificial Intelligence)',
-                B: 'Database Management',
-                C: 'Sistem Operasi',
-                D: 'Pengolahan Data',
-                E: 'Penyimpanan Cloud'
-              },
-              jawaban: 'A'
-            },
-            { soal: '4. Apa yang dimaksud dengan game engine?',
-              pilihan: {
-                A: 'Perangkat keras untuk menjalankan gim',
-                B: 'Perangkat lunak untuk membuat dan mengembangkan gim',
-                C: 'Sistem operasi khusus untuk gim',
-                D: 'Aplikasi pengedit foto',
-                E: 'Bahasa pemrograman'
-              },
-              jawaban: 'B'
-            },
-            { soal: '5. Game engine yang populer dan menggunakan bahasa pemrograman C# adalah:',
-              pilihan: {
-                A: 'Unreal Engine',
-                B: 'Godot',
-                C: 'Unity',
-                D: 'CryEngine',
-                E: 'Frostbite'
-              },
-              jawaban: 'C'
-            },
-            { soal: '6. Game engine yang menggunakan bahasa pemrograman C++ dan Blueprints adalah:',
-              pilihan: {
-                A: 'Unity',
-                B: 'Unreal Engine',
-                C: 'Godot',
-                D: 'Source Engine',
-                E: 'Lumberyard'
-              },
-              jawaban: 'B'
-            },
-            { soal: '7. Game engine yang menggunakan bahasa pemrograman GDScript adalah:',
-              pilihan: {
-                A: 'Unity',
-                B: 'Unreal Engine',
-                C: 'Godot',
-                D: 'CryEngine',
-                E: 'Frostbite'
-              },
-              jawaban: 'C'
-            },
-            { soal: '8. Dalam Unity, apa yang dimaksud dengan "Scene"?',
-              pilihan: {
-                A: 'Tempat menyimpan aset gim',
-                B: 'Tempat objek-objek gim ditempatkan dan diatur',
-                C: 'Editor kode pemrograman',
-                D: 'Format audio',
-                E: 'Komponen animasi'
-              },
-              jawaban: 'B'
-            },
-            { soal: '9. Apa itu GameObject dalam Unity?',
-              pilihan: {
-                A: 'Objek dalam gim seperti karakter, musuh, atau item',
-                B: 'Aset untuk audio',
-                C: 'Editor untuk membuat level',
-                D: 'Format file gambar',
-                E: 'Tipe data untuk skrip'
-              },
-              jawaban: 'A'
-            },
-            { soal: '10. Komponen apa yang digunakan untuk mengatur posisi, rotasi, dan skala objek dalam Unity?',
-              pilihan: {
-                A: 'AudioSource',
-                B: 'Collider',
-                C: 'Transform',
-                D: 'Rigidbody',
-                E: 'Animator'
-              },
-              jawaban: 'C'
-            },
-            { soal: '11. Komponen mana yang digunakan untuk menambahkan efek fisika pada objek dalam Unity?',
-              pilihan: {
-                A: 'Transform',
-                B: 'Rigidbody',
-                C: 'Collider',
-                D: 'Animator',
-                E: 'UI'
-              },
-              jawaban: 'B'
-            },
-            { soal: '12. Fungsi Collider dalam Unity adalah untuk:',
-              pilihan: {
-                A: 'Menambahkan audio',
-                B: 'Mengatur animasi',
-                C: 'Mendeteksi tabrakan antara objek',
-                D: 'Mengatur fisika',
-                E: 'Menyimpan data pemain'
-              },
-              jawaban: 'C'
-            },
-            { soal: '13. Bagaimana cara mendeteksi input keyboard di Unity?',
-              pilihan: {
-                A: 'Input.GetAxis("Horizontal")',
-                B: 'Input.GetKey(KeyCode.Space)',
-                C: 'Input.GetMouseButton(0)',
-                D: 'Input.GetButton("Fire1")',
-                E: 'Input.GetTouch(0)'
-              },
-              jawaban: 'B'
-            },
-            { soal: '14. Bagaimana cara mendeteksi pergerakan mouse di Unity?',
-              pilihan: {
-                A: 'Input.GetKey(KeyCode.Mouse0)',
-                B: 'Input.GetAxis("Mouse X")',
-                C: 'Input.GetButton("Jump")',
-                D: 'Input.GetTouch(1)',
-                E: 'Input.GetAxis("Horizontal")'
-              },
-              jawaban: 'B'
-            },
-            { soal: '15. Untuk mendeteksi pergerakan joystick/controller, perintah apa yang digunakan dalam Unity?',
-              pilihan: {
-                A: 'Input.GetKey(KeyCode.Joystick1)',
-                B: 'Input.GetAxis("Vertical")',
-                C: 'Input.GetAxis("Horizontal")',
-                D: 'Input.GetMouseButton(1)',
-                E: 'Input.GetTouch(0)'
-              },
-              jawaban: 'C'
-            },
-            { soal: '16. Format audio mana yang terkompresi dengan ukuran file kecil?',
-              pilihan: {
-                A: 'WAV',
-                B: 'FLAC',
-                C: 'MP3',
-                D: 'AIFF',
-                E: 'OGG'
-              },
-              jawaban: 'C'
-            },
-            { soal: '17. Format audio mana yang dikenal dengan kualitas tinggi namun ukuran file lebih besar?',
-              pilihan: {
-                A: 'MP3',
-                B: 'WAV',
-                C: 'AAC',
-                D: 'WMA',
-                E: 'OGG'
-              },
-              jawaban: 'B'
-            },
-            { soal: '18. Komponen apa yang digunakan untuk memutar suara di Unity?',
-              pilihan: {
-                A: 'AudioListener',
-                B: 'AudioClip',
-                C: 'AudioSource',
-                D: 'AudioMixer',
-                E: 'SoundManager'
-              },
-              jawaban: 'C'
-            },
-            { soal: '19. Apa fungsi dari AudioMixer dalam Unity?',
-              pilihan: {
-                A: 'Menyimpan aset audio',
-                B: 'Mengontrol volume dan efek suara',
-                C: 'Mengatur file audio',
-                D: 'Mengubah format audio',
-                E: 'Menghapus suara'
-              },
-              jawaban: 'B'
-            },
-            { soal: '20. Apa yang dimaksud dengan Spatial Audio dalam konteks gim?',
-              pilihan: {
-                A: 'Audio 2D statis',
-                B: 'Audio yang berubah sesuai dengan posisi dan orientasi pemain',
-                C: 'Format file audio khusus',
-                D: 'Pengaturan volume tetap',
-                E: 'Efek audio pada menu gim'
-              },
-              jawaban: 'B'
-            },
-            { soal: '21. Teknik optimisasi gim apa yang digunakan untuk menyembunyikan objek yang tidak terlihat oleh kamera?',
-              pilihan: {
-                A: 'LOD (Level of Detail)',
-                B: 'Garbage Collection',
-                C: 'Occlusion Culling',
-                D: 'Backface Culling',
-                E: 'Frustum Culling'
-              },
-              jawaban: 'C'
-            },
-            { soal: '22. Teknik optimisasi gim yang menurunkan kualitas detail objek saat berada jauh dari kamera adalah:',
-              pilihan: {
-                A: 'Occlusion Culling',
-                B: 'Level Streaming',
-                C: 'LOD (Level of Detail)',
-                D: 'Batching',
-                E: 'Texture Compression'
-              },
-              jawaban: 'C'
-            },
-            { soal: '23. Fungsi Garbage Collection dalam konteks pemrograman gim adalah untuk:',
-              pilihan: {
-                A: 'Menambah data baru',
-                B: 'Menghapus data yang tidak digunakan',
-                C: 'Menyimpan data pemain',
-                D: 'Meningkatkan grafis',
-                E: 'Mengontrol kecepatan animasi'
-              },
-              jawaban: 'B'
-            },
-            { soal: '24. Perintah apa yang digunakan di Unity untuk mencetak log ke console untuk debugging?',
-              pilihan: {
-                A: 'Console.WriteLine()',
-                B: 'Debug.Log()',
-                C: 'Print()',
-                D: 'LogMessage()',
-                E: 'System.out.println()'
-              },
-              jawaban: 'B'
-            },
-            { soal: '25. Apa fungsi dari Profiler dalam Unity?',
-              pilihan: {
-                A: 'Mengatur input pengguna',
-                B: 'Menganalisis performa gim',
-                C: 'Membuat aset grafis',
-                D: 'Menyimpan data',
-                E: 'Mengatur suara'
-              },
-              jawaban: 'B'
-            },
-            { soal: '26. Platform distribusi gim terbesar untuk PC adalah:',
-              pilihan: {
-                A: 'Google Play Store',
-                B: 'App Store',
-                C: 'Steam',
-                D: 'Epic Games Store',
-                E: 'Itch.io'
-              },
-              jawaban: 'C'
-            },
-            { soal: '27. Platform distribusi gim untuk perangkat Android yang populer adalah:',
-              pilihan: {
-                A: 'Steam',
-                B: 'Google Play Store',
-                C: 'App Store',
-                D: 'Xbox Live',
-                E: 'Nintendo eShop'
-              },
-              jawaban: 'B'
-            },
-            { soal: '28. Platform distribusi gim untuk perangkat iOS adalah:',
-              pilihan: {
-                A: 'Google Play Store',
-                B: 'Steam',
-                C: 'App Store',
-                D: 'Epic Games Store',
-                E: 'Microsoft Store'
-              },
-              jawaban: 'C'
-            },
-            { soal: '29. Model monetisasi gim di mana pemain harus membeli gim sebelum dapat memainkannya disebut:',
-              pilihan: {
-                A: 'Freemium',
-                B: 'In-App Purchase',
-                C: 'Premium',
-                D: 'Iklan',
-                E: 'Subscription'
-              },
-              jawaban: 'C'
-            },
-            { soal: '30. Model monetisasi gim yang menawarkan gim gratis dengan fitur tambahan berbayar disebut:',
-              pilihan: {
-                A: 'Premium',
-                B: 'Freemium',
-                C: 'In-App Purchase',
-                D: 'Iklan',
-                E: 'Langganan'
-              },
-              jawaban: 'B'
-            },
-            { soal: '31. Model monetisasi gim yang melibatkan pembelian item dalam gim dengan uang sungguhan adalah:',
-              pilihan: {
-                A: 'Premium',
-                B: 'Freemium',
-                C: 'In-App Purchase',
-                D: 'Iklan',
-                E: 'Sponsorship'
-              },
-              jawaban: 'C'
-            },
-            { soal: '32. Model monetisasi gim yang mengandalkan pendapatan dari penayangan iklan disebut:',
-              pilihan: {
-                A: 'Premium',
-                B: 'Freemium',
-                C: 'In-App Purchase',
-                D: 'Iklan dalam Gim',
-                E: 'Langganan'
-              },
-              jawaban: 'D'
-            },
-            { soal: '33. Apa itu Unity Hub?',
-              pilihan: {
-                A: 'Platform distribusi gim',
-                B: 'Alat untuk menginstal dan mengelola berbagai versi Unity',
-                C: 'Editor grafis untuk gim',
-                D: 'Bahasa pemrograman',
-                E: 'Komponen audio di Unity'
-              },
-              jawaban: 'B'
-            },
-            { soal: '34. Saat memulai proyek baru di Unity, template proyek yang tersedia biasanya berupa:',
-              pilihan: {
-                A: '3D saja',
-                B: '2D saja',
-                C: '2D dan 3D',
-                D: 'VR saja',
-                E: 'AR saja'
-              },
-              jawaban: 'C'
-            },
-            { soal: '35. Komponen mana yang menampilkan daftar semua objek dalam sebuah scene di Unity?',
-              pilihan: {
-                A: 'Scene View',
-                B: 'Game View',
-                C: 'Hierarchy',
-                D: 'Inspector',
-                E: 'Project'
-              },
-              jawaban: 'C'
-            },
-            { soal: '36. Komponen mana yang menampilkan properti dari objek yang dipilih di Unity?',
-              pilihan: {
-                A: 'Scene View',
-                B: 'Game View',
-                C: 'Hierarchy',
-                D: 'Inspector',
-                E: 'Project'
-              },
-              jawaban: 'D'
-            },
-            { soal: '37. Apa fungsi utama dari Scene View dalam Unity?',
-              pilihan: {
-                A: 'Menyimpan aset',
-                B: 'Menampilkan pratinjau gim saat dijalankan',
-                C: 'Menampilkan dan mengatur tata letak objek dalam scene',
-                D: 'Mengedit kode skrip',
-                E: 'Mengontrol audio'
-              },
-              jawaban: 'C'
-            },
-            { soal: '38. Dalam skrip Unity, fungsi <code>Start()</code> dan <code>Update()</code> digunakan untuk:',
-              pilihan: {
-                A: 'Mengatur audio',
-                B: 'Menginisialisasi dan memperbarui perilaku objek',
-                C: 'Mengelola file',
-                D: 'Mengubah aset grafis',
-                E: 'Menyimpan data'
-              },
-              jawaban: 'B'
-            },
-            { soal: '39. Fungsi <code>OnCollisionEnter</code> dalam Unity digunakan untuk:',
-              pilihan: {
-                A: 'Menampilkan animasi',
-                B: 'Mendeteksi tabrakan antara objek',
-                C: 'Mengatur input',
-                D: 'Memutar audio',
-                E: 'Mengubah scene'
-              },
-              jawaban: 'B'
-            },
-            { soal: '40. Bagaimana cara berpindah antar level atau scene dalam Unity?',
-              pilihan: {
-                A: 'Menggunakan AudioSource',
-                B: 'Menggunakan Animator',
-                C: 'Menggunakan SceneManager',
-                D: 'Menggunakan GameObject',
-                E: 'Menggunakan Collider'
-              },
-              jawaban: 'C'
-            }
-          ],
-        };
+  <script>
+    /* Data soal: Kelompok soal HTML, CSS, dan PHP */
+    const soalData = {
+      html: [
+        { soal: 'Apa kepanjangan dari HTML?',
+          pilihan: {
+            A: 'HyperText Markup Language',
+            B: 'HighText Machine Language',
+            C: 'Hyperlink and Text Markup Language',
+            D: 'Home Tool Markup Language',
+            E: 'None of the above'
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Tag HTML untuk membuat paragraf adalah:',
+          pilihan: {
+            A: '&lt;div&gt;',
+            B: '&lt;span&gt;',
+            C: '&lt;p&gt;',
+            D: '&lt;para&gt;',
+            E: '&lt;paragraph&gt;'
+          },
+          jawaban: 'C'
+        },
+        { soal: 'Manakah tag HTML yang digunakan untuk membuat tautan?',
+          pilihan: {
+            A: '&lt;link&gt;',
+            B: '&lt;a&gt;',
+            C: '&lt;href&gt;',
+            D: '&lt;nav&gt;',
+            E: '&lt;ul&gt;'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Fungsi dari tag &lt;head&gt; dalam HTML adalah:',
+          pilihan: {
+            A: 'Menampilkan konten halaman',
+            B: 'Menyimpan metadata dan link ke resources',
+            C: 'Menyimpan script saja',
+            D: 'Menyimpan gambar saja',
+            E: 'Menyimpan data pengguna'
+          },
+          jawaban: 'B'
+        }
+      ],
+      css: [
+        { soal: 'Apa fungsi CSS dalam web development?',
+          pilihan: {
+            A: 'Mengatur struktur halaman',
+            B: 'Mengatur tampilan visual halaman',
+            C: 'Menyimpan data',
+            D: 'Memproses logika server',
+            E: 'Semua jawaban salah'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Properti CSS yang digunakan untuk mengubah warna latar belakang adalah:',
+          pilihan: {
+            A: 'color',
+            B: 'background-color',
+            C: 'font-color',
+            D: 'bg-color',
+            E: 'border-color'
+          },
+          jawaban: 'B'
+        },
+        { soal: 'Bagaimana cara menyisipkan komentar dalam kode CSS?',
+          pilihan: {
+            A: '// Komentar',
+            B: '/* Komentar */',
+            C: '&lt;!-- Komentar --&gt;',
+            D: '# Komentar',
+            E: '** Komentar **'
+          },
+          jawaban: 'B'
+        }
+      ],
+      php: [
+        { soal: 'Apa kepanjangan dari PHP?',
+          pilihan: {
+            A: 'Personal Hypertext Processor',
+            B: 'PHP Hypertext Preprocessor',
+            C: 'Public Home Page',
+            D: 'Private Home Page',
+            E: 'None of the above'
+          },
+          jawaban: 'B'
+        },
+        { soal: "Bagaimana cara mencetak 'Hello World' dalam PHP?",
+          pilihan: {
+            A: "echo 'Hello World';",
+            B: "print 'Hello World';",
+            C: "console.log('Hello World');",
+            D: "document.write('Hello World');",
+            E: "printf('Hello World');"
+          },
+          jawaban: 'A'
+        },
+        { soal: 'Dalam PHP, variabel diawali dengan karakter:',
+          pilihan: {
+            A: '$',
+            B: '%',
+            C: '&',
+            D: '#',
+            E: '@'
+          },
+          jawaban: 'A'
+        }
+      ]
+    };
 
-        const questions = [];
-    Object.values(soalData).forEach(bab => {
-      bab.forEach(item => {
+    // Gabungkan semua soal menjadi satu array
+    const questions = [];
+    Object.values(soalData).forEach(kategori => {
+      kategori.forEach(item => {
         const options = [
           item.pilihan.A,
           item.pilihan.B,
@@ -551,11 +257,24 @@
 
     let currentQuestion = 0;
     let score = 0;
+    let streak = 0; // Menghitung jumlah jawaban benar berturut-turut
     const results = []; // Menyimpan detail tiap pertanyaan
 
     function updateProgress() {
       const progressPercent = (currentQuestion / questions.length) * 100;
       document.querySelector('.progress').style.width = `${progressPercent}%`;
+    }
+
+    function showStreakIcon() {
+      const streakIcon = document.createElement('div');
+      streakIcon.innerHTML = '<i class="fas fa-trophy" style="font-size:3rem; color: var(--game-success);"></i>';
+      streakIcon.style.position = 'absolute';
+      streakIcon.style.top = '50%';
+      streakIcon.style.left = '50%';
+      streakIcon.style.transform = 'translate(-50%, -50%)';
+      streakIcon.style.zIndex = '1000';
+      document.body.appendChild(streakIcon);
+      setTimeout(() => { streakIcon.remove(); }, 2000);
     }
 
     function showQuestion() {
@@ -578,16 +297,27 @@
             let isCorrect = false;
             if (index === q.correct) {
               score++;
+              streak++;
               btn.style.backgroundColor = 'var(--game-success)';
               isCorrect = true;
+              // Mainkan suara benar
+              document.getElementById('correctSound').play();
+              // Jika mencapai 5 jawaban benar berturut-turut, tampilkan ikon trophy
+              if (streak === 5) {
+                showStreakIcon();
+                streak = 0; // reset streak setelah penghargaan
+              }
             } else {
               btn.style.backgroundColor = 'var(--game-danger)';
+              streak = 0; // reset streak jika salah
               // Tandai opsi yang benar
               document.querySelectorAll('.option-btn').forEach(b => {
                 if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
                   b.style.backgroundColor = 'var(--game-success)';
                 }
               });
+              // Mainkan suara salah
+              document.getElementById('wrongSound').play();
             }
             // Simpan detail hasil
             results.push({
