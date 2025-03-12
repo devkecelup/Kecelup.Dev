@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Quest - Kalah</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Gunakan font Press Start 2P untuk semua perangkat -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --game-primary: #6C5CE7;
+      --game-secondary: #A8A5E6;
+      --game-success: #00B894;
+      --game-danger: #D63031;
+    }
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      min-height: 100vh;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .kalah-container {
+      max-width: 600px;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 20px;
+      border: 3px solid var(--game-danger);
+      text-align: center;
+    }
+    .kalah-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 3px 3px 0 var(--game-danger);
+    }
+    .kalah-message {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .restart-btn {
+      background: var(--game-secondary);
+      border: 2px solid var(--game-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .share-icon {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="kalah-container">
+    <h1 class="kalah-title">KALAH!</h1>
+    <p class="kalah-message">Nyawa Anda telah habis. Jangan menyerah, coba lagi!</p>
+    <a class="restart-btn" href="index.html">Main Lagi</a>
+    <div>
+      <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
+    </div>
+  </div>
+</body>
+</html>
