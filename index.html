@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Code Quest - Quiz</title>
+  <title>Code Quest - Pilih Kategori</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Gunakan font Press Start 2P untuk semua perangkat -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -15,6 +14,7 @@
       --game-success: #00B894;
       --game-danger: #D63031;
     }
+
     body {
       background: linear-gradient(135deg, #1a1a2e, #16213e);
       color: white;
@@ -23,55 +23,75 @@
       margin: 0;
       padding: 0;
     }
-    /* Lives dan extra life ditempatkan secara fixed di kiri atas */
-    #livesContainer, #extraLifeContainer {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-    #livesContainer {
-      margin-bottom: 50px;
-    }
-    #extraLifeContainer {
-      top: 70px; /* sedikit di bawah lives */
-    }
-    #extraLifeBtn {
-      background: var(--game-secondary);
-      border: 2px solid var(--game-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: white;
-    }
-    .game-container {
-      max-width: 800px;
-      margin: 120px auto 2rem auto; /* beri jarak atas agar tidak tertutup lives */
+
+    .category-container {
+      max-width: 1000px;
+      margin: 2rem auto;
       padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .category-card {
       background: rgba(0, 0, 0, 0.7);
-      border-radius: 20px;
       border: 3px solid var(--game-primary);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    .game-header {
-      text-align: center;
-      margin-bottom: 2rem;
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 20px var(--game-primary);
     }
-    .game-title {
-      font-size: 2.5rem;
-      text-shadow: 3px 3px 0 var(--game-primary);
+
+    .category-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--game-primary);
+    }
+
+    .category-image {
+      width: 100%;
+      height: 150px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       margin-bottom: 1rem;
     }
-    .character {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%236C5CE7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5" fill="%23ffffff"/></svg>');
-      background-size: contain;
+
+    .category-title {
+      font-size: 1.5rem;
+      text-shadow: 2px 2px 0 var(--game-primary);
+      margin-bottom: 1rem;
+    }
+
+    .game-header {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .game-logo {
+      width: 200px;
+      margin-bottom: 2rem;
       animation: float 3s ease-in-out infinite;
     }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Style untuk halaman kuis */
     .question-box {
       background: rgba(255, 255, 255, 0.1);
       padding: 2rem;
@@ -79,557 +99,101 @@
       margin-bottom: 2rem;
       border: 2px solid var(--game-primary);
     }
-    .option-btn {
-      width: 100%;
-      margin: 0.5rem 0;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid var(--game-primary);
-      color: white;
-      text-align: left;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .option-btn:hover {
-      background: var(--game-primary);
-      transform: translateX(10px);
-    }
-    .progress-bar {
-      height: 15px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      margin-bottom: 1rem;
-    }
-    .progress {
-      height: 100%;
-      background: var(--game-primary);
-      transition: width 0.5s ease;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes pixelate {
-      0% { filter: blur(0px); }
-      50% { filter: blur(2px); }
-      100% { filter: blur(0px); }
-    }
-    .share-icon {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: white;
-      z-index: 1000;
-    }
   </style>
 </head>
 <body>
-  <!-- Lives Display -->
-  <div id="livesContainer"></div>
-  <!-- Extra Life Button (hanya muncul jika lives === 1 dan belum diklaim) -->
-  <div id="extraLifeContainer">
-    <button id="extraLifeBtn" onclick="getExtraLife()"> 
-      <i class="fab fa-instagram"></i> Follow Instagram untuk +1 Nyawa
-    </button>
+  <!-- Halaman Pilihan Kategori -->
+  <div class="game-header">
+    <img src="https://i.ibb.co/0jQ7Z3T/game-logo.png" alt="Code Quest Logo" class="game-logo">
+    <h1>PILIH KATEGORI</h1>
   </div>
 
-  <div class="container game-container">
-    <div class="game-header">
-      <div class="character"></div>
-      <h1 class="game-title">CODE QUEST</h1>
-      <div class="progress-bar">
-        <div class="progress" style="width: 0%"></div>
-      </div>
+  <div class="category-container">
+    <!-- Kategori 1: Pemrograman -->
+    <div class="category-card" onclick="startQuiz('programming')">
+      <div class="category-image" style="background-image: url('https://i.ibb.co/4ZQ3Y7J/code-bg.png')"></div>
+      <i class="fas fa-code category-icon"></i>
+      <h2 class="category-title">Pemrograman</h2>
+      <p>HTML, CSS, PHP</p>
     </div>
-    <div class="question-box">
-      <!-- Pertanyaan akan disuntikkan secara dinamis -->
+
+    <!-- Kategori 2: Bahasa Indonesia -->
+    <div class="category-card" onclick="startQuiz('bahasa')">
+      <div class="category-image" style="background-image: url('https://i.ibb.co/3C5Zx9k/book-bg.png')"></div>
+      <i class="fas fa-book category-icon"></i>
+      <h2 class="category-title">Bahasa Indonesia</h2>
+      <p>Tata Bahasa & Sastra</p>
+    </div>
+
+    <!-- Kategori 3: Sejarah -->
+    <div class="category-card" onclick="startQuiz('history')">
+      <div class="category-image" style="background-image: url('https://i.ibb.co/6n7hL3T/history-bg.png')"></div>
+      <i class="fas fa-landmark category-icon"></i>
+      <h2 class="category-title">Sejarah</h2>
+      <p>Indonesia & Dunia</p>
     </div>
   </div>
-
-  <!-- Ikon share -->
-  <i class="fas fa-share share-icon" onclick="location.href='share.html'"></i>
-
-  <!-- Audio untuk suara benar dan salah -->
-  <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-  <audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
-    /* Data soal: Total 40 soal (HTML, CSS, PHP) */
-    const soalData = {
-      html: [
-        { soal: 'Apa kepanjangan dari HTML?',
-          pilihan: {
-            A: 'HyperText Markup Language',
-            B: 'HighText Machine Language',
-            C: 'Hyperlink and Text Markup Language',
-            D: 'Home Tool Markup Language',
-            E: 'None of the above'
+    // Data kategori
+    const categories = {
+      programming: {
+        name: "Pemrograman",
+        icon: "fa-code",
+        questions: [
+          /* Soal pemrograman dari kode sebelumnya */
+        ]
+      },
+      bahasa: {
+        name: "Bahasa Indonesia",
+        icon: "fa-book",
+        questions: [
+          {
+            soal: "Apa jenis kata yang menyatakan tindakan?",
+            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina", "Numeralia"],
+            jawaban: "B"
           },
-          jawaban: 'A'
-        },
-        { soal: 'Tag HTML untuk membuat paragraf adalah:',
-          pilihan: {
-            A: '&lt;div&gt;',
-            B: '&lt;span&gt;',
-            C: '&lt;p&gt;',
-            D: '&lt;para&gt;',
-            E: '&lt;paragraph&gt;'
+          {
+            soal: "Apa yang dimaksud dengan puisi?",
+            pilihan: ["Karya sastra berbentuk dialog", 
+                     "Karya sastra berirama", 
+                     "Karya ilmiah", 
+                     "Laporan berita", 
+                     "Karya sejarah"],
+            jawaban: "B"
+          }
+        ]
+      },
+      history: {
+        name: "Sejarah",
+        icon: "fa-landmark",
+        questions: [
+          {
+            soal: "Kapan Indonesia merdeka?",
+            pilihan: ["17 Agustus 1945", 
+                     "27 Desember 1949", 
+                     "1 Juni 1945", 
+                     "28 Oktober 1928", 
+                     "10 November 1945"],
+            jawaban: "A"
           },
-          jawaban: 'C'
-        },
-        { soal: 'Manakah tag HTML yang digunakan untuk membuat tautan?',
-          pilihan: {
-            A: '&lt;link&gt;',
-            B: '&lt;a&gt;',
-            C: '&lt;href&gt;',
-            D: '&lt;nav&gt;',
-            E: '&lt;ul&gt;'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Fungsi dari tag &lt;head&gt; dalam HTML adalah:',
-          pilihan: {
-            A: 'Menampilkan konten halaman',
-            B: 'Menyimpan metadata dan link ke resources',
-            C: 'Menyimpan script saja',
-            D: 'Menyimpan gambar saja',
-            E: 'Menyimpan data pengguna'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Tag apa yang digunakan untuk memasukkan gambar?',
-          pilihan: {
-            A: '&lt;img&gt;',
-            B: '&lt;picture&gt;',
-            C: '&lt;image&gt;',
-            D: '&lt;src&gt;',
-            E: '&lt;figure&gt;'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Atribut apa yang wajib ada dalam tag &lt;img&gt;?',
-          pilihan: {
-            A: 'alt',
-            B: 'src',
-            C: 'title',
-            D: 'href',
-            E: 'class'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Tag HTML untuk membuat daftar terurut adalah:',
-          pilihan: {
-            A: '&lt;ul&gt;',
-            B: '&lt;ol&gt;',
-            C: '&lt;dl&gt;',
-            D: '&lt;list&gt;',
-            E: '&lt;li&gt;'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Tag HTML untuk membuat daftar tidak terurut adalah:',
-          pilihan: {
-            A: '&lt;ol&gt;',
-            B: '&lt;ul&gt;',
-            C: '&lt;dl&gt;',
-            D: '&lt;list&gt;',
-            E: '&lt;menu&gt;'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Bagaimana cara membuat tabel di HTML?',
-          pilihan: {
-            A: '&lt;table&gt;',
-            B: '&lt;grid&gt;',
-            C: '&lt;div&gt;',
-            D: '&lt;form&gt;',
-            E: '&lt;section&gt;'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Tag HTML untuk menandai heading level 1 adalah:',
-          pilihan: {
-            A: '&lt;h1&gt;',
-            B: '&lt;header&gt;',
-            C: '&lt;title&gt;',
-            D: '&lt;h6&gt;',
-            E: '&lt;head&gt;'
-          },
-          jawaban: 'A'
-        }
-      ],
-      css: [
-        { soal: 'Apa fungsi CSS dalam web development?',
-          pilihan: {
-            A: 'Mengatur struktur halaman',
-            B: 'Mengatur tampilan visual halaman',
-            C: 'Menyimpan data',
-            D: 'Memproses logika server',
-            E: 'Semua jawaban salah'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Properti CSS yang digunakan untuk mengubah warna latar belakang adalah:',
-          pilihan: {
-            A: 'color',
-            B: 'background-color',
-            C: 'font-color',
-            D: 'bg-color',
-            E: 'border-color'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Bagaimana cara menyisipkan komentar dalam kode CSS?',
-          pilihan: {
-            A: '// Komentar',
-            B: '/* Komentar */',
-            C: '&lt;!-- Komentar --&gt;',
-            D: '# Komentar',
-            E: '** Komentar **'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Properti CSS untuk mengubah ukuran font adalah:',
-          pilihan: {
-            A: 'font-size',
-            B: 'text-size',
-            C: 'size',
-            D: 'font-style',
-            E: 'text-style'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Apa fungsi properti margin dalam CSS?',
-          pilihan: {
-            A: 'Memberikan jarak di dalam elemen',
-            B: 'Memberikan jarak di luar elemen',
-            C: 'Mengubah warna elemen',
-            D: 'Menentukan ukuran elemen',
-            E: 'Membuat elemen transparan'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Apa fungsi properti padding dalam CSS?',
-          pilihan: {
-            A: 'Memberikan jarak di dalam elemen',
-            B: 'Memberikan jarak di luar elemen',
-            C: 'Mengubah warna latar belakang',
-            D: 'Menentukan batas elemen',
-            E: 'Mengatur tata letak elemen'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Bagaimana cara mengubah warna teks dalam CSS?',
-          pilihan: {
-            A: 'text-color',
-            B: 'color',
-            C: 'font-color',
-            D: 'background-color',
-            E: 'border-color'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Properti CSS apa yang digunakan untuk mengubah jenis font?',
-          pilihan: {
-            A: 'font-weight',
-            B: 'font-style',
-            C: 'font-family',
-            D: 'text-transform',
-            E: 'font-size'
-          },
-          jawaban: 'C'
-        },
-        { soal: 'Apa itu selector dalam CSS?',
-          pilihan: {
-            A: 'Pola untuk memilih elemen HTML',
-            B: 'Fungsi JavaScript',
-            C: 'Properti CSS',
-            D: 'Metode HTML',
-            E: 'Komentar dalam CSS'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Bagaimana cara membuat elemen tampil sebagai blok di CSS?',
-          pilihan: {
-            A: 'display: inline',
-            B: 'display: block',
-            C: 'display: none',
-            D: 'visibility: hidden',
-            E: 'display: flex'
-          },
-          jawaban: 'B'
-        }
-      ],
-      php: [
-        { soal: 'Apa kepanjangan dari PHP?',
-          pilihan: {
-            A: 'Personal Hypertext Processor',
-            B: 'PHP Hypertext Preprocessor',
-            C: 'Public Home Page',
-            D: 'Private Home Page',
-            E: 'None of the above'
-          },
-          jawaban: 'B'
-        },
-        { soal: "Bagaimana cara mencetak 'Hello World' dalam PHP?",
-          pilihan: {
-            A: "echo 'Hello World';",
-            B: "print 'Hello World';",
-            C: "console.log('Hello World');",
-            D: "document.write('Hello World');",
-            E: "printf('Hello World');"
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Dalam PHP, variabel diawali dengan karakter:',
-          pilihan: {
-            A: '$',
-            B: '%',
-            C: '&',
-            D: '#',
-            E: '@'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Fungsi apa yang digunakan untuk menyertakan file dalam PHP?',
-          pilihan: {
-            A: 'include',
-            B: 'import',
-            C: 'require_once',
-            D: 'load',
-            E: 'attach'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Bagaimana cara mendapatkan data dari form menggunakan method POST di PHP?',
-          pilihan: {
-            A: '$_GET',
-            B: '$_POST',
-            C: '$_REQUEST',
-            D: '$_FORM',
-            E: '$_DATA'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Fungsi untuk menghitung jumlah elemen dalam array di PHP adalah:',
-          pilihan: {
-            A: 'size()',
-            B: 'length()',
-            C: 'count()',
-            D: 'sum()',
-            E: 'array_length()'
-          },
-          jawaban: 'C'
-        },
-        { soal: 'Apa itu PHP session?',
-          pilihan: {
-            A: 'Mekanisme untuk menyimpan data pengguna di server',
-            B: 'Fungsi untuk memproses data form',
-            C: 'Metode untuk mengirim email',
-            D: 'Cara menyimpan data ke database',
-            E: 'Fungsi untuk membuat file'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Fungsi untuk mengubah string menjadi huruf kecil di PHP adalah:',
-          pilihan: {
-            A: 'strtoupper()',
-            B: 'strtolower()',
-            C: 'lower()',
-            D: 'toLowerCase()',
-            E: 'min()'
-          },
-          jawaban: 'B'
-        },
-        { soal: 'Bagaimana cara memulai session di PHP?',
-          pilihan: {
-            A: 'session_start()',
-            B: 'start_session()',
-            C: 'init_session()',
-            D: 'begin_session()',
-            E: 'open_session()'
-          },
-          jawaban: 'A'
-        },
-        { soal: 'Apa perbedaan antara include dan require di PHP?',
-          pilihan: {
-            A: 'Tidak ada perbedaan',
-            B: 'require menghentikan eksekusi jika file tidak ditemukan',
-            C: 'include lebih cepat dari require',
-            D: 'include menghentikan eksekusi jika file tidak ditemukan',
-            E: 'require hanya untuk file PHP eksternal'
-          },
-          jawaban: 'B'
-        }
-      ]
+          {
+            soal: "Siapa penemu benua Amerika?",
+            pilihan: ["Christopher Columbus", 
+                     "Vasco da Gama", 
+                     "Ferdinand Magellan", 
+                     "James Cook", 
+                     "Marco Polo"],
+            jawaban: "A"
+          }
+        ]
+      }
     };
 
-    // Gabungkan semua soal menjadi satu array
-    const questions = [];
-    Object.values(soalData).forEach(kategori => {
-      kategori.forEach(item => {
-        const options = [
-          item.pilihan.A,
-          item.pilihan.B,
-          item.pilihan.C,
-          item.pilihan.D,
-          item.pilihan.E
-        ];
-        const correctIndex = item.jawaban.charCodeAt(0) - 'A'.charCodeAt(0);
-        questions.push({
-          question: item.soal,
-          options: options,
-          correct: correctIndex
-        });
-      });
-    });
-    // Duplikasi atau potong array agar total soal tepat 40
-    while (questions.length < 40) {
-      questions.push(...questions.slice(0, Math.min(40 - questions.length, questions.length)));
+    function startQuiz(category) {
+      localStorage.setItem('selectedCategory', category);
+      window.location.href = 'quiz.html';
     }
-    questions.length = 40;
-
-    let currentQuestion = 0;
-    let score = 0;
-    let streak = 0; // hitung jawaban benar berturut-turut
-    let lives = 4; // nyawa awal (maksimal 4)
-    let extraLifeClaimed = false; // hanya sekali klaim extra life
-    const results = []; // menyimpan detail tiap pertanyaan
-
-    function updateProgress() {
-      const progressPercent = (currentQuestion / questions.length) * 100;
-      document.querySelector('.progress').style.width = `${progressPercent}%`;
-    }
-
-    function updateLivesDisplay() {
-      const display = document.getElementById('livesContainer');
-      let heartsHTML = "";
-      for (let i = 0; i < lives; i++) {
-        heartsHTML += '<i class="fas fa-heart" style="color: red; margin-right: 5px;"></i>';
-      }
-      display.innerHTML = heartsHTML;
-      // Tampilkan extra life button hanya jika lives === 1 dan belum diklaim
-      if(lives === 1 && !extraLifeClaimed) {
-        document.getElementById('extraLifeContainer').style.display = 'block';
-      } else {
-        document.getElementById('extraLifeContainer').style.display = 'none';
-      }
-    }
-
-    function showStreakIcon() {
-      const streakIcon = document.createElement('div');
-      streakIcon.innerHTML = '<i class="fas fa-trophy" style="font-size:3rem; color: var(--game-success);"></i>';
-      streakIcon.style.position = 'absolute';
-      streakIcon.style.top = '50%';
-      streakIcon.style.left = '50%';
-      streakIcon.style.transform = 'translate(-50%, -50%)';
-      streakIcon.style.zIndex = '1000';
-      document.body.appendChild(streakIcon);
-      setTimeout(() => { streakIcon.remove(); }, 2000);
-    }
-
-    function gameOver() {
-      // Simpan hasil dan redirect ke halaman kalah.html
-      localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
-      window.location.href = 'kalah.html';
-    }
-
-    function showQuestion() {
-      const questionBox = document.querySelector('.question-box');
-      questionBox.innerHTML = '';
-      if (currentQuestion < questions.length) {
-        const q = questions[currentQuestion];
-        const questionEl = document.createElement('h3');
-        questionEl.className = 'mb-4';
-        questionEl.innerHTML = q.question;
-        questionBox.appendChild(questionEl);
-
-        // Buat tombol opsi
-        q.options.forEach((option, index) => {
-          const btn = document.createElement('button');
-          btn.className = 'option-btn';
-          btn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
-          btn.addEventListener('click', function() {
-            this.style.animation = 'pixelate 0.3s';
-            let isCorrect = false;
-            if (index === q.correct) {
-              score++;
-              streak++;
-              btn.style.backgroundColor = 'var(--game-success)';
-              isCorrect = true;
-              document.getElementById('correctSound').play();
-              if (streak === 5) {
-                showStreakIcon();
-                streak = 0;
-              }
-            } else {
-              btn.style.backgroundColor = 'var(--game-danger)';
-              streak = 0;
-              // Tandai opsi yang benar
-              document.querySelectorAll('.option-btn').forEach(b => {
-                if (b.innerHTML.startsWith(String.fromCharCode(65 + q.correct) + '.')) {
-                  b.style.backgroundColor = 'var(--game-success)';
-                }
-              });
-              document.getElementById('wrongSound').play();
-              // Kurangi nyawa jika salah
-              if(lives > 0) {
-                lives--;
-                updateLivesDisplay();
-              }
-              if(lives <= 0) {
-                setTimeout(() => { gameOver(); }, 500);
-                return;
-              }
-            }
-            // Simpan detail hasil
-            results.push({
-              question: q.question,
-              selected: index,
-              correct: q.correct,
-              isCorrect: isCorrect,
-              options: q.options
-            });
-            setTimeout(() => {
-              currentQuestion++;
-              updateProgress();
-              showQuestion();
-            }, 500);
-          });
-          questionBox.appendChild(btn);
-        });
-      } else {
-        // Jika semua soal sudah dijawab, simpan hasil dan redirect ke halaman hasil.html
-        localStorage.setItem('quizResults', JSON.stringify({ score: score, total: questions.length, details: results }));
-        window.location.href = 'hasil.html';
-      }
-    }
-
-    // Fungsi untuk menambah nyawa ekstra via Instagram (hanya sekali, hanya muncul saat lives === 1)
-    function getExtraLife() {
-      if(extraLifeClaimed) {
-        alert("Anda sudah mendapatkan nyawa ekstra!");
-        return;
-      }
-      // Buka akun Instagram (ganti URL sesuai kebutuhan)
-      window.open("https://www.instagram.com/batmankecelup", "_blank");
-      alert("Tunggu 30 detik untuk verifikasi follow Instagram...");
-      extraLifeClaimed = true;
-      setTimeout(() => {
-        if(lives < 4) {
-          lives++;
-          updateLivesDisplay();
-          alert("Verifikasi berhasil! Nyawa bertambah 1.");
-        }
-      }, 30000);
-    }
-
-    // Inisialisasi tampilan
-    updateLivesDisplay();
-    showQuestion();
   </script>
 </body>
 </html>
