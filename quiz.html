@@ -18,9 +18,10 @@
       font-family: 'Press Start 2P', cursive;
       overflow: hidden;
     }
+    /* Posisi kontainer kuis di bawah layar (di bawah karakter) */
     .quiz-container {
       position: absolute;
-      top: 20px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(0, 0, 0, 0.8);
@@ -62,7 +63,7 @@
   </style>
 </head>
 <body>
-  <!-- Container Quiz -->
+  <!-- Container Kuis (Pertanyaan dan opsi) -->
   <div class="quiz-container">
     <h2 id="question"></h2>
     <div class="options" id="options"></div>
@@ -71,12 +72,11 @@
   <canvas id="gameCanvas"></canvas>
 
   <script>
-    // Nonaktifkan klik kanan dan shortcut keyboard untuk mengurangi kemungkinan inspect
+    // Nonaktifkan klik kanan dan shortcut keyboard agar tidak mudah inspect
     document.addEventListener('contextmenu', function(e) {
       e.preventDefault();
     });
     document.onkeydown = function(e) {
-      // Nonaktifkan F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
       if (e.keyCode == 123 || 
           (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
           (e.ctrlKey && e.keyCode == 85)) {
@@ -114,7 +114,6 @@
             pilihan: ["<div>", "<span>", "<p>", "<para>"],
             jawaban: "C"
           },
-          // Tambahkan soal sesuai kebutuhan (misal 18 soal tambahan)
           {
             soal: "Properti CSS untuk mengubah warna teks?",
             pilihan: ["color", "font-color", "text-color", "background-color"],
@@ -130,6 +129,7 @@
             pilihan: ["echo()", "print()", "output()", "console.log()"],
             jawaban: "A"
           }
+          // Tambahkan soal lainnya sesuai kebutuhan...
         ]
       },
       bahasa: {
@@ -146,7 +146,7 @@
             pilihan: ["Tema", "Alur", "Setting", "Moral"],
             jawaban: "D"
           }
-          // Tambahkan soal lainnya
+          // Tambahkan soal lainnya...
         ]
       },
       history: {
@@ -163,12 +163,12 @@
             pilihan: ["Kutai", "Tarumanegara", "Majapahit", "Sriwijaya"],
             jawaban: "A"
           }
-          // Tambahkan soal lainnya
+          // Tambahkan soal lainnya...
         ]
       }
     };
 
-    // Pilih soal sesuai kategori yang dipilih
+    // Ambil soal sesuai kategori yang dipilih
     const questions = categories[selectedCategory].questions;
     let currentQuestionIndex = 0;
 
@@ -273,6 +273,17 @@
       });
     }
 
+    // Fungsi untuk menggambar notifikasi ketika HP pemain rendah
+    function drawNotification() {
+      if (player.health < 30) {
+        ctx.font = '20px "Press Start 2P"';
+        ctx.fillStyle = '#FFD700';
+        const text = "Follow Instagram untuk menambah HP!";
+        const textWidth = ctx.measureText(text).width;
+        ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height - 20);
+      }
+    }
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
@@ -291,6 +302,7 @@
       ctx.restore();
       drawHealthBars();
       drawDamageText();
+      drawNotification();  // Tampilkan notifikasi jika HP pemain rendah
       requestAnimationFrame(animate);
     }
 
