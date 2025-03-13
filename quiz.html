@@ -34,6 +34,28 @@
       font-size: 1.8rem;
       text-decoration: none;
     }
+    /* Container alert custom */
+    .custom-alert {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid var(--game-primary);
+      text-align: center;
+      z-index: 1000;
+      display: none;
+    }
+    .custom-alert button {
+      margin-top: 10px;
+      background: var(--game-primary);
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+    }
     /* Quiz Container di posisi agak di atas bawah */
     .quiz-container {
       position: absolute;
@@ -92,7 +114,6 @@
         font-size: 1.5rem;
       }
     }
-    /* Tambahkan style berikut ke bagian CSS */
     @media (max-width: 600px) {
       canvas {
         width: 100%;
@@ -128,46 +149,20 @@
         font-size: 1.2rem;
       }
     }
-
-    /* Animasi serangan baru */
+    /* Animasi serangan */
     @keyframes sword-slash {
       0% { transform: rotate(0deg); opacity: 1; }
       100% { transform: rotate(45deg) translateX(50px); opacity: 0; }
     }
-
     @keyframes enemy-bite {
       0% { transform: scale(1); }
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
-
     .attack-effect {
       position: absolute;
       pointer-events: none;
       z-index: 100;
-    }
-
-    /* Style untuk alert custom */
-    .custom-alert {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.9);
-      padding: 20px;
-      border-radius: 10px;
-      border: 2px solid var(--game-primary);
-      text-align: center;
-      z-index: 1000;
-      display: none;
-    }
-    .custom-alert button {
-      margin-top: 10px;
-      background: var(--game-primary);
-      border: none;
-      padding: 10px 20px;
-      color: white;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -177,11 +172,14 @@
     <a href="https://www.instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
     <a href="share.html" title="Share"><i class="fas fa-share-alt"></i></a>
   </div>
-<div class="custom-alert" id="instagramAlert">
+
+  <!-- Custom Alert untuk Follow Instagram -->
+  <div class="custom-alert" id="instagramAlert">
     <h3>Follow Instagram Kami!</h3>
     <p>Dapatkan +1 Nyawa dengan follow Instagram kami</p>
     <button onclick="window.open('https://www.instagram.com', '_blank')">Follow Sekarang</button>
   </div>
+
   <!-- Container Quiz (Pertanyaan dan opsi) -->
   <div class="quiz-container">
     <h2 id="question"></h2>
@@ -326,33 +324,19 @@
       updateScore();
     }
 
-     function handleBattle(isCorrect) {
+    function handleBattle(isCorrect) {
       const damage = Math.floor(Math.random() * 20) + 10;
-      
       if (isCorrect) {
-        // Animasi serangan player
-        createSwordSlash();
+        createSwordSlash(); // Animasi serangan player
         enemy.health = Math.max(enemy.health - damage, 0);
         player.attackAnim = 1;
-        damageTexts.push({ 
-          value: `-${damage}`, 
-          x: enemy.x + 40, 
-          y: enemy.y + 50, 
-          duration: 30 
-        });
+        damageTexts.push({ value: `-${damage}`, x: enemy.x + 40, y: enemy.y + 50, duration: 30 });
       } else {
-        // Animasi serangan musuh
-        createBiteEffect();
+        createBiteEffect();  // Animasi serangan musuh
         player.health = Math.max(player.health - damage, 0);
         enemy.attackAnim = 1;
-        damageTexts.push({ 
-          value: `-${damage}`, 
-          x: player.x + 30, 
-          y: player.y + 50, 
-          duration: 30 
-        });
-        
-        // Tampilkan alert saat HP < 30
+        damageTexts.push({ value: `-${damage}`, x: player.x + 30, y: player.y + 50, duration: 30 });
+        // Tampilkan alert saat HP pemain rendah
         if (player.health < 30) {
           showInstagramAlert();
         }
@@ -401,24 +385,82 @@
       }, 5000);
     }
 
-    // Perbarui fungsi animate untuk menambahkan efek getar
+    // Fungsi menggambar karakter
+    function drawCharacter(char, isPlayer) {
+      ctx.fillStyle = isPlayer ? "#27ae60" : "#c0392b";
+      ctx.fillRect(char.x, char.y, char.width, char.height);
+      if (isPlayer) {
+        // Gambar helm dan pedang pemain
+        ctx.fillStyle = "#2c3e50";
+        ctx.beginPath();
+        ctx.arc(char.x + char.width / 2, char.y + 20, 15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#95a5a6";
+        ctx.fillRect(char.x + char.width - 10, char.y + 30, 10, 50);
+      } else {
+        // Gambar sayap dan kepala musuh
+        ctx.fillStyle = "#8e44ad";
+        ctx.beginPath();
+        ctx.moveTo(char.x - 30, char.y + 40);
+        ctx.lineTo(char.x - 10, char.y + 80);
+        ctx.lineTo(char.x - 50, char.y + 100);
+        ctx.fill();
+        ctx.fillStyle = "#e67e22";
+        ctx.beginPath();
+        ctx.arc(char.x + char.width / 2, char.y + 30, 25, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawHealthBars() {
+      // Health Bar Pemain
+      ctx.fillStyle = '#333';
+      ctx.fillRect(50, 50, 100, 15);
+      ctx.fillStyle = '#2ecc71';
+      ctx.fillRect(50, 50, (100 * player.health) / 100, 15);
+      // Health Bar Musuh
+      ctx.fillStyle = '#333';
+      ctx.fillRect(canvas.width - 150, 50, 100, 15);
+      ctx.fillStyle = '#e74c3c';
+      ctx.fillRect(canvas.width - 150, 50, (100 * enemy.health) / 100, 15);
+    }
+
+    function drawDamageText() {
+      ctx.fillStyle = 'white';
+      ctx.font = '20px "Press Start 2P"';
+      damageTexts.forEach((text, index) => {
+        ctx.fillText(text.value, text.x, text.y);
+        text.y -= 1;
+        text.duration--;
+        if (text.duration <= 0) {
+          damageTexts.splice(index, 1);
+        }
+      });
+    }
+
+    // Tampilkan notifikasi jika HP pemain rendah
+    function drawNotification() {
+      if (player.health < 30) {
+        ctx.font = '20px "Press Start 2P"';
+        ctx.fillStyle = '#FFD700';
+        const text = "Follow Instagram untuk menambah HP!";
+        const textWidth = ctx.measureText(text).width;
+        ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height - 20);
+      }
+    }
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Efek getar saat menyerang
+      // Gambar pemain
+      ctx.save();
       if (player.attackAnim > 0) {
-        ctx.save();
         ctx.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
       }
       drawCharacter(player, true);
-      if (player.attackAnim > 0) ctx.restore();
+      ctx.restore();
       
-      if (enemy.attackAnim > 0) {
-        ctx.save();
-        ctx.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
-      }
-      drawCharacter(enemy, false);
-      if (enemy.attackAnim > 0) ctx.restore();
+      // Gambar musuh dengan animasi attack (jika ada)
       ctx.save();
       if (enemy.attackAnim > 0) {
         ctx.translate(Math.sin(enemy.attackAnim * 10) * -10, 0);
@@ -426,6 +468,7 @@
       }
       drawCharacter(enemy, false);
       ctx.restore();
+
       drawHealthBars();
       drawDamageText();
       drawNotification(); // Tampilkan notifikasi HP rendah
