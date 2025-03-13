@@ -19,20 +19,27 @@
       font-family: 'Press Start 2P', cursive;
       overflow: hidden;
     }
-    /* Top bar dengan Instagram dan Share */
+    /* Top bar dengan ikon Instagram dan Share, tampilan lebih halus */
     .top-bar {
       position: fixed;
       top: 10px;
       left: 10px;
       display: flex;
-      gap: 15px;
+      gap: 10px;
       align-items: center;
       z-index: 20;
     }
     .top-bar a {
       color: white;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       text-decoration: none;
+      font-weight: normal;
+      background: rgba(255,255,255,0.2);
+      padding: 5px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     /* Container alert custom */
     .custom-alert {
@@ -111,7 +118,7 @@
         font-size: 0.8rem;
       }
       .top-bar a {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
       }
     }
     @media (max-width: 600px) {
@@ -143,10 +150,10 @@
       .top-bar {
         top: 5px;
         left: 5px;
-        gap: 10px;
+        gap: 8px;
       }
       .top-bar a {
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
     }
     /* Animasi serangan */
@@ -177,8 +184,12 @@
   <div class="custom-alert" id="instagramAlert">
     <h3>Follow Instagram Kami!</h3>
     <p>Dapatkan +1 Nyawa dengan follow Instagram kami</p>
-    <button onclick="window.open('https://www.instagram.com', '_blank')">Follow Sekarang</button>
+    <button onclick="followNow()">Follow Sekarang</button>
   </div>
+
+  <!-- Audio Elements untuk suara -->
+  <audio id="attackSound" src="attack.mp3"></audio>
+  <audio id="hitSound" src="hit.mp3"></audio>
 
   <!-- Container Quiz (Pertanyaan dan opsi) -->
   <div class="quiz-container">
@@ -194,9 +205,9 @@
       e.preventDefault();
     });
     document.onkeydown = function(e) {
-      if (e.keyCode == 123 || 
-          (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
-          (e.ctrlKey && e.keyCode == 85)) {
+      if (e.keyCode === 123 || 
+          (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+          (e.ctrlKey && e.keyCode === 85)) {
         return false;
       }
     };
@@ -211,6 +222,7 @@
     let player = { x: 100, y: 200, width: 60, height: 100, health: 100, attackAnim: 0 };
     let enemy  = { x: 600, y: 200, width: 80, height: 120, health: 100, attackAnim: 0 };
     let damageTexts = [];
+    let followUsed = false; // Hanya dapat digunakan 1 kali
 
     // Ambil kategori yang dipilih dari localStorage (default: programming)
     const selectedCategory = localStorage.getItem('selectedCategory') || 'programming';
@@ -327,16 +339,20 @@
     function handleBattle(isCorrect) {
       const damage = Math.floor(Math.random() * 20) + 10;
       if (isCorrect) {
-        createSwordSlash(); // Animasi serangan player
+        // Suara dan animasi serangan pemain
+        document.getElementById('attackSound').play();
+        createSwordSlash();
         enemy.health = Math.max(enemy.health - damage, 0);
         player.attackAnim = 1;
         damageTexts.push({ value: `-${damage}`, x: enemy.x + 40, y: enemy.y + 50, duration: 30 });
       } else {
-        createBiteEffect();  // Animasi serangan musuh
+        // Suara dan animasi serangan musuh
+        document.getElementById('hitSound').play();
+        createBiteEffect();
         player.health = Math.max(player.health - damage, 0);
         enemy.attackAnim = 1;
         damageTexts.push({ value: `-${damage}`, x: player.x + 30, y: player.y + 50, duration: 30 });
-        // Tampilkan alert saat HP pemain rendah
+        // Tampilkan alert jika HP pemain rendah
         if (player.health < 30) {
           showInstagramAlert();
         }
@@ -383,6 +399,17 @@
       setTimeout(() => {
         alert.style.display = 'none';
       }, 5000);
+    }
+
+    // Fungsi untuk follow dan menambah HP (hanya 1 kali)
+    function followNow() {
+      if (!followUsed) {
+        player.health = Math.min(player.health + 20, 100);
+        followUsed = true;
+      }
+      window.open('https://www.instagram.com', '_blank');
+      document.getElementById('instagramAlert').style.display = 'none';
+      updateScore();
     }
 
     // Fungsi menggambar karakter
@@ -452,7 +479,7 @@
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Gambar pemain
+      // Gambar pemain dengan efek getar jika menyerang
       ctx.save();
       if (player.attackAnim > 0) {
         ctx.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
@@ -460,18 +487,17 @@
       drawCharacter(player, true);
       ctx.restore();
       
-      // Gambar musuh dengan animasi attack (jika ada)
+      // Gambar musuh dengan animasi jika diserang
       ctx.save();
       if (enemy.attackAnim > 0) {
         ctx.translate(Math.sin(enemy.attackAnim * 10) * -10, 0);
-        enemy.attackAnim -= 0.1;
       }
       drawCharacter(enemy, false);
       ctx.restore();
 
       drawHealthBars();
       drawDamageText();
-      drawNotification(); // Tampilkan notifikasi HP rendah
+      drawNotification();
       requestAnimationFrame(animate);
     }
 
