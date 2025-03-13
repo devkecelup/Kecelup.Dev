@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz Battle</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    body {
-      background-color: #1a1a1a;
-      margin: 0;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: 'Press Start 2P', cursive;
-      color: white;
+    :root {
+      --game-primary: #6C5CE7;
+      --game-secondary: #A8A5E6;
     }
-    canvas {
-      border: 2px solid #34495e;
-      margin-top: 20px;
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      margin: 0;
+      font-family: 'Press Start 2P', cursive;
+      overflow: hidden;
     }
     .quiz-container {
       position: absolute;
       top: 20px;
-      text-align: center;
+      left: 50%;
+      transform: translateX(-50%);
       background: rgba(0, 0, 0, 0.8);
       padding: 20px;
       border-radius: 10px;
+      text-align: center;
+      z-index: 10;
     }
     .options {
       display: grid;
@@ -31,27 +35,34 @@
       gap: 10px;
       margin-top: 15px;
     }
-    button {
-      background: #3498db;
+    .options button {
+      background: var(--game-primary);
       border: none;
       padding: 10px;
       color: white;
       cursor: pointer;
       transition: all 0.2s;
+      font-family: 'Press Start 2P', cursive;
     }
-    button:hover {
-      background: #2980b9;
+    .options button:hover {
+      background: var(--game-secondary);
     }
     .score {
       position: absolute;
       top: 20px;
       right: 20px;
       font-size: 14px;
+      z-index: 10;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      border: 2px solid #34495e;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Container Quiz -->
   <div class="quiz-container">
     <h2 id="question"></h2>
     <div class="options" id="options"></div>
@@ -60,354 +71,108 @@
   <canvas id="gameCanvas"></canvas>
 
   <script>
+    // Nonaktifkan klik kanan dan shortcut keyboard untuk mengurangi kemungkinan inspect
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    document.onkeydown = function(e) {
+      // Nonaktifkan F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+      if (e.keyCode == 123 || 
+          (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
+          (e.ctrlKey && e.keyCode == 85)) {
+        return false;
+      }
+    };
+
+    // Setup canvas
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 800;
     canvas.height = 400;
 
-    // Game State
-    let player = {
-      x: 100,
-      y: 200,
-      width: 60,
-      height: 100,
-      health: 100,
-      attackAnim: 0
-    };
-
-    let enemy = {
-      x: 600,
-      y: 200,
-      width: 80,
-      height: 120,
-      health: 100,
-      attackAnim: 0
-    };
-
-    let currentQuestionIndex = 0;
+    // State Karakter & Damage
+    let player = { x: 100, y: 200, width: 60, height: 100, health: 100, attackAnim: 0 };
+    let enemy  = { x: 600, y: 200, width: 80, height: 120, health: 100, attackAnim: 0 };
     let damageTexts = [];
 
-    // Soal: 15 HTML, 10 CSS, 35 PHP (total 60)
-    let questions = [
-      // --- HTML (15)
-      {
-        question: "Apa kepanjangan dari HTML?",
-        options: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Tag HTML untuk membuat paragraf adalah:",
-        options: ["<div>", "<span>", "<p>", "<para>", "Tidak ada jawaban lain"],
-        answer: 2
-      },
-      {
-        question: "Manakah tag HTML yang digunakan untuk membuat tautan?",
-        options: ["<link>", "<a>", "<href>", "<nav>", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Fungsi dari tag head dalam HTML adalah:",
-        options: ["Menampilkan konten halaman", "Menyimpan metadata dan link ke resources", "Menyimpan script saja", "Menyimpan gambar saja", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Tag apa yang digunakan untuk memasukkan gambar?",
-        options: ["<img>", "<picture>", "<image>", "<src>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Atribut apa yang wajib ada dalam tag img?",
-        options: ["alt", "src", "title", "href", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Tag HTML untuk membuat daftar terurut adalah:",
-        options: ["<ul>", "<ol>", "<dl>", "<list>", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Tag HTML untuk membuat daftar tidak terurut adalah:",
-        options: ["<ol>", "<ul>", "<dl>", "<list>", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara membuat tabel di HTML?",
-        options: ["<table>", "<grid>", "<div>", "<form>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Tag HTML untuk menandai heading level 1 adalah:",
-        options: ["<h1>", "<header>", "<title>", "<h6>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Tag HTML apa yang digunakan untuk menyisipkan video?",
-        options: ["<video>", "<clip>", "<source>", "<media>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Atribut mana yang digunakan untuk mengatur ukuran video di tag video?",
-        options: ["width", "size", "length", "dimension", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Tag HTML apa yang digunakan untuk menyisipkan audio?",
-        options: ["<audio>", "<sound>", "<music>", "<track>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Atribut mana yang digunakan untuk menentukan sumber file pada tag audio?",
-        options: ["src", "file", "href", "data", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Tag HTML apa yang digunakan untuk membuat hyperlink yang membuka di jendela baru?",
-        options: ["<a target='_blank'>", "<link target='_new'>", "<a new>", "<button>", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      // --- CSS (10)
-      {
-        question: "Apa fungsi CSS dalam web development?",
-        options: ["Mengatur struktur halaman", "Mengatur tampilan visual halaman", "Menyimpan data", "Memproses logika server", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Properti CSS yang digunakan untuk mengubah warna latar belakang adalah:",
-        options: ["color", "background-color", "font-color", "bg-color", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara menyisipkan komentar dalam kode CSS?",
-        options: ["// Komentar", "/* Komentar */", "<!-- Komentar -->", "# Komentar", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Properti CSS untuk mengubah ukuran font adalah:",
-        options: ["font-size", "text-size", "size", "font-style", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa fungsi properti margin dalam CSS?",
-        options: ["Memberikan jarak di dalam elemen", "Memberikan jarak di luar elemen", "Mengubah warna elemen", "Menentukan ukuran elemen", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Apa fungsi properti padding dalam CSS?",
-        options: ["Memberikan jarak di dalam elemen", "Memberikan jarak di luar elemen", "Mengubah warna latar belakang", "Menentukan batas elemen", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Bagaimana cara mengubah warna teks dalam CSS?",
-        options: ["text-color", "color", "font-color", "background-color", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Properti CSS apa yang digunakan untuk mengubah jenis font?",
-        options: ["font-weight", "font-style", "font-family", "text-transform", "Tidak ada jawaban lain"],
-        answer: 2
-      },
-      {
-        question: "Apa itu selector dalam CSS?",
-        options: ["Pola untuk memilih elemen HTML", "Fungsi JavaScript", "Properti CSS", "Metode HTML", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Bagaimana cara membuat elemen tampil sebagai blok di CSS?",
-        options: ["display: inline", "display: block", "display: none", "visibility: hidden", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      // --- PHP (35)
-      {
-        question: "Apa kepanjangan dari PHP?",
-        options: ["Personal Hypertext Processor", "PHP Hypertext Preprocessor", "Public Home Page", "Private Home Page", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara mencetak 'Hello World' dalam PHP?",
-        options: ["echo 'Hello World';", "print('Hello World');", "console.log('Hello World');", "document.write('Hello World');", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Ekstensi file default untuk script PHP adalah:",
-        options: [".php", ".html", ".js", ".txt", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apakah PHP case sensitive terhadap nama fungsi?",
-        options: ["Ya, semua fungsi case sensitive", "Tidak, nama fungsi tidak case sensitive", "Hanya jika fungsi menggunakan parameter khusus", "Tergantung versi PHP", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Apakah PHP case sensitive terhadap nama variabel?",
-        options: ["Ya, variabel bersifat case sensitive", "Tidak, variabel tidak case sensitive", "Hanya konstanta yang case sensitive", "Tidak ada perbedaan", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apakah PHP case sensitive terhadap nama konstanta yang didefinisikan tanpa parameter ketiga?",
-        options: ["Ya, konstanta bersifat case sensitive", "Tidak, konstanta tidak case sensitive", "Bergantung pada nilai konstanta", "Hanya pada konstanta sistem", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Dalam PHP, variabel diawali dengan karakter:",
-        options: ["$", "#", "&", "@", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Manakah dari berikut yang merupakan penulisan variabel yang valid dalam PHP?",
-        options: ["$varName", "varName", "$123var", "$-var", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa fungsi tanda dolar ($) dalam PHP?",
-        options: ["Menunjukkan awal nama variabel", "Menyatakan string", "Menginisiasi fungsi", "Menandai komentar", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Operator mana yang digunakan untuk menggabungkan string di PHP?",
-        options: ["+", ".", "&", "concat", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Apa hasil dari ekspresi: 5 + '10' ?",
-        options: ["15", "510", "error", "5+10", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Operator mana yang digunakan untuk perbandingan identitas di PHP?",
-        options: ["==", "===", "=", "!=","Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Struktur percabangan untuk memilih alternatif adalah:",
-        options: ["if", "switch", "for", "while", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana menulis kondisi IF untuk mengecek apakah $a > 10?",
-        options: ["if($a > 10)", "if($a >= 10)", "if($a < 10)", "if($a == 10)", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Kata kunci yang digunakan untuk menangani kondisi alternatif jika IF tidak terpenuhi adalah:",
-        options: ["else", "default", "elseif", "otherwise", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Looping mana yang digunakan untuk iterasi dengan jumlah pasti?",
-        options: ["while", "do-while", "for", "foreach", "Tidak ada jawaban lain"],
-        answer: 2
-      },
-      {
-        question: "Apa perbedaan utama antara while dan do-while loop dalam PHP?",
-        options: ["while mengecek kondisi di awal, do-while di akhir", "do-while tidak mengecek kondisi", "while selalu berjalan sekali", "Tidak ada perbedaan", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Looping mana yang ideal untuk mengiterasi array asosiatif?",
-        options: ["for", "foreach", "while", "do-while", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara mendefinisikan fungsi di PHP?",
-        options: ["function namaFungsi() {}", "def namaFungsi() {}", "func namaFungsi() {}", "procedure namaFungsi() {}", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa yang dimaksud dengan parameter dalam fungsi PHP?",
-        options: ["Nilai yang dikembalikan fungsi", "Variabel yang tersedia di dalam fungsi", "Nilai yang diterima oleh fungsi", "Nama fungsi itu sendiri", "Tidak ada jawaban lain"],
-        answer: 2
-      },
-      {
-        question: "Bagaimana cara mengembalikan nilai dari fungsi di PHP?",
-        options: ["return", "yield", "echo", "print", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Bagaimana mengakses data form yang dikirim dengan method GET di PHP?",
-        options: ["$_GET", "$_POST", "$_REQUEST", "$_FORM", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa perbedaan utama antara method GET dan POST pada form PHP?",
-        options: ["GET mengirim data melalui URL, POST melalui body", "GET untuk data sensitif, POST untuk data umum", "POST mengirim data melalui URL, GET melalui body", "Tidak ada jawaban lain", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Metode mana yang dapat digunakan untuk mengamankan data form dari serangan XSS?",
-        options: ["htmlspecialchars()", "strip_tags()", "mysqli_real_escape_string()", "Semua benar", "Tidak ada jawaban lain"],
-        answer: 3
-      },
-      {
-        question: "Apa fungsi dari 'require_once' dalam PHP?",
-        options: ["Menyertakan file hanya sekali", "Menyertakan file berkali-kali", "Membuat koneksi database", "Mendeklarasikan fungsi", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Bagaimana cara mengatur level error reporting di PHP?",
-        options: ["error_reporting()", "set_error()", "display_errors()", "report_error()", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa itu namespace dalam PHP?",
-        options: ["Pengelompokkan kode agar tidak terjadi konflik", "Menyimpan variabel", "Pengganti class", "Fungsi untuk mengatur memori", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Bagaimana cara mendefinisikan kelas di PHP?",
-        options: ["class NamaKelas {}", "function NamaKelas() {}", "define NamaKelas {}", "object NamaKelas {}", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Apa itu constructor dalam OOP PHP?",
-        options: ["Fungsi untuk menginisialisasi objek saat dibuat", "Fungsi untuk menghancurkan objek", "Method untuk menampilkan properti", "Fungsi untuk mengakses variabel global", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Keyword mana yang digunakan untuk mewarisi kelas dalam PHP?",
-        options: ["implements", "extends", "inherits", "includes", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara membuka file dalam mode baca di PHP menggunakan fungsi fopen()?",
-        options: ["fopen('filename', 'r')", "fopen('filename', 'w')", "fopen('filename', 'a')", "fopen('filename', 'read')", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Fungsi mana yang digunakan untuk menutup file yang telah dibuka di PHP?",
-        options: ["close()", "fclose()", "endFile()", "file_close()", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Bagaimana cara menangani error menggunakan try-catch di PHP?",
-        options: ["try { ... } catch (Exception $e) { ... }", "ifError { ... } else { ... }", "error_try { ... } catch { ... }", "tryCatch { ... }", "Tidak ada jawaban lain"],
-        answer: 0
-      },
-      {
-        question: "Fungsi apa yang digunakan untuk mengkonversi string ke tipe data integer di PHP?",
-        options: ["int()", "intval()", "strToInt()", "convertInt()", "Tidak ada jawaban lain"],
-        answer: 1
-      },
-      {
-        question: "Apa output dari perintah: <?php echo 3 * (2 + 4); ?> ?",
-        options: ["18", "20", "24", "10", "Tidak ada jawaban lain"],
-        answer: 0
-      }
-    ];
+    // Ambil kategori yang dipilih dari localStorage (default: programming)
+    const selectedCategory = localStorage.getItem('selectedCategory') || 'programming';
 
-    // Desain karakter
-    const designs = {
-      player: {
-        body: '#27ae60',
-        helmet: '#2c3e50',
-        sword: '#95a5a6'
+    // Data Kategori (sesuaikan dengan index Anda)
+    const categories = {
+      programming: {
+        name: "Pemrograman",
+        icon: "fa-code",
+        questions: [
+          {
+            soal: "Apa kepanjangan dari HTML?",
+            pilihan: ["HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
+            jawaban: "A"
+          },
+          {
+            soal: "Tag HTML untuk membuat paragraf adalah:",
+            pilihan: ["<div>", "<span>", "<p>", "<para>"],
+            jawaban: "C"
+          },
+          // Tambahkan soal sesuai kebutuhan (misal 18 soal tambahan)
+          {
+            soal: "Properti CSS untuk mengubah warna teks?",
+            pilihan: ["color", "font-color", "text-color", "background-color"],
+            jawaban: "A"
+          },
+          {
+            soal: "Manakah yang bukan jenis positioning CSS?",
+            pilihan: ["static", "relative", "fixed", "sticky"],
+            jawaban: "E"
+          },
+          {
+            soal: "Fungsi PHP untuk menampilkan output?",
+            pilihan: ["echo()", "print()", "output()", "console.log()"],
+            jawaban: "A"
+          }
+        ]
       },
-      enemy: {
-        body: '#c0392b',
-        wing: '#8e44ad',
-        head: '#e67e22'
+      bahasa: {
+        name: "Bahasa Indonesia",
+        icon: "fa-book",
+        questions: [
+          {
+            soal: "Apa jenis kata yang menyatakan tindakan?",
+            pilihan: ["Nomina", "Verba", "Adjektiva", "Pronomina"],
+            jawaban: "B"
+          },
+          {
+            soal: "Amanat dalam cerita disebut juga?",
+            pilihan: ["Tema", "Alur", "Setting", "Moral"],
+            jawaban: "D"
+          }
+          // Tambahkan soal lainnya
+        ]
+      },
+      history: {
+        name: "Sejarah",
+        icon: "fa-landmark",
+        questions: [
+          {
+            soal: "Kapan Indonesia merdeka?",
+            pilihan: ["17 Agustus 1945", "27 Desember 1949", "1 Juni 1945", "28 Oktober 1928"],
+            jawaban: "A"
+          },
+          {
+            soal: "Kerajaan Hindu pertama di Indonesia?",
+            pilihan: ["Kutai", "Tarumanegara", "Majapahit", "Sriwijaya"],
+            jawaban: "A"
+          }
+          // Tambahkan soal lainnya
+        ]
       }
     };
 
+    // Pilih soal sesuai kategori yang dipilih
+    const questions = categories[selectedCategory].questions;
+    let currentQuestionIndex = 0;
+
+    // Inisialisasi Quiz
     function initializeQuiz() {
       showQuestion(currentQuestionIndex);
       updateScore();
@@ -415,10 +180,10 @@
 
     function showQuestion(index) {
       const q = questions[index];
-      document.getElementById('question').textContent = q.question;
+      document.getElementById('question').textContent = q.soal;
       const optionsContainer = document.getElementById('options');
       optionsContainer.innerHTML = '';
-      q.options.forEach((option, i) => {
+      q.pilihan.forEach((option, i) => {
         const button = document.createElement('button');
         button.textContent = option;
         button.onclick = () => checkAnswer(i);
@@ -427,7 +192,9 @@
     }
 
     function checkAnswer(selectedIndex) {
-      const correct = questions[currentQuestionIndex].answer === selectedIndex;
+      // Map indeks pilihan (0->A, 1->B, dst)
+      const selectedLetter = String.fromCharCode(65 + selectedIndex);
+      const correct = selectedLetter === questions[currentQuestionIndex].jawaban.toUpperCase();
       handleBattle(correct);
       if (correct) {
         currentQuestionIndex++;
@@ -445,66 +212,52 @@
       if (isCorrect) {
         enemy.health = Math.max(enemy.health - damage, 0);
         player.attackAnim = 1;
-        damageTexts.push({
-          value: `-${damage}`,
-          x: enemy.x + 40,
-          y: enemy.y + 50,
-          duration: 30
-        });
+        damageTexts.push({ value: `-${damage}`, x: enemy.x + 40, y: enemy.y + 50, duration: 30 });
       } else {
         player.health = Math.max(player.health - damage, 0);
         enemy.attackAnim = 1;
-        damageTexts.push({
-          value: `-${damage}`,
-          x: player.x + 30,
-          y: player.y + 50,
-          duration: 30
-        });
+        damageTexts.push({ value: `-${damage}`, x: player.x + 30, y: player.y + 50, duration: 30 });
       }
       checkGameOver();
     }
 
     function drawCharacter(char, isPlayer) {
-      // Body
-      ctx.fillStyle = isPlayer ? designs.player.body : designs.enemy.body;
+      ctx.fillStyle = isPlayer ? "#27ae60" : "#c0392b";
       ctx.fillRect(char.x, char.y, char.width, char.height);
-
       if (isPlayer) {
-        // Helmet
-        ctx.fillStyle = designs.player.helmet;
+        // Gambar helm dan pedang pemain
+        ctx.fillStyle = "#2c3e50";
         ctx.beginPath();
-        ctx.arc(char.x + char.width/2, char.y + 20, 15, 0, Math.PI * 2);
+        ctx.arc(char.x + char.width / 2, char.y + 20, 15, 0, Math.PI * 2);
         ctx.fill();
-        // Sword
-        ctx.fillStyle = designs.player.sword;
+        ctx.fillStyle = "#95a5a6";
         ctx.fillRect(char.x + char.width - 10, char.y + 30, 10, 50);
       } else {
-        // Wings
-        ctx.fillStyle = designs.enemy.wing;
+        // Gambar sayap dan kepala musuh
+        ctx.fillStyle = "#8e44ad";
         ctx.beginPath();
         ctx.moveTo(char.x - 30, char.y + 40);
         ctx.lineTo(char.x - 10, char.y + 80);
         ctx.lineTo(char.x - 50, char.y + 100);
         ctx.fill();
-        // Head
-        ctx.fillStyle = designs.enemy.head;
+        ctx.fillStyle = "#e67e22";
         ctx.beginPath();
-        ctx.arc(char.x + char.width/2, char.y + 30, 25, 0, Math.PI * 2);
+        ctx.arc(char.x + char.width / 2, char.y + 30, 25, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
     function drawHealthBars() {
-      // Player health
+      // Health Bar Pemain
       ctx.fillStyle = '#333';
       ctx.fillRect(50, 50, 100, 15);
       ctx.fillStyle = '#2ecc71';
-      ctx.fillRect(50, 50, (100 * player.health)/100, 15);
-      // Enemy health
+      ctx.fillRect(50, 50, (100 * player.health) / 100, 15);
+      // Health Bar Musuh
       ctx.fillStyle = '#333';
       ctx.fillRect(canvas.width - 150, 50, 100, 15);
       ctx.fillStyle = '#e74c3c';
-      ctx.fillRect(canvas.width - 150, 50, (100 * enemy.health)/100, 15);
+      ctx.fillRect(canvas.width - 150, 50, (100 * enemy.health) / 100, 15);
     }
 
     function drawDamageText() {
@@ -522,7 +275,6 @@
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Gambar karakter dengan animasi
       ctx.save();
       if (player.attackAnim > 0) {
         ctx.translate(Math.sin(player.attackAnim * 10) * 10, 0);
@@ -530,7 +282,6 @@
       }
       drawCharacter(player, true);
       ctx.restore();
-
       ctx.save();
       if (enemy.attackAnim > 0) {
         ctx.translate(Math.sin(enemy.attackAnim * 10) * -10, 0);
@@ -538,7 +289,6 @@
       }
       drawCharacter(enemy, false);
       ctx.restore();
-
       drawHealthBars();
       drawDamageText();
       requestAnimationFrame(animate);
